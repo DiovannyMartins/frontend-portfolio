@@ -1,3 +1,5 @@
+/*FONTES E VARIÁVEIS GLOBAIS*/
+
 @import url("https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
 
@@ -7,11 +9,15 @@
   --bg-button: rgba(62, 62, 66);
 }
 
+/* Reset básico */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+/* ESTILOS GERAIS (tags base) */
 
 body {
   font-family: "Inter", sans-serif;
@@ -30,6 +36,8 @@ p {
   font-size: 18px;
   line-height: 1.5;
 }
+
+/*HEADER / NAVEGAÇÃO*/
 
 .header {
   background-color: var(--bg-primary);
@@ -78,6 +86,8 @@ p {
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
+/* Botão hamburguer (visível só no mobile, controlado via JS) */
+
 .menu-toggle {
   display: none;
   background: none;
@@ -94,6 +104,8 @@ p {
   transition: all 0.3s ease;
 }
 
+/* Animação do ícone hamburguer virando um X quando o menu está aberto */
+
 .menu-toggle.active .bar:nth-child(2) {
   opacity: 0;
 }
@@ -105,6 +117,8 @@ p {
 .menu-toggle.active .bar:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
+
+/*HERO (banner de apresentação)*/
 
 .container-hero {
   height: 500px;
@@ -152,6 +166,8 @@ p {
   border-radius: 15px;
 }
 
+/*SOBRE MIM*/
+
 .sobre {
   background-color: var(--bg-secondary);
   color: white;
@@ -175,6 +191,8 @@ p {
   width: 845px;
   max-width: 100%;
 }
+
+/*TECNOLOGIAS (cards de skills)*/
 
 .tecnologias {
   background-color: var(--bg-primary);
@@ -231,6 +249,8 @@ p {
   font-size: 16px;
   margin-top: 15px;
 }
+
+/*PROJETOS (portfólio de trabalhos)*/
 
 .projetos-container {
   background-color: var(--bg-secondary);
@@ -295,6 +315,8 @@ p {
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
+/*CONTATO (redes sociais)*/
+
 .contato {
   height: 400px;
   display: flex;
@@ -355,6 +377,8 @@ p {
   box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
 }
 
+/*FOOTER*/
+
 .footer {
   background-color: var(--bg-secondary);
   height: 150px;
@@ -364,6 +388,8 @@ p {
   text-align: center;
   font-size: 13px;
 }
+
+/*RESPONSIVIDADE (MOBILE)*/
 
 @media (max-width: 768px) {
   .menu-toggle {
