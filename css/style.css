@@ -94,6 +94,18 @@ p {
   transition: all 0.3s ease;
 }
 
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
 .container-hero {
   height: 500px;
   background-color: var(--bg-primary);
