@@ -8,7 +8,7 @@ menuToggle.addEventListener("click", () => {
   menuToggle.classList.toggle("active");
 });
 
-// Fecha o menu automaticamente ao clicar em um link (boa prática de UX)
+// Fecha o menu automaticamente ao clicar em um link
 const menuLinks = document.querySelectorAll(".menu a");
 
 menuLinks.forEach((link) => {
