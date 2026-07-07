@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* ESTILOS GERAIS (tags base) */
 
 body {
@@ -376,6 +380,41 @@ p {
 
 .card-rede.instagram:hover {
   box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
+}
+
+/* BOTÃO VOLTAR AO TOPO */
+
+.btn-topo {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+
+  width: 50px;
+  height: 50px;
+
+  background-color: var(--bg-button);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 50%;
+
+  font-size: 22px;
+  cursor: pointer;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.3s ease;
+  z-index: 998;
+}
+
+.btn-topo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+.btn-topo.mostrar {
+  display: flex;
 }
 
 /*FOOTER*/
