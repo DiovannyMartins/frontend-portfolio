@@ -29,6 +29,7 @@ body.light-mode {
 .theme-toggle {
   background: none;
   border: none;
+  color: var(--text-primary);
   font-size: 22px;
   cursor: pointer;
   line-height: 1;
@@ -290,7 +291,7 @@ p {
 
 .projetos-container {
   background-color: var(--bg-secondary);
-  color: white;
+  color: var(--text-primary);
 }
 
 .projetos-grid {
@@ -435,7 +436,7 @@ p {
   height: 50px;
 
   background-color: var(--bg-button);
-  color: rgb(255, 255, 255);
+  color: var(--text-primary);
   border: none;
   border-radius: 50%;
 

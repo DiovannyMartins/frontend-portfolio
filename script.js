@@ -44,24 +44,38 @@ btnTopo.addEventListener("click", () => {
 
 // Dark/Light mode
 const themeToggle = document.getElementById("themeToggle");
+const iconeTema = themeToggle.querySelector("i");
+const logoImg = document.querySelector(".logo img");
 const body = document.body;
+
+// Troca a logo conforme o tema
+function atualizarLogo(tema) {
+  if (tema === "light") {
+    logoImg.src = "img/icon-logo-dark.png";
+  } else {
+    logoImg.src = "img/icon-logo.png";
+  }
+}
 
 // Aplica o tema salvo ao carregar a página
 const temaSalvo = localStorage.getItem("tema");
 if (temaSalvo === "light") {
   body.classList.add("light-mode");
-  themeToggle.textContent = "☀️";
+  iconeTema.classList.replace("fa-moon", "fa-sun");
 }
+atualizarLogo(temaSalvo === "light" ? "light" : "dark");
 
 themeToggle.addEventListener("click", () => {
   body.classList.toggle("light-mode");
 
   if (body.classList.contains("light-mode")) {
-    themeToggle.textContent = "☀️";
+    iconeTema.classList.replace("fa-moon", "fa-sun");
     localStorage.setItem("tema", "light");
+    atualizarLogo("light");
   } else {
-    themeToggle.textContent = "🌙";
+    iconeTema.classList.replace("fa-sun", "fa-moon");
     localStorage.setItem("tema", "dark");
+    atualizarLogo("dark");
   }
 });
 
@@ -112,11 +126,11 @@ btnCopiarEmail.addEventListener("click", () => {
   const email = btnCopiarEmail.dataset.email;
 
   navigator.clipboard.writeText(email).then(() => {
-    const textoOriginal = btnCopiarEmail.textContent;
-    btnCopiarEmail.textContent = "✅ Copiado!";
+    const htmlOriginal = btnCopiarEmail.innerHTML;
+    btnCopiarEmail.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
 
     setTimeout(() => {
-      btnCopiarEmail.textContent = textoOriginal;
+      btnCopiarEmail.innerHTML = htmlOriginal;
     }, 2000);
   });
 });
