@@ -198,7 +198,8 @@ p {
   background-color: var(--bg-primary);
   color: white;
 
-  height: 500px;
+  min-height: 500px;
+  padding: 50px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -209,7 +210,7 @@ p {
 }
 
 .container-cards {
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -387,6 +388,17 @@ p {
   align-items: center;
   text-align: center;
   font-size: 13px;
+}
+
+/*AJUSTES PARA TABLETS*/
+@media (max-width: 900px) {
+  .container-cards {
+    gap: 45px;
+  }
+
+  .card {
+    padding: 20px;
+  }
 }
 
 /*RESPONSIVIDADE (MOBILE)*/
