@@ -7,6 +7,31 @@
   --bg-primary: rgba(30, 30, 30);
   --bg-secondary: rgba(45, 45, 48);
   --bg-button: rgba(62, 62, 66);
+  --text-primary: rgb(255, 255, 255);
+  --text-secondary: rgba(203, 213, 225);
+}
+
+body.light-mode {
+  --bg-primary: rgb(245, 245, 245);
+  --bg-secondary: rgb(230, 230, 230);
+  --bg-button: rgb(210, 210, 215);
+  --text-primary: rgb(20, 20, 20);
+  --text-secondary: rgba(60, 60, 60, 0.9);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-right: 15px;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
 }
 
 /* Reset básico */
@@ -25,6 +50,7 @@ html {
 
 body {
   font-family: "Inter", sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 h2 {
@@ -36,7 +62,7 @@ h3 {
 }
 
 p {
-  color: rgba(203, 213, 225);
+  color: var(--text-secondary);
   font-size: 18px;
   line-height: 1.5;
 }
@@ -57,7 +83,7 @@ p {
 }
 
 .logo {
-  color: rgb(255, 255, 255);
+  color: var(--text-primary);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -78,7 +104,7 @@ p {
 .menu > ul > li > a {
   display: flex;
   background-color: var(--bg-button);
-  color: rgba(255, 255, 255);
+  color: var(--text-primary);
   border-radius: 15px;
   padding: 10px 15px;
   font-size: 18px;
@@ -88,6 +114,11 @@ p {
 .menu a:hover {
   transform: translateY(-0.25em);
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+.menu a.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
 }
 
 /* Botão hamburguer (visível só no mobile, controlado via JS) */
@@ -104,7 +135,7 @@ p {
   width: 25px;
   height: 3px;
   margin: 5px auto;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
@@ -127,7 +158,7 @@ p {
 .container-hero {
   height: 500px;
   background-color: var(--bg-primary);
-  color: rgb(255, 255, 255);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -150,7 +181,7 @@ p {
 
 .conteudo-esquerdo a {
   background-color: var(--bg-button);
-  color: rgba(255, 255, 255);
+  color: var(--text-primary);
   border-radius: 15px;
   padding: 15px 20px;
   font-size: 18px;
@@ -174,7 +205,7 @@ p {
 
 .sobre {
   background-color: var(--bg-secondary);
-  color: white;
+  color: var(--text-primary);
 
   height: 300px;
   display: flex;
@@ -200,7 +231,7 @@ p {
 
 .tecnologias {
   background-color: var(--bg-primary);
-  color: white;
+  color: var(--text-primary);
 
   min-height: 500px;
   padding: 50px 20px;
@@ -278,6 +309,10 @@ p {
   padding: 50px 0px 0px 140px;
 }
 
+.projetos-header > h2 {
+  color: var(--text-primary);
+}
+
 .projeto-card {
   width: 200px;
   width: 100%;
@@ -308,7 +343,7 @@ p {
 .projeto-card a {
   display: flex;
   background-color: var(--bg-button);
-  color: rgba(255, 255, 255);
+  color: var(--text-primary);
   border-radius: 15px;
   padding: 10px 15px;
   font-size: 18px;
@@ -332,7 +367,7 @@ p {
   padding: 10px;
 
   background-color: var(--bg-primary);
-  color: white;
+  color: var(--text-primary);
 }
 
 .contato-texto {
@@ -346,7 +381,7 @@ p {
   width: 320px;
   padding: 10px;
   background-color: var(--bg-button);
-  color: #ffffff;
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: bold;
   border-radius: 15px;
@@ -380,6 +415,13 @@ p {
 
 .card-rede.instagram:hover {
   box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
+}
+
+.copiar-email {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
 }
 
 /* BOTÃO VOLTAR AO TOPO */
@@ -427,6 +469,21 @@ p {
   align-items: center;
   text-align: center;
   font-size: 13px;
+}
+
+/* SCROLL REVEAL */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /*AJUSTES PARA TABLETS*/

@@ -20,19 +20,19 @@
             </a>
         </h2>
 
-        <!-- Botão hamburguer (menu mobile) -->
+        <div class="header-actions">
+            <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">🌙</button>
 
-        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </button>
-
-        <!-- Menu de navegação principal -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
 
         <nav class="menu">
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="#home" id="linkHome">Home</a></li>
                 <li><a href="#sobre">Sobre</a></li>
                 <li><a href="#projetos">Projetos</a></li>
                 <li><a href="#contato">Contato</a></li>
@@ -44,7 +44,7 @@
 
         <!-- HERO (banner de apresentação) -->
 
-        <section class="container-hero">
+        <section class="container-hero" id="home">
 
             <div class="conteudo-esquerdo">
                 <h1>Desenvolvedor Front-End</h1>
@@ -60,7 +60,7 @@
 
         <!--SOBRE MIM -->
 
-        <section class="sobre" id="sobre">
+        <section class="sobre reveal" id="sobre">
             <h2>Sobre mim</h2>
             <p>
                 Olá, eu sou o Diovanny. Estudante de Front-End focado em criar interfaces web modernas e acessíveis.
@@ -71,7 +71,7 @@
 
         <!--TECNOLOGIAS (cards de skills)-->
 
-        <section class="tecnologias">
+        <section class="tecnologias reveal">
             <h2>Minhas Tecnologias</h2>
 
             <div class="container-cards">
@@ -99,7 +99,7 @@
 
         <!--PROJETOS (portfólio de trabalhos)-->
 
-        <section id="projetos" class="projetos-container">
+        <section id="projetos" class="projetos-container reveal">
             <div class="projetos-header">
                 <h2>Meus Projetos</h2>
                 <p>Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5 e CSS3.</p>
@@ -147,7 +147,7 @@
 
         <!--CONTATO (redes sociais)-->
 
-        <section class="contato" id="contato">
+        <section class="contato reveal" id="contato">
             <div class="contato-texto">
                 <h2>Contato</h2>
                 <p>Entre em contato comigo pelas redes sociais:</p>
@@ -155,7 +155,7 @@
 
             <div class="contato-redes">
 
-                <a href="#" class="card-rede github">
+                <a href="https://github.com/DiovannyMartins" target="_blank" class="card-rede github">
                     <img src="img/github.png" alt="Logo github.">
                     GitHub
                 </a>
@@ -169,6 +169,10 @@
                     <img src="img/instagram.png" alt="Logo instagram.">
                     Instagram
                 </a>
+
+                <button class="card-rede copiar-email" id="btnCopiarEmail" data-email="diovannydev@gmail.com">
+                    📧 Copiar E-mail
+                </button>
 
             </div>
         </section>
