@@ -17,3 +17,27 @@ menuLinks.forEach((link) => {
     menuToggle.classList.remove("active");
   });
 });
+
+// Atualiza o ano do rodapé automaticamente
+const anoAtual = document.getElementById("anoAtual");
+anoAtual.textContent = new Date().getFullYear();
+
+// Botão voltar ao topo
+const btnTopo = document.getElementById("btnTopo");
+
+// Mostra o botão só depois que o usuário rolar a página
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 400) {
+    btnTopo.classList.add("mostrar");
+  } else {
+    btnTopo.classList.remove("mostrar");
+  }
+});
+
+// Ao clicar, rola suavemente até o topo
+btnTopo.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
