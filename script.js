@@ -137,3 +137,117 @@ btnCopiarEmail.addEventListener("click", () => {
     }, 2000);
   });
 });
+
+// Filtro de projetos
+const filtroBotoes = document.querySelectorAll(".filtro-btn");
+const projetoCards = document.querySelectorAll(".projeto-card");
+
+filtroBotoes.forEach((botao) => {
+  botao.addEventListener("click", () => {
+    // Marca o botão clicado como ativo e remove dos demais
+    filtroBotoes.forEach((btn) => btn.classList.remove("active"));
+    botao.classList.add("active");
+
+    const filtro = botao.dataset.filtro;
+
+    projetoCards.forEach((card) => {
+      const categoria = card.dataset.categoria;
+
+      if (filtro === "todos" || categoria === filtro) {
+        card.classList.remove("escondido");
+      } else {
+        card.classList.add("escondido");
+      }
+    });
+  });
+});
+
+// Efeito de digitação no título do hero
+const typingText = document.getElementById("typingText");
+const texto = "Desenvolvedor Front-End";
+let indice = 0;
+
+function digitar() {
+  if (indice < texto.length) {
+    typingText.textContent += texto.charAt(indice);
+    indice++;
+    setTimeout(digitar, 100);
+  }
+}
+
+digitar();
+
+// Validação do formulário de contato
+const formContato = document.getElementById("formContato");
+const campoNome = document.getElementById("nome");
+const campoEmail = document.getElementById("email");
+const campoMensagem = document.getElementById("mensagem");
+const feedbackForm = document.getElementById("feedbackForm");
+
+function validarEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+function mostrarErro(campo, elementoErro, mensagem) {
+  campo.classList.add("invalido");
+  elementoErro.textContent = mensagem;
+}
+
+function limparErro(campo, elementoErro) {
+  campo.classList.remove("invalido");
+  elementoErro.textContent = "";
+}
+
+formContato.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  let formValido = true;
+
+  // Valida nome
+  if (campoNome.value.trim().length < 3) {
+    mostrarErro(
+      campoNome,
+      document.getElementById("erroNome"),
+      "Digite seu nome completo.",
+    );
+    formValido = false;
+  } else {
+    limparErro(campoNome, document.getElementById("erroNome"));
+  }
+
+  // Valida e-mail
+  if (!validarEmail(campoEmail.value.trim())) {
+    mostrarErro(
+      campoEmail,
+      document.getElementById("erroEmail"),
+      "Digite um e-mail válido.",
+    );
+    formValido = false;
+  } else {
+    limparErro(campoEmail, document.getElementById("erroEmail"));
+  }
+
+  // Valida mensagem
+  if (campoMensagem.value.trim().length < 10) {
+    mostrarErro(
+      campoMensagem,
+      document.getElementById("erroMensagem"),
+      "Escreva uma mensagem com pelo menos 10 caracteres.",
+    );
+    formValido = false;
+  } else {
+    limparErro(campoMensagem, document.getElementById("erroMensagem"));
+  }
+
+  // Se tudo estiver certo
+  if (formValido) {
+    feedbackForm.textContent =
+      "Mensagem enviada com sucesso! Em breve entro em contato.";
+    formContato.reset();
+
+    setTimeout(() => {
+      feedbackForm.textContent = "";
+    }, 5000);
+  }
+});

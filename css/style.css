@@ -202,6 +202,24 @@ p {
   border-radius: 15px;
 }
 
+/* EFEITO DE DIGITAÇÃO */
+
+#typingText::after {
+  content: "|";
+  animation: piscar 0.8s infinite;
+}
+
+@keyframes piscar {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
 /*SOBRE MIM*/
 
 .sobre {
@@ -307,7 +325,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 50px 0px 0px 140px;
+  padding: 50px 0px 20px 140px;
 }
 
 .projetos-header > h2 {
@@ -356,10 +374,47 @@ p {
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
+/* FILTRO DE PROJETOS */
+
+.filtro-botoes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0px 20px 20px;
+}
+
+.filtro-btn {
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filtro-btn:hover {
+  transform: translateY(-0.2em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.3);
+}
+
+.filtro-btn.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
+}
+
+/* Card escondido pelo filtro */
+.projeto-card.escondido {
+  display: none;
+}
+
 /*CONTATO (redes sociais)*/
 
 .contato {
-  height: 400px;
+  height: 550px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -435,6 +490,76 @@ p {
 .copiar-email:hover {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
+
+/* FORMULÁRIO DE CONTATO */
+
+.form-contato {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 25px;
+  max-width: 500px;
+}
+
+.campo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-contato input,
+.form-contato textarea {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-button);
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: none;
+}
+
+.form-contato input:focus,
+.form-contato textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.form-contato input.invalido,
+.form-contato textarea.invalido {
+  border-color: rgb(220, 80, 80);
+}
+
+.erro-mensagem {
+  color: rgb(255, 120, 120);
+  font-size: 13px;
+  min-height: 16px;
+}
+
+.btn-enviar {
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 15px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.btn-enviar:hover {
+  transform: translateY(-0.2em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+.feedback-form {
+  font-size: 15px;
+  min-height: 20px;
+  color: rgb(120, 220, 150);
+}
+
 /* BOTÃO VOLTAR AO TOPO */
 
 .btn-topo {
@@ -525,6 +650,10 @@ p {
     height: calc(100vh - 80px);
     background-color: var(--bg-primary);
     transition: right 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .menu ul {
@@ -537,6 +666,11 @@ p {
 
   .menu.active {
     right: 0;
+  }
+
+  .theme-toggle {
+    font-size: 28px;
+    margin-top: 30px;
   }
 
   .container-hero {

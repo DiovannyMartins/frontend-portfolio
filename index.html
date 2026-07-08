@@ -22,10 +22,6 @@
         </h2>
 
         <div class="header-actions">
-            <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-                <i class="fa-solid fa-moon"></i>
-            </button>
-
             <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -40,6 +36,10 @@
                 <li><a href="#projetos">Projetos</a></li>
                 <li><a href="#contato">Contato</a></li>
             </ul>
+
+            <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+                <i class="fa-solid fa-moon"></i>
+            </button>
         </nav>
     </header>
 
@@ -50,7 +50,7 @@
         <section class="container-hero" id="home">
 
             <div class="conteudo-esquerdo">
-                <h1>Desenvolvedor Front-End</h1>
+                <h1 id="typingText"></h1>
                 <p>Criando interfaces modernas, responsivas e funcionais com html e css.</p>
                 <a href="#projetos" class="btn">Ver Projetos</a>
             </div>
@@ -105,12 +105,20 @@
         <section id="projetos" class="projetos-container reveal">
             <div class="projetos-header">
                 <h2>Meus Projetos</h2>
-                <p>Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5 e CSS3.</p>
+                <p>Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5, CSS3 e JAVASCRIPT.</p>
+            </div>
+
+            <!-- Botões de filtro -->
+            <div class="filtro-botoes">
+                <button class="filtro-btn active" data-filtro="todos">Todos</button>
+                <button class="filtro-btn" data-filtro="dashboard">Dashboard</button>
+                <button class="filtro-btn" data-filtro="landing">Landing Page</button>
+                <button class="filtro-btn" data-filtro="ecommerce">E-commerce</button>
             </div>
 
             <div class="projetos-grid">
 
-                <div class="projeto-card">
+                <div class="projeto-card" data-categoria="dashboard">
                     <h3>Business Dashboard</h3>
                     <p>Dashboard corporativo com painel administrativo, cards de métricas e sidebar de navegação, focado
                         em
@@ -119,7 +127,7 @@
                         class="btn-projeto">Acessar Projeto</a>
                 </div>
 
-                <div class="projeto-card">
+                <div class="projeto-card" data-categoria="landing">
                     <h3>SaaS Landing Page</h3>
                     <p>Landing page profissional inspirada em plataformas SaaS modernas, com layout moderno, seções bem
                         organizadas e interface de nível profissional.</p>
@@ -127,7 +135,7 @@
                         class="btn-projeto">Acessar Projeto</a>
                 </div>
 
-                <div class="projeto-card">
+                <div class="projeto-card" data-categoria="ecommerce">
                     <h3>Modern E-commerce</h3>
                     <p>Página inicial de loja virtual com seção de produtos, design moderno e experiência visual pensada
                         para
@@ -136,7 +144,7 @@
                         class="btn-projeto">Acessar Projeto</a>
                 </div>
 
-                <div class="projeto-card">
+                <div class="projeto-card" data-categoria="dashboard">
                     <h3>Admin Dashboard</h3>
                     <p>Dashboard administrativo com sidebar, cards informativos e interface moderna, focado em
                         organização
@@ -153,7 +161,30 @@
         <section class="contato reveal" id="contato">
             <div class="contato-texto">
                 <h2>Contato</h2>
-                <p>Entre em contato comigo pelas redes sociais:</p>
+                <p>Entre em contato comigo pelas redes sociais ou pelo formulário abaixo:</p>
+
+                <!-- Formulário de contato -->
+
+                <form id="formContato" class="form-contato" novalidate>
+                    <div class="campo-form">
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome">
+                        <span class="erro-mensagem" id="erroNome"></span>
+                    </div>
+
+                    <div class="campo-form">
+                        <input type="email" id="email" name="email" placeholder="Seu e-mail">
+                        <span class="erro-mensagem" id="erroEmail"></span>
+                    </div>
+
+                    <div class="campo-form">
+                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem"></textarea>
+                        <span class="erro-mensagem" id="erroMensagem"></span>
+                    </div>
+
+                    <button type="submit" class="btn-enviar">Enviar Mensagem</button>
+
+                    <p id="feedbackForm" class="feedback-form"></p>
+                </form>
             </div>
 
             <div class="contato-redes">
