@@ -145,8 +145,13 @@ const projetoCards = document.querySelectorAll(".projeto-card");
 filtroBotoes.forEach((botao) => {
   botao.addEventListener("click", () => {
     // Marca o botão clicado como ativo e remove dos demais
-    filtroBotoes.forEach((btn) => btn.classList.remove("active"));
+    filtroBotoes.forEach((btn) => {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-pressed", "false");
+    });
+
     botao.classList.add("active");
+    botao.setAttribute("aria-pressed", "true");
 
     const filtro = botao.dataset.filtro;
 

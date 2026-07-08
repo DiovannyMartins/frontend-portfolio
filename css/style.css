@@ -19,22 +19,6 @@ body.light-mode {
   --text-secondary: rgba(60, 60, 60, 0.9);
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding-right: 15px;
-}
-
-.theme-toggle {
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  font-size: 22px;
-  cursor: pointer;
-  line-height: 1;
-}
-
 /* Reset básico */
 
 * {
@@ -107,6 +91,22 @@ p {
   font-size: 30px;
   padding: 10px;
   text-decoration: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-right: 15px;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
 }
 
 .menu > ul {
@@ -427,13 +427,13 @@ p {
 /*CONTATO (redes sociais)*/
 
 .contato {
-  height: 550px;
+  min-height: 550px;
+  padding: 50px 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 50px;
-  padding: 10px;
 
   background-color: var(--bg-primary);
   color: var(--text-primary);
