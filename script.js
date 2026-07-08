@@ -184,6 +184,11 @@ const campoEmail = document.getElementById("email");
 const campoMensagem = document.getElementById("mensagem");
 const feedbackForm = document.getElementById("feedbackForm");
 
+// Elementos de mensagem de erro (buscados uma única vez, fora do submit)
+const erroNome = document.getElementById("erroNome");
+const erroEmail = document.getElementById("erroEmail");
+const erroMensagem = document.getElementById("erroMensagem");
+
 function validarEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
@@ -206,38 +211,30 @@ formContato.addEventListener("submit", (event) => {
 
   // Valida nome
   if (campoNome.value.trim().length < 3) {
-    mostrarErro(
-      campoNome,
-      document.getElementById("erroNome"),
-      "Digite seu nome completo.",
-    );
+    mostrarErro(campoNome, erroNome, "Digite seu nome completo.");
     formValido = false;
   } else {
-    limparErro(campoNome, document.getElementById("erroNome"));
+    limparErro(campoNome, erroNome);
   }
 
   // Valida e-mail
   if (!validarEmail(campoEmail.value.trim())) {
-    mostrarErro(
-      campoEmail,
-      document.getElementById("erroEmail"),
-      "Digite um e-mail válido.",
-    );
+    mostrarErro(campoEmail, erroEmail, "Digite um e-mail válido.");
     formValido = false;
   } else {
-    limparErro(campoEmail, document.getElementById("erroEmail"));
+    limparErro(campoEmail, erroEmail);
   }
 
   // Valida mensagem
   if (campoMensagem.value.trim().length < 10) {
     mostrarErro(
       campoMensagem,
-      document.getElementById("erroMensagem"),
+      erroMensagem,
       "Escreva uma mensagem com pelo menos 10 caracteres.",
     );
     formValido = false;
   } else {
-    limparErro(campoMensagem, document.getElementById("erroMensagem"));
+    limparErro(campoMensagem, erroMensagem);
   }
 
   // Se tudo estiver certo

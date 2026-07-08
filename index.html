@@ -11,7 +11,7 @@
 
 <body>
 
-    <!--HEADER / NAVEGAÇÃO-->
+    <!-- HEADER / NAVEGAÇÃO -->
 
     <header class="header">
         <h2>
@@ -35,7 +35,7 @@
 
         <nav class="menu">
             <ul>
-                <li><a href="#home" id="linkHome">Home</a></li>
+                <li><a href="#home">Home</a></li>
                 <li><a href="#sobre">Sobre</a></li>
                 <li><a href="#projetos">Projetos</a></li>
                 <li><a href="#contato">Contato</a></li>
@@ -61,7 +61,7 @@
 
         </section>
 
-        <!--SOBRE MIM -->
+        <!-- SOBRE MIM -->
 
         <section class="sobre reveal" id="sobre">
             <h2>Sobre mim</h2>
@@ -72,7 +72,7 @@
             </p>
         </section>
 
-        <!--TECNOLOGIAS (cards de skills)-->
+        <!-- TECNOLOGIAS (cards de skills) -->
 
         <section class="tecnologias reveal">
             <h2>Minhas Tecnologias</h2>
@@ -100,7 +100,7 @@
             </div>
         </section>
 
-        <!--PROJETOS (portfólio de trabalhos)-->
+        <!-- PROJETOS (portfólio de trabalhos) -->
 
         <section id="projetos" class="projetos-container reveal">
             <div class="projetos-header">
@@ -156,7 +156,7 @@
             </div>
         </section>
 
-        <!--CONTATO (redes sociais)-->
+        <!-- CONTATO (redes sociais) -->
 
         <section class="contato reveal" id="contato">
             <div class="contato-texto">
@@ -167,16 +167,19 @@
 
                 <form id="formContato" class="form-contato" novalidate>
                     <div class="campo-form">
+                        <label for="nome" class="sr-only">Nome</label>
                         <input type="text" id="nome" name="nome" placeholder="Seu nome">
                         <span class="erro-mensagem" id="erroNome"></span>
                     </div>
 
                     <div class="campo-form">
+                        <label for="email" class="sr-only">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Seu e-mail">
                         <span class="erro-mensagem" id="erroEmail"></span>
                     </div>
 
                     <div class="campo-form">
+                        <label for="mensagem" class="sr-only">Mensagem</label>
                         <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem"></textarea>
                         <span class="erro-mensagem" id="erroMensagem"></span>
                     </div>
@@ -219,7 +222,7 @@
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
-    <!--FOOTER-->
+    <!-- FOOTER -->
 
     <footer class="footer">
         <p>© <span id="anoAtual"></span> Diovanny.dev - Todos os direitos reservados</p>
