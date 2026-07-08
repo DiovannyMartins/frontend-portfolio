@@ -746,6 +746,10 @@ p {
     gap: 25px;
   }
 
+  .btn-enviar {
+    align-self: center;
+  }
+
   .footer {
     height: 90px;
   }
