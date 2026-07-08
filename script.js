@@ -46,14 +46,17 @@ btnTopo.addEventListener("click", () => {
 const themeToggle = document.getElementById("themeToggle");
 const iconeTema = themeToggle.querySelector("i");
 const logoImg = document.querySelector(".logo img");
+const iconGithub = document.getElementById("iconGithub");
 const body = document.body;
 
-// Troca a logo conforme o tema
-function atualizarLogo(tema) {
+// Troca a logo e o ícone do GitHub conforme o tema
+function atualizarImagens(tema) {
   if (tema === "light") {
     logoImg.src = "img/icon-logo-dark.png";
+    iconGithub.src = "img/github-dark.png";
   } else {
     logoImg.src = "img/icon-logo.png";
+    iconGithub.src = "img/github.png";
   }
 }
 
@@ -63,7 +66,7 @@ if (temaSalvo === "light") {
   body.classList.add("light-mode");
   iconeTema.classList.replace("fa-moon", "fa-sun");
 }
-atualizarLogo(temaSalvo === "light" ? "light" : "dark");
+atualizarImagens(temaSalvo === "light" ? "light" : "dark");
 
 themeToggle.addEventListener("click", () => {
   body.classList.toggle("light-mode");
@@ -71,11 +74,11 @@ themeToggle.addEventListener("click", () => {
   if (body.classList.contains("light-mode")) {
     iconeTema.classList.replace("fa-moon", "fa-sun");
     localStorage.setItem("tema", "light");
-    atualizarLogo("light");
+    atualizarImagens("light");
   } else {
     iconeTema.classList.replace("fa-sun", "fa-moon");
     localStorage.setItem("tema", "dark");
-    atualizarLogo("dark");
+    atualizarImagens("dark");
   }
 });
 
