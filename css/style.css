@@ -610,6 +610,12 @@ p {
   display: flex;
 }
 
+.icon-btn {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
 /*FOOTER*/
 
 .footer {
