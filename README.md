@@ -42,8 +42,3 @@ Portfólio pessoal desenvolvido com HTML5, CSS3 e JavaScript para apresentar meu
 - [SaaS Landing Page](https://diovannymartins.github.io/saas-landing-page/)
 - [Modern E-commerce](https://diovannymartins.github.io/modern-ecommerce/)
 - [Admin Dashboard](https://diovannymartins.github.io/admin-dashboard/)
-
-## 📫 Contato
-
-- GitHub: [@DiovannyMartins](https://github.com/DiovannyMartins)
-- Instagram: [@diovanny_067](https://www.instagram.com/diovanny_067/)
