@@ -1,0 +1,129 @@
+/*
+ * COMPONENTE: SOBRE + CARDS DE TECNOLOGIA
+ * -----------------------------------------
+ */
+
+.about {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+  text-align: justify;
+}
+
+.about__title {
+  align-self: center;
+}
+
+.about__text {
+  width: 845px;
+  max-width: 100%;
+}
+
+.skills {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+
+  min-height: 500px;
+  padding: 50px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+
+  text-align: center;
+}
+
+.skills__grid {
+  max-width: 1000px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  place-content: center;
+  justify-items: center;
+}
+
+.skills__card {
+  background-color: var(--bg-primary);
+
+  max-width: 300px;
+  width: 100%;
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow:
+    10px 10px 20px rgba(232, 232, 232, 0.2),
+    -10px -10px 20px rgb(60, 60, 60);
+  transition: transform 0.3s ease;
+}
+
+.skills__card:hover {
+  transform: translateY(-5px);
+}
+
+.skills__card-title {
+  margin-top: 30px;
+}
+
+.skills__card-text {
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+@media (max-width: 900px) {
+  .skills__grid {
+    gap: 45px;
+  }
+
+  .skills__card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    height: 270px;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .about__text {
+    width: auto;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .skills {
+    height: auto;
+    padding: 20px;
+  }
+
+  .skills__grid {
+    gap: 30px;
+  }
+
+  .skills__card {
+    padding: 0px 20px;
+  }
+
+  .skills__card-title {
+    margin-top: 20px;
+  }
+
+  .skills__card-text {
+    font-size: 14px;
+  }
+}

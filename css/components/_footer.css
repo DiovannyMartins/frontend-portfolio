@@ -1,0 +1,20 @@
+/*
+ * COMPONENTE: FOOTER
+ * ------------------
+ */
+
+.footer {
+  background-color: var(--bg-secondary);
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    height: 90px;
+  }
+}

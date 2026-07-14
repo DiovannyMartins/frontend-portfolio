@@ -1,0 +1,29 @@
+/*
+ * UTILITÁRIOS DE ANIMAÇÃO
+ * --------------------------
+ */
+
+@keyframes piscar {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Scroll reveal: aplicado a qualquer seção que deva ter fade-in ao entrar na tela */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}

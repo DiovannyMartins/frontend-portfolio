@@ -7,7 +7,10 @@
     <meta name="description"
         content="Portfólio de Diovanny Martins, desenvolvedor Front-End especializado em HTML5, CSS3 e JavaScript. Confira meus projetos e entre em contato.">
     <link rel="shortcut icon" href="img/icon-logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/style.css">
+
+    <!-- CSS: um único ponto de entrada. main.css apenas importa os módulos (ver css/main.css) -->
+    <link rel="stylesheet" href="css/main.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title>Diovanny Martins | Desenvolvedor Front-End</title>
@@ -15,33 +18,32 @@
 
 <body>
 
-    <!-- HEADER / NAVEGAÇÃO -->
-
+    <!-- ============ HEADER / NAVEGAÇÃO ============ -->
     <header class="header">
         <h2>
-            <a href="#" class="logo">
+            <a href="#" class="header__logo">
                 <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64">
                 Diovanny.dev
             </a>
         </h2>
 
-        <div class="header-actions">
-            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+        <div class="header__actions">
+            <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu">
+                <span class="header__menu-toggle-bar"></span>
+                <span class="header__menu-toggle-bar"></span>
+                <span class="header__menu-toggle-bar"></span>
             </button>
         </div>
 
-        <nav class="menu">
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#projetos">Projetos</a></li>
-                <li><a href="#contato">Contato</a></li>
-                <li>
+        <nav class="nav">
+            <ul class="nav__list">
+                <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
+                <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
+                <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
+                <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
+                <li class="nav__item">
                     <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon-btn">
+                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon">
                     </button>
                 </li>
             </ul>
@@ -50,195 +52,178 @@
 
     <main>
 
-        <!-- HERO (banner de apresentação) -->
-
-        <section class="container-hero" id="home">
-
-            <div class="conteudo-esquerdo">
-                <h1 id="typingText"></h1>
-                <p>Desenvolvendo interfaces modernas, responsivas e interativas com HTML5, CSS3 e JavaScript.</p>
-                <a href="#projetos" class="btn">Ver Projetos</a>
+        <!-- ============ HERO ============ -->
+        <section class="hero" id="home">
+            <div class="hero__content">
+                <h1 class="hero__title" id="typingText"></h1>
+                <p class="hero__text">Desenvolvendo interfaces modernas, responsivas e interativas com HTML5, CSS3 e
+                    JavaScript.</p>
+                <a href="#projetos" class="hero__cta">Ver Projetos</a>
             </div>
 
-            <div class="conteudo-direito">
-                <img src="img/imagem.webp" alt="uma tela de computador com um monte de código nele" width="600"
-                    height="400" fetchpriority="high">
+            <div class="hero__media">
+                <img class="hero__image" src="img/imagem.webp" alt="uma tela de computador com um monte de código nele"
+                    width="600" height="400" fetchpriority="high">
             </div>
-
         </section>
 
-        <!-- SOBRE MIM -->
-
-        <section class="sobre reveal" id="sobre">
-            <h2>Sobre mim</h2>
-            <p>
+        <!-- ============ SOBRE MIM ============ -->
+        <section class="about reveal" id="sobre">
+            <h2 class="about__title">Sobre mim</h2>
+            <p class="about__text">
                 Olá, eu sou o Diovanny. Estudante de Front-End focado em criar interfaces web modernas e acessíveis.
-                Com conhecimentos práticos em HTML e CSS, sigo em constante evolução tecnológica para entregar soluções
-                responsivas que unam design atraente e excelente usabilidade.
+                Com conhecimentos práticos em HTML e CSS, sigo em constante evolução tecnológica para entregar
+                soluções responsivas que unam design atraente e excelente usabilidade.
             </p>
         </section>
 
-        <!-- TECNOLOGIAS (cards de skills) -->
+        <!-- ============ TECNOLOGIAS ============ -->
+        <section class="skills reveal">
+            <h2 class="skills__title">Minhas Tecnologias</h2>
 
-        <section class="tecnologias reveal">
-            <h2>Minhas Tecnologias</h2>
-
-            <div class="container-cards">
-
-                <div class="card">
-                    <img src="img/arquivo-html.png" alt="Ícone do HTML5" loading="lazy">
-                    <h3>HTML5</h3>
-                    <p>Estrutura de páginas web com semântica e organização.</p>
+            <div class="skills__grid">
+                <div class="skills__card">
+                    <img class="skills__card-icon" src="img/arquivo-html.png" alt="Ícone do HTML5" loading="lazy">
+                    <h3 class="skills__card-title">HTML5</h3>
+                    <p class="skills__card-text">Estrutura de páginas web com semântica e organização.</p>
                 </div>
 
-                <div class="card">
-                    <img src="img/arquivo-css.png" alt="Ícone do CSS3" loading="lazy">
-                    <h3>CSS3</h3>
-                    <p>Estilização moderna com layouts responsivos.</p>
+                <div class="skills__card">
+                    <img class="skills__card-icon" src="img/arquivo-css.png" alt="Ícone do CSS3" loading="lazy">
+                    <h3 class="skills__card-title">CSS3</h3>
+                    <p class="skills__card-text">Estilização moderna com layouts responsivos.</p>
                 </div>
 
-                <div class="card">
-                    <img src="img/arquivo-js.png" alt="Ícone do JavaScript" loading="lazy">
-                    <h3>JavaScript</h3>
-                    <p>Interatividade e dinamismo para páginas web modernas.</p>
+                <div class="skills__card">
+                    <img class="skills__card-icon" src="img/arquivo-js.png" alt="Ícone do JavaScript" loading="lazy">
+                    <h3 class="skills__card-title">JavaScript</h3>
+                    <p class="skills__card-text">Interatividade e dinamismo para páginas web modernas.</p>
                 </div>
-
             </div>
         </section>
 
-        <!-- PROJETOS (portfólio de trabalhos) -->
-
-        <section id="projetos" class="projetos-container reveal">
-            <div class="projetos-header">
-                <h2>Meus Projetos</h2>
-                <p>Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5, CSS3 e JAVASCRIPT.</p>
+        <!-- ============ PROJETOS ============ -->
+        <section id="projetos" class="projects reveal">
+            <div class="projects__header">
+                <h2 class="projects__title">Meus Projetos</h2>
+                <p class="projects__subtitle">Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5,
+                    CSS3 e JAVASCRIPT.</p>
             </div>
 
-            <!-- Botões de filtro -->
-            <div class="filtro-botoes">
-                <button class="filtro-btn active" data-filtro="todos" aria-pressed="true">Todos</button>
-                <button class="filtro-btn" data-filtro="dashboard" aria-pressed="false">Dashboard</button>
-                <button class="filtro-btn" data-filtro="landing" aria-pressed="false">Landing Page</button>
-                <button class="filtro-btn" data-filtro="ecommerce" aria-pressed="false">E-commerce</button>
+            <div class="projects__filters">
+                <button class="projects__filter-btn projects__filter-btn--active" data-filtro="todos"
+                    aria-pressed="true">Todos</button>
+                <button class="projects__filter-btn" data-filtro="dashboard" aria-pressed="false">Dashboard</button>
+                <button class="projects__filter-btn" data-filtro="landing" aria-pressed="false">Landing
+                    Page</button>
+                <button class="projects__filter-btn" data-filtro="ecommerce" aria-pressed="false">E-commerce</button>
             </div>
 
-            <div class="projetos-grid">
-
-                <div class="projeto-card" data-categoria="dashboard">
-                    <h3>Business Dashboard</h3>
-                    <p>Dashboard corporativo com painel administrativo, cards de métricas e sidebar de navegação,
-                        focado
-                        em
-                        visual profissional e organização de informações.</p>
+            <div class="projects__grid">
+                <article class="project-card" data-categoria="dashboard">
+                    <h3 class="project-card__title">Business Dashboard</h3>
+                    <p class="project-card__text">Dashboard corporativo com painel administrativo, cards de
+                        métricas e sidebar de navegação, focado em visual profissional e organização de
+                        informações.</p>
                     <a href="https://diovannymartins.github.io/business-dashboard/" target="_blank"
-                        class="btn-projeto">Acessar Projeto</a>
-                </div>
+                        class="project-card__link">Acessar Projeto</a>
+                </article>
 
-                <div class="projeto-card" data-categoria="landing">
-                    <h3>SaaS Landing Page</h3>
-                    <p>Landing page profissional inspirada em plataformas SaaS modernas, com layout moderno, seções
-                        bem
-                        organizadas e interface de nível profissional.</p>
+                <article class="project-card" data-categoria="landing">
+                    <h3 class="project-card__title">SaaS Landing Page</h3>
+                    <p class="project-card__text">Landing page profissional inspirada em plataformas SaaS
+                        modernas, com layout moderno, seções bem organizadas e interface de nível profissional.</p>
                     <a href="https://diovannymartins.github.io/saas-landing-page/" target="_blank"
-                        class="btn-projeto">Acessar Projeto</a>
-                </div>
+                        class="project-card__link">Acessar Projeto</a>
+                </article>
 
-                <div class="projeto-card" data-categoria="ecommerce">
-                    <h3>Modern E-commerce</h3>
-                    <p>Página inicial de loja virtual com seção de produtos, design moderno e experiência visual
-                        pensada
-                        para
-                        e-commerce.</p>
+                <article class="project-card" data-categoria="ecommerce">
+                    <h3 class="project-card__title">Modern E-commerce</h3>
+                    <p class="project-card__text">Página inicial de loja virtual com seção de produtos, design
+                        moderno e experiência visual pensada para e-commerce.</p>
                     <a href="https://diovannymartins.github.io/modern-ecommerce/" target="_blank"
-                        class="btn-projeto">Acessar Projeto</a>
-                </div>
+                        class="project-card__link">Acessar Projeto</a>
+                </article>
 
-                <div class="projeto-card" data-categoria="dashboard">
-                    <h3>Admin Dashboard</h3>
-                    <p>Dashboard administrativo com sidebar, cards informativos e interface moderna, focado em
-                        organização
-                        visual e responsividade.</p>
+                <article class="project-card" data-categoria="dashboard">
+                    <h3 class="project-card__title">Admin Dashboard</h3>
+                    <p class="project-card__text">Dashboard administrativo com sidebar, cards informativos e
+                        interface moderna, focado em organização visual e responsividade.</p>
                     <a href="https://diovannymartins.github.io/admin-dashboard/" target="_blank"
-                        class="btn-projeto">Acessar Projeto</a>
-                </div>
-
+                        class="project-card__link">Acessar Projeto</a>
+                </article>
             </div>
         </section>
 
-        <!-- CONTATO (redes sociais) -->
+        <!-- ============ CONTATO ============ -->
+        <section class="contact reveal" id="contato">
+            <div class="contact__info">
+                <h2 class="contact__title">Contato</h2>
+                <p class="contact__text">Entre em contato comigo pelas redes sociais ou pelo formulário abaixo:</p>
 
-        <section class="contato reveal" id="contato">
-            <div class="contato-texto">
-                <h2>Contato</h2>
-                <p>Entre em contato comigo pelas redes sociais ou pelo formulário abaixo:</p>
-
-                <!-- Formulário de contato -->
-
-                <form id="formContato" class="form-contato" novalidate>
-                    <div class="campo-form">
+                <form id="formContato" class="contact__form" novalidate>
+                    <div class="contact__field">
                         <label for="nome" class="sr-only">Nome</label>
                         <input type="text" id="nome" name="nome" placeholder="Seu nome">
-                        <span class="erro-mensagem" id="erroNome" aria-live="polite"></span>
+                        <span class="contact__error" id="erroNome" aria-live="polite"></span>
                     </div>
 
-                    <div class="campo-form">
+                    <div class="contact__field">
                         <label for="email" class="sr-only">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Seu e-mail">
-                        <span class="erro-mensagem" id="erroEmail" aria-live="polite"></span>
+                        <span class="contact__error" id="erroEmail" aria-live="polite"></span>
                     </div>
 
-                    <div class="campo-form">
+                    <div class="contact__field">
                         <label for="mensagem" class="sr-only">Mensagem</label>
                         <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem"></textarea>
-                        <span class="erro-mensagem" id="erroMensagem" aria-live="polite"></span>
+                        <span class="contact__error" id="erroMensagem" aria-live="polite"></span>
                     </div>
 
-                    <button type="submit" class="btn-enviar">Enviar Mensagem</button>
+                    <button type="submit" class="contact__submit">Enviar Mensagem</button>
 
-                    <p id="feedbackForm" class="feedback-form"></p>
+                    <p id="feedbackForm" class="contact__feedback"></p>
                 </form>
             </div>
 
-            <div class="contato-redes">
-
-                <a href="https://github.com/DiovannyMartins" target="_blank" class="card-rede github">
-                    <img src="img/github.png" alt="Logo github." id="iconGithub" loading="lazy">
+            <div class="contact__social">
+                <a href="https://github.com/DiovannyMartins" target="_blank" class="social-card social-card--github">
+                    <img class="social-card__icon" src="img/github.png" alt="Logo github." id="iconGithub"
+                        loading="lazy">
                     GitHub
                 </a>
 
-                <a href="#" class="card-rede linkedin">
-                    <img src="img/linkedin.png" alt="Logo linkedin." loading="lazy">
+                <a href="#" class="social-card social-card--linkedin">
+                    <img class="social-card__icon" src="img/linkedin.png" alt="Logo linkedin." loading="lazy">
                     LinkedIn
                 </a>
 
-                <a href="https://www.instagram.com/diovanny_067/" class="card-rede instagram" target="_blank">
-                    <img src="img/instagram.png" alt="Logo instagram." loading="lazy">
+                <a href="https://www.instagram.com/diovanny_067/" target="_blank"
+                    class="social-card social-card--instagram">
+                    <img class="social-card__icon" src="img/instagram.png" alt="Logo instagram." loading="lazy">
                     Instagram
                 </a>
 
-                <button class="card-rede copiar-email" id="btnCopiarEmail" data-email="diovannydev@gmail.com">
-                    <img src="img/icon-envelope-branco.png" alt="" id="iconEmail" class="icon-btn" loading="lazy">
+                <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com">
+                    <img class="social-card__icon icon" src="img/icon-envelope-branco.png" alt="" id="iconEmail"
+                        loading="lazy">
                     <span id="textoCopiarEmail">Copiar E-mail</span>
                 </button>
-
             </div>
         </section>
 
     </main>
 
-    <!-- Botão voltar ao topo -->
-
-    <button id="btnTopo" class="btn-topo" aria-label="Voltar ao topo">
-        <img src="img/icon-seta-branco.png" alt="" id="iconSeta" class="icon-btn" loading="lazy">
+    <button id="btnTopo" class="back-to-top" aria-label="Voltar ao topo">
+        <img src="img/icon-seta-branco.png" alt="" id="iconSeta" class="icon" loading="lazy">
     </button>
-
-    <!-- FOOTER -->
 
     <footer class="footer">
         <p>© <span id="anoAtual"></span> Diovanny.dev - Todos os direitos reservados</p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- type="module" habilita import/export nativo do ES6 -->
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

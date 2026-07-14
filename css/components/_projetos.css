@@ -1,0 +1,124 @@
+/*
+ * COMPONENTE: PROJETOS (grid + filtros)
+ * ----------------------------------------
+ * .project-card--hidden é aplicado/removido via JS (ver filtroProjetos.js)
+ * para ocultar cards que não batem com a categoria selecionada.
+ */
+
+.projects {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.projects__header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 50px 0px 20px 140px;
+}
+
+.projects__title {
+  color: var(--text-primary);
+}
+
+.projects__filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 0px 20px 20px;
+}
+
+.projects__filter-btn {
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.projects__filter-btn:hover {
+  transform: translateY(-0.2em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.3);
+}
+
+.projects__filter-btn--active {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
+}
+
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+.project-card {
+  width: 100%;
+  min-height: 200px;
+  background-color: var(--bg-primary);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-card--hidden {
+  display: none;
+}
+
+.project-card__text {
+  font-size: 16px;
+  text-align: justify;
+}
+
+.project-card__link {
+  display: flex;
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border-radius: 15px;
+  padding: 10px 15px;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.project-card__link:hover {
+  transform: translateY(-0.25em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .projects__header {
+    padding: 20px 10px;
+    gap: 10px;
+  }
+
+  .projects__subtitle {
+    font-size: 15px;
+    text-align: justify;
+  }
+
+  .projects__grid {
+    height: auto;
+    padding-bottom: 15px;
+  }
+}

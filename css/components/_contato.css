@@ -1,0 +1,142 @@
+/*
+ * COMPONENTE: CONTATO (formulário + cards de redes sociais)
+ * -------------------------------------------------------------
+ */
+
+.contact {
+  min-height: 550px;
+  padding: 50px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.contact__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- Formulário --- */
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 25px;
+  max-width: 500px;
+}
+
+.contact__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contact__field input,
+.contact__field textarea {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-button);
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: none;
+}
+
+.contact__field input:focus,
+.contact__field textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Modificador aplicado via JS quando a validação falha (ver formulario.js) */
+.contact__field .input--invalid {
+  border-color: rgb(220, 80, 80);
+}
+
+.contact__error {
+  color: rgb(255, 120, 120);
+  font-size: 13px;
+  min-height: 16px;
+}
+
+.contact__feedback {
+  font-size: 15px;
+  min-height: 20px;
+  color: rgb(120, 220, 150);
+}
+
+/* --- Cards de rede social --- */
+
+.contact__social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-card {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+
+  width: 320px;
+  padding: 10px;
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  border: 2px solid transparent;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.social-card:hover {
+  transform: translateX(-5px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.social-card--github:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.social-card--linkedin:hover {
+  box-shadow: 0 0 20px rgba(0, 119, 181, 0.3);
+}
+
+.social-card--instagram:hover {
+  box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
+}
+
+/* copy-email-btn é um <button>, então herda .social-card mas precisa resetar estilos nativos de botão */
+.copy-email-btn {
+  border: 2px solid transparent;
+  font-family: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: left;
+  padding: 14px;
+}
+
+.copy-email-btn:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .contact {
+    height: auto;
+    gap: 25px;
+  }
+}

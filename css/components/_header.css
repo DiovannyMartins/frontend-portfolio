@@ -1,0 +1,157 @@
+/*
+ * COMPONENTE: HEADER / NAVEGAÇÃO
+ * -------------------------------
+ * Nomenclatura BEM:
+ *   .header            → bloco
+ *   .header__logo      → elemento do bloco header
+ *   .nav__link--active → modificador do elemento .nav__link
+ */
+
+.header {
+  background-color: var(--bg-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.header__logo {
+  color: var(--text-primary);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 30px;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding-right: 15px;
+}
+
+/* Hamburguer: escondido por padrão, só aparece no breakpoint mobile (ver responsividade) */
+.header__menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.header__menu-toggle-bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+/* Animação hamburguer → X, controlada pela classe .header__menu-toggle--active via JS */
+.header__menu-toggle--active .header__menu-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.header__menu-toggle--active .header__menu-toggle-bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.header__menu-toggle--active .header__menu-toggle-bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* --- Navegação --- */
+
+.nav__list {
+  display: flex;
+  padding: 22px;
+  gap: 10px;
+  list-style: none;
+}
+
+.nav__link {
+  display: flex;
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border-radius: 15px;
+  padding: 10px 15px;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav__link:hover {
+  transform: translateY(-0.25em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+.nav__link--active {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
+}
+
+/* --- Botão de tema (fica dentro da lista de navegação) --- */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-button);
+  border: none;
+  border-radius: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-0.25em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
+/* --- Responsividade: menu vira drawer lateral no mobile --- */
+
+@media (max-width: 768px) {
+  .header__menu-toggle {
+    display: block;
+    margin-right: 15px;
+    z-index: 10;
+  }
+
+  .header__actions {
+    gap: 20px;
+    margin-right: 10px;
+  }
+
+  .nav {
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background-color: var(--bg-primary);
+    transition: right 0.3s ease;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    gap: 30px;
+  }
+
+  /* Estado "aberto" controlado via JS adicionando essa classe no <nav> */
+  .nav--active {
+    right: 0;
+  }
+}

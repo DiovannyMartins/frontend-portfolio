@@ -1,0 +1,22 @@
+/*
+ * UTILITÁRIOS DE ACESSIBILIDADE
+ * -------------------------------
+ * Classes genéricas, reutilizáveis por qualquer componente.
+ */
+
+/* Esconde visualmente mas mantém disponível para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Tamanho padrão para ícones de botões (tema, voltar ao topo, copiar e-mail) */
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}

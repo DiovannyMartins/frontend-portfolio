@@ -1,0 +1,23 @@
+/*
+ * RESET BÁSICO
+ * ------------
+ * Remove estilos padrão inconsistentes entre navegadores antes de
+ * qualquer estilização própria começar.
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease;
+}
