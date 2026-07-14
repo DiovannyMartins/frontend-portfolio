@@ -7,17 +7,17 @@
  * Essa abordagem é inspirada em ITCSS (Inverted Triangle CSS).
  */
 
-@import url("base/_variables.css");
-@import url("base/_reset.css");
-@import url("base/_typography.css");
+@import url("base/variables.css");
+@import url("base/reset.css");
+@import url("base/typography.css");
 
-@import url("components/_header.css");
-@import url("components/_hero.css");
-@import url("components/_cards.css");
-@import url("components/_projetos.css");
-@import url("components/_contato.css");
-@import url("components/_botoes.css");
-@import url("components/_footer.css");
+@import url("components/header.css");
+@import url("components/hero.css");
+@import url("components/cards.css");
+@import url("components/projetos.css");
+@import url("components/contato.css");
+@import url("components/botoes.css");
+@import url("components/footer.css");
 
-@import url("utils/_acessibilidade.css");
-@import url("utils/_animacoes.css");
+@import url("utils/acessibilidade.css");
+@import url("utils/animacoes.css");
