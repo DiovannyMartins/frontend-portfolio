@@ -119,33 +119,6 @@
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
-/* --- Botão de modo foco --- */
-
-.focus-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bg-button);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 15px;
-  padding: 10px 15px;
-  font-size: 14px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.focus-toggle:hover {
-  transform: translateY(-0.25em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
-}
-
-.focus-toggle[aria-pressed="true"] {
-  background-color: rgb(80, 200, 120);
-  color: white;
-}
-
 /* --- Responsividade: menu vira drawer lateral no mobile --- */
 
 @media (max-width: 768px) {

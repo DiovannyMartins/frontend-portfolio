@@ -20,7 +20,6 @@ import { initCopiarEmail } from "./modules/copiarEmail.js";
 import { initVoltarTopo } from "./modules/voltarTopo.js";
 import { initFormulario } from "./modules/formulario.js";
 import { initAnoRodape } from "./modules/anoRodape.js";
-import { initModoFoco } from "./modules/modoFoco.js";
 
 // Cada init() é independente — se um módulo falhar, os outros continuam funcionando.
 initMenuMobile();
@@ -34,4 +33,3 @@ initCopiarEmail();
 initVoltarTopo();
 initFormulario();
 initAnoRodape();
-initModoFoco();
