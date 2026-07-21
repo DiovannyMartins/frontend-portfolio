@@ -4,13 +4,12 @@
  */
 
 .contact {
-  min-height: 550px;
-  padding: 50px 10px;
+  padding: 80px 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 50px;
+  align-items: flex-start;
+  gap: 60px;
 
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -19,7 +18,28 @@
 .contact__info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  flex: 1;
+  min-width: 280px;
+  max-width: 480px;
+}
+
+.contact__title {
+  margin-bottom: 4px;
+}
+
+.contact__text {
+  margin-bottom: 16px;
+}
+
+.contact__social {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 280px;
+  max-width: 400px;
+  padding-top: 4px;
 }
 
 /* --- Formulário --- */
@@ -27,15 +47,14 @@
 .contact__form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 25px;
-  max-width: 500px;
+  gap: 12px;
+  width: 100%;
 }
 
 .contact__field {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .contact__field input,
@@ -44,10 +63,11 @@
   color: var(--text-primary);
   border: 1px solid var(--bg-button);
   border-radius: 10px;
-  padding: 12px 15px;
+  padding: 14px 16px;
   font-family: inherit;
   font-size: 16px;
   resize: none;
+  width: 100%;
 }
 
 .contact__field input:focus,
@@ -75,27 +95,19 @@
 
 /* --- Cards de rede social --- */
 
-.contact__social {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
 .social-card {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 
-  width: 320px;
-  padding: 10px;
+  width: 100%;
+  padding: 16px 18px;
   background-color: var(--bg-button);
   color: var(--text-primary);
   text-decoration: none;
   font-weight: bold;
-  border-radius: 15px;
-  margin-bottom: 15px;
+  border-radius: 12px;
   border: 2px solid transparent;
   transition:
     transform 0.3s ease,
@@ -124,10 +136,10 @@
 .copy-email-btn {
   border: 2px solid transparent;
   font-family: inherit;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   text-align: left;
-  padding: 14px;
+  padding: 16px 18px;
 }
 
 .copy-email-btn:hover {
@@ -136,7 +148,15 @@
 
 @media (max-width: 768px) {
   .contact {
-    height: auto;
-    gap: 25px;
+    padding: 60px 16px;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .contact__info,
+  .contact__social {
+    max-width: 100%;
+    width: 100%;
   }
 }
