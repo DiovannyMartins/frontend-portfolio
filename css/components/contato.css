@@ -48,17 +48,26 @@
   font-family: inherit;
   font-size: 16px;
   resize: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .contact__field input:focus,
 .contact__field textarea:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 /* Modificador aplicado via JS quando a validação falha (ver formulario.js) */
 .contact__field .input--invalid {
   border-color: rgb(220, 80, 80);
+  box-shadow: 0 0 0 3px rgba(220, 80, 80, 0.2);
+}
+
+/* Modificador aplicado via JS quando o campo é válido */
+.contact__field .input--valid {
+  border-color: rgb(80, 200, 120);
+  box-shadow: 0 0 0 3px rgba(80, 200, 120, 0.2);
 }
 
 .contact__error {

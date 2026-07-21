@@ -1,0 +1,64 @@
+/*
+ * COMPONENTE: TOAST NOTIFICATION
+ * ----------------------------------
+ * Notificações temporárias que aparecem no canto da tela.
+ */
+
+.toast-notification {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--bg-button);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease,
+    transform 0.3s ease;
+}
+
+.toast--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.toast__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgb(80, 200, 120);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.toast__message {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .toast-notification {
+    bottom: 90px;
+    right: 16px;
+    left: 16px;
+  }
+}

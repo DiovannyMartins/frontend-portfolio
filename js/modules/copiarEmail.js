@@ -13,6 +13,34 @@ export function initCopiarEmail() {
 
   const FEEDBACK_DURACAO_MS = 2000;
 
+  function criarToast(mensagem, sucesso = true) {
+    // Remove toast existente se houver
+    const toastExistente = document.querySelector(".toast-notification");
+    if (toastExistente) {
+      toastExistente.remove();
+    }
+
+    const toast = document.createElement("div");
+    toast.className = "toast-notification";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    toast.innerHTML = `
+      <span class="toast__icon">${sucesso ? "✓" : "✕"}</span>
+      <span class="toast__message">${mensagem}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Força reflow para animação funcionar
+    toast.offsetHeight;
+    toast.classList.add("toast--visible");
+
+    setTimeout(() => {
+      toast.classList.remove("toast--visible");
+      setTimeout(() => toast.remove(), 300);
+    }, FEEDBACK_DURACAO_MS);
+  }
+
   btnCopiarEmail.addEventListener("click", () => {
     const email = btnCopiarEmail.dataset.email;
 
@@ -26,10 +54,14 @@ export function initCopiarEmail() {
         ? "img/icon-check-preto.png"
         : "img/icon-check-branco.png";
 
+      criarToast("E-mail copiado com sucesso!");
+
       setTimeout(() => {
         textoCopiarEmail.textContent = textoOriginal;
         iconEmail.src = iconOriginal;
       }, FEEDBACK_DURACAO_MS);
+    }).catch(() => {
+      criarToast("Erro ao copiar e-mail. Tente novamente.", false);
     });
   });
 }

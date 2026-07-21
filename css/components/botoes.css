@@ -37,22 +37,32 @@
   font-size: 22px;
   cursor: pointer;
 
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.8);
+
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   z-index: 998;
 }
 
 .back-to-top:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) scale(1.05);
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
 /* Modificador aplicado via JS conforme a posição do scroll (ver voltarTopo.js) */
 .back-to-top--visible {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
 }
 
 @media (max-width: 768px) {

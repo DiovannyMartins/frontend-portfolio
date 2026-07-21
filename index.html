@@ -30,6 +30,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" as="style">
+    <link rel="preload" href="img/imagem.webp" as="image" type="image/webp">
     <title>Diovanny Martins | Desenvolvedor Front-End</title>
 </head>
 
@@ -38,43 +41,48 @@
     <a href="#main" class="skip-link">Pular para o conteúdo principal</a>
 
     <!-- ============ HEADER / NAVEGAÇÃO ============ -->
-    <header class="header">
+    <header class="header" role="banner">
         <h2>
-            <a href="#" class="header__logo">
+            <a href="#" class="header__logo" aria-label="Diovanny.dev - Página inicial">
                 <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64">
                 Diovanny.dev
             </a>
         </h2>
 
         <div class="header__actions">
-            <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu">
+            <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
                 <span class="header__menu-toggle-bar"></span>
                 <span class="header__menu-toggle-bar"></span>
                 <span class="header__menu-toggle-bar"></span>
             </button>
         </div>
 
-        <nav class="nav">
-            <ul class="nav__list">
+        <nav class="nav" aria-label="Navegação principal">
+            <ul class="nav__list" role="list">
                 <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
                 <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
                 <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
                 <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
                 <li class="nav__item">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema claro e escuro">
+                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
+                    </button>
+                </li>
+                <li class="nav__item">
+                    <button id="btnModoFoco" class="focus-toggle" aria-label="Ativar modo foco" aria-pressed="false">
+                        Modo Foco
                     </button>
                 </li>
             </ul>
         </nav>
     </header>
 
-    <main id="main">
+    <main id="main" role="main">
 
         <!-- ============ HERO ============ -->
-        <section class="hero" id="home">
+        <section class="hero" id="home" aria-labelledby="hero-heading">
             <div class="hero__content">
-                <h1 class="hero__title" id="typingText"></h1>
+                <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Front-End"></h1>
                 <p class="hero__text">Desenvolvendo interfaces modernas, responsivas e interativas com HTML5, CSS3 e
                     JavaScript.</p>
                 <a href="#projetos" class="hero__cta">Ver Projetos</a>
@@ -87,8 +95,8 @@
         </section>
 
         <!-- ============ SOBRE MIM ============ -->
-        <section class="about reveal" id="sobre">
-            <h2 class="about__title">Sobre mim</h2>
+        <section class="about reveal" id="sobre" aria-labelledby="sobre-title">
+            <h2 class="about__title" id="sobre-title">Sobre mim</h2>
             <p class="about__text">
                 Olá, eu sou o Diovanny. Estudante de Front-End focado em criar interfaces web modernas e acessíveis.
                 Com conhecimentos práticos em HTML e CSS, sigo em constante evolução tecnológica para entregar
@@ -97,8 +105,8 @@
         </section>
 
         <!-- ============ TECNOLOGIAS ============ -->
-        <section class="skills reveal">
-            <h2 class="skills__title">Minhas Tecnologias</h2>
+        <section class="skills reveal" aria-labelledby="skills-title">
+            <h2 class="skills__title" id="skills-title">Minhas Tecnologias</h2>
 
             <div class="skills__grid">
                 <div class="skills__card">
@@ -122,9 +130,9 @@
         </section>
 
         <!-- ============ PROJETOS ============ -->
-        <section id="projetos" class="projects reveal">
+        <section id="projetos" class="projects reveal" aria-labelledby="projetos-title">
             <div class="projects__header">
-                <h2 class="projects__title">Meus Projetos</h2>
+                <h2 class="projects__title" id="projetos-title">Meus Projetos</h2>
                 <p class="projects__subtitle">Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5,
                     CSS3 e JAVASCRIPT.</p>
             </div>
@@ -136,6 +144,12 @@
                 <button class="projects__filter-btn" data-filtro="landing" aria-pressed="false">Landing
                     Page</button>
                 <button class="projects__filter-btn" data-filtro="ecommerce" aria-pressed="false">E-commerce</button>
+            </div>
+
+            <div class="projects__search">
+                <label for="buscaProjetos" class="sr-only">Buscar projetos</label>
+                <input type="search" id="buscaProjetos" class="projects__search-input"
+                    placeholder="Buscar projetos...">
             </div>
 
             <div class="projects__grid">
@@ -171,13 +185,27 @@
                     <a href="https://diovannymartins.github.io/admin-dashboard/" target="_blank"
                         class="project-card__link">Acessar Projeto</a>
                 </article>
+
+                <article class="project-card" data-categoria="landing">
+                    <h3 class="project-card__title">Blog Pessoal</h3>
+                    <p class="project-card__text">Template de blog pessoal com layout limpo, tipografia elegante
+                        e sistema de posts organizado, ideal para compartilhar artigos e tutoriais.</p>
+                    <a href="#" target="_blank" class="project-card__link">Acessar Projeto</a>
+                </article>
+
+                <article class="project-card" data-categoria="landing">
+                    <h3 class="project-card__title">Portfolio Fotografia</h3>
+                    <p class="project-card__text">Galeria de fotos com layout em grid, lightbox para visualização
+                        ampliada e design minimalista que destaca as imagens.</p>
+                    <a href="#" target="_blank" class="project-card__link">Acessar Projeto</a>
+                </article>
             </div>
         </section>
 
         <!-- ============ CONTATO ============ -->
-        <section class="contact reveal" id="contato">
+        <section class="contact reveal" id="contato" aria-labelledby="contato-title">
             <div class="contact__info">
-                <h2 class="contact__title">Contato</h2>
+                <h2 class="contact__title" id="contato-title">Contato</h2>
                 <p class="contact__text">Entre em contato comigo pelas redes sociais ou pelo formulário abaixo:</p>
 
                 <form id="formContato" class="contact__form" novalidate>
@@ -205,27 +233,31 @@
                 </form>
             </div>
 
-            <div class="contact__social">
-                <a href="https://github.com/DiovannyMartins" target="_blank" class="social-card social-card--github">
-                    <img class="social-card__icon" src="img/github.png" alt="Logo github." id="iconGithub"
-                        loading="lazy">
+            <div class="contact__social" role="list" aria-label="Redes sociais">
+                <a href="https://github.com/DiovannyMartins" target="_blank" rel="noopener noreferrer"
+                    class="social-card social-card--github" role="listitem" aria-label="Visitar perfil no GitHub">
+                    <img class="social-card__icon" src="img/github.png" alt="" id="iconGithub" loading="lazy"
+                        aria-hidden="true">
                     GitHub
                 </a>
 
-                <a href="#" class="social-card social-card--linkedin">
-                    <img class="social-card__icon" src="img/linkedin.png" alt="Logo linkedin." loading="lazy">
+                <a href="#" class="social-card social-card--linkedin" role="listitem"
+                    aria-label="Visitar perfil no LinkedIn">
+                    <img class="social-card__icon" src="img/linkedin.png" alt="" loading="lazy" aria-hidden="true">
                     LinkedIn
                 </a>
 
-                <a href="https://www.instagram.com/diovanny_067/" target="_blank"
-                    class="social-card social-card--instagram">
-                    <img class="social-card__icon" src="img/instagram.png" alt="Logo instagram." loading="lazy">
+                <a href="https://www.instagram.com/diovanny_067/" target="_blank" rel="noopener noreferrer"
+                    class="social-card social-card--instagram" role="listitem"
+                    aria-label="Visitar perfil no Instagram">
+                    <img class="social-card__icon" src="img/instagram.png" alt="" loading="lazy" aria-hidden="true">
                     Instagram
                 </a>
 
-                <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com">
+                <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com"
+                    role="listitem" aria-label="Copiar endereço de e-mail">
                     <img class="social-card__icon icon" src="img/icon-envelope-branco.png" alt="" id="iconEmail"
-                        loading="lazy">
+                        loading="lazy" aria-hidden="true">
                     <span id="textoCopiarEmail">Copiar E-mail</span>
                 </button>
             </div>
@@ -233,11 +265,11 @@
 
     </main>
 
-    <button id="btnTopo" class="back-to-top" aria-label="Voltar ao topo">
-        <img src="img/icon-seta-branco.png" alt="" id="iconSeta" class="icon" loading="lazy">
+    <button id="btnTopo" class="back-to-top" aria-label="Voltar ao topo da página">
+        <img src="img/icon-seta-branco.png" alt="" id="iconSeta" class="icon" loading="lazy" aria-hidden="true">
     </button>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <p>© <span id="anoAtual"></span> Diovanny.dev - Todos os direitos reservados</p>
     </footer>
 

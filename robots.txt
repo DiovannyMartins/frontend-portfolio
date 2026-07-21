@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://diovannymartins.github.io/frontend-portfolio/sitemap.xml

@@ -21,3 +21,16 @@ body {
   background-color: var(--bg-primary);
   transition: background-color 0.3s ease;
 }
+
+/* Modo foco: esconde elementos distrativos */
+body.modo-foco .header,
+body.modo-foco .footer,
+body.modo-foco .back-to-top {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+body.modo-foco main {
+  padding-top: 20px;
+}

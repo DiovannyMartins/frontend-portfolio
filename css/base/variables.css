@@ -13,7 +13,7 @@
   --bg-secondary: rgb(45, 45, 48);
   --bg-button: rgb(62, 62, 66);
   --text-primary: rgb(255, 255, 255);
-  --text-secondary: rgba(203, 213, 225, 0.9);
+  --text-secondary: rgb(203, 213, 225);
 
   --font-heading: "Fjalla One", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -29,5 +29,5 @@ body.light-mode {
   --bg-secondary: rgb(230, 230, 230);
   --bg-button: rgb(210, 210, 215);
   --text-primary: rgb(20, 20, 20);
-  --text-secondary: rgba(60, 60, 60, 0.9);
+  --text-secondary: rgb(60, 60, 60);
 }
