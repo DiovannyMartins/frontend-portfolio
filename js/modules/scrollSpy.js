@@ -20,8 +20,10 @@ export function initScrollSpy() {
 
         navLinks.forEach((link) => {
           link.classList.remove("nav__link--active");
+          link.removeAttribute("aria-current");
           if (link.getAttribute("href") === `#${id}`) {
             link.classList.add("nav__link--active");
+            link.setAttribute("aria-current", "page");
           }
         });
       });
