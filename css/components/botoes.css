@@ -12,7 +12,9 @@
   font-size: 16px;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   align-self: flex-start;
 }
 

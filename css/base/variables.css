@@ -5,9 +5,6 @@
  * e permite trocar o tema inteiro alterando só este arquivo.
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
-
 :root {
   --bg-primary: rgb(30, 30, 30);
   --bg-secondary: rgb(45, 45, 48);
@@ -23,8 +20,10 @@
  * Tema claro: sobrescreve só as variáveis de cor, mantendo toda a estrutura
  * do restante do CSS intacta. É isso que torna o dark/light mode barato
  * de manter — nenhum componente precisa saber que o tema existe.
+ * A classe vai no <html> (não no <body>) para o script anti-FOUC do <head>
+ * conseguir aplicá-la antes do body existir.
  */
-body.light-mode {
+html.light-mode {
   --bg-primary: rgb(245, 245, 245);
   --bg-secondary: rgb(230, 230, 230);
   --bg-button: rgb(210, 210, 215);

@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Portfólio de Diovanny Martins, desenvolvedor Front-End especializado em HTML5, CSS3 e JavaScript. Confira meus projetos e entre em contato.">
-    <link rel="shortcut icon" href="img/icon-logo.png" type="image/x-icon">
+    <link rel="icon" href="img/icon-logo.png" type="image/png">
+
+    <!-- Anti-FOUC: aplica o tema salvo antes da página renderizar, evitando o "flash" do tema errado -->
+    <script>
+        if (localStorage.getItem("tema") === "light") {
+            document.documentElement.classList.add("light-mode");
+        }
+    </script>
 
     <!-- CSS: um único ponto de entrada. main.css apenas importa os módulos (ver css/main.css) -->
     <link rel="stylesheet" href="css/main.css">
@@ -18,7 +25,7 @@
     <meta property="og:title" content="Diovanny Martins | Desenvolvedor Front-End">
     <meta property="og:description"
         content="Portfólio de Diovanny Martins, desenvolvedor Front-End especializado em HTML5, CSS3 e JavaScript.">
-    <meta property="og:image" content="img/imagem.webp">
+    <meta property="og:image" content="https://diovannymartins.github.io/frontend-portfolio/img/imagem.webp">
     <meta property="og:url" content="https://diovannymartins.github.io/frontend-portfolio/">
     <meta property="og:locale" content="pt_BR">
 
@@ -26,12 +33,13 @@
     <meta name="twitter:title" content="Diovanny Martins | Desenvolvedor Front-End">
     <meta name="twitter:description"
         content="Portfólio de Diovanny Martins, desenvolvedor Front-End especializado em HTML5, CSS3 e JavaScript.">
-    <meta name="twitter:image" content="img/imagem.webp">
+    <meta name="twitter:image" content="https://diovannymartins.github.io/frontend-portfolio/img/imagem.webp">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" as="style">
+    <!-- Fontes carregadas via <link> (o @import no CSS foi removido — ele bloqueava a renderização) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
     <link rel="preload" href="img/imagem.webp" as="image" type="image/webp">
     <title>Diovanny Martins | Desenvolvedor Front-End</title>
 </head>
@@ -42,12 +50,10 @@
 
     <!-- ============ HEADER / NAVEGAÇÃO ============ -->
     <header class="header" role="banner">
-        <h2>
-            <a href="#" class="header__logo" aria-label="Diovanny.dev - Página inicial">
-                <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64">
-                Diovanny.dev
-            </a>
-        </h2>
+        <a href="#" class="header__logo" aria-label="Diovanny.dev - Página inicial">
+            <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64">
+            Diovanny.dev
+        </a>
 
         <div class="header__actions">
             <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
@@ -77,7 +83,8 @@
         <!-- ============ HERO ============ -->
         <section class="hero" id="home" aria-labelledby="hero-heading">
             <div class="hero__content">
-                <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Front-End"></h1>
+                <!-- Texto servirá de fallback caso o JS do efeito de digitação não carregue -->
+                <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Front-End">Desenvolvedor Front-End</h1>
                 <p class="hero__text">Desenvolvendo interfaces modernas, responsivas e interativas com HTML5, CSS3 e
                     JavaScript.</p>
                 <a href="#projetos" class="hero__cta">Ver Projetos</a>
@@ -143,8 +150,7 @@
 
             <div class="projects__search">
                 <label for="buscaProjetos" class="sr-only">Buscar projetos</label>
-                <input type="search" id="buscaProjetos" class="projects__search-input"
-                    placeholder="Buscar projetos...">
+                <input type="search" id="buscaProjetos" class="projects__search-input" placeholder="Buscar projetos...">
             </div>
 
             <div class="projects__grid">
@@ -154,7 +160,7 @@
                         métricas e sidebar de navegação, focado em visual profissional e organização de
                         informações.</p>
                     <a href="https://diovannymartins.github.io/business-dashboard/" target="_blank"
-                        class="project-card__link">Acessar Projeto</a>
+                        rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="landing">
@@ -162,7 +168,7 @@
                     <p class="project-card__text">Landing page profissional inspirada em plataformas SaaS
                         modernas, com layout moderno, seções bem organizadas e interface de nível profissional.</p>
                     <a href="https://diovannymartins.github.io/saas-landing-page/" target="_blank"
-                        class="project-card__link">Acessar Projeto</a>
+                        rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="ecommerce">
@@ -170,7 +176,7 @@
                     <p class="project-card__text">Página inicial de loja virtual com seção de produtos, design
                         moderno e experiência visual pensada para e-commerce.</p>
                     <a href="https://diovannymartins.github.io/modern-ecommerce/" target="_blank"
-                        class="project-card__link">Acessar Projeto</a>
+                        rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="dashboard">
@@ -178,9 +184,12 @@
                     <p class="project-card__text">Dashboard administrativo com sidebar, cards informativos e
                         interface moderna, focado em organização visual e responsividade.</p>
                     <a href="https://diovannymartins.github.io/admin-dashboard/" target="_blank"
-                        class="project-card__link">Acessar Projeto</a>
+                        rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
             </div>
+
+            <!-- Exibida via JS quando filtro + busca não retornam resultados -->
+            <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.</p>
         </section>
 
         <!-- ============ CONTATO ============ -->
@@ -192,19 +201,19 @@
                 <form id="formContato" class="contact__form" novalidate>
                     <div class="contact__field">
                         <label for="nome" class="sr-only">Nome</label>
-                        <input type="text" id="nome" name="nome" placeholder="Seu nome">
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome" aria-describedby="erroNome">
                         <span class="contact__error" id="erroNome" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
                         <label for="email" class="sr-only">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="Seu e-mail">
+                        <input type="email" id="email" name="email" placeholder="Seu e-mail" aria-describedby="erroEmail">
                         <span class="contact__error" id="erroEmail" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
                         <label for="mensagem" class="sr-only">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem"></textarea>
+                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem" aria-describedby="erroMensagem"></textarea>
                         <span class="contact__error" id="erroMensagem" aria-live="polite"></span>
                     </div>
 
@@ -214,34 +223,40 @@
                 </form>
             </div>
 
-            <div class="contact__social" role="list" aria-label="Redes sociais">
-                <a href="https://github.com/DiovannyMartins" target="_blank" rel="noopener noreferrer"
-                    class="social-card social-card--github" role="listitem" aria-label="Visitar perfil no GitHub">
-                    <img class="social-card__icon" src="img/github.png" alt="" id="iconGithub" loading="lazy"
-                        aria-hidden="true">
-                    GitHub
-                </a>
+            <ul class="contact__social" aria-label="Redes sociais">
+                <li>
+                    <a href="https://github.com/DiovannyMartins" target="_blank" rel="noopener noreferrer"
+                        class="social-card social-card--github" aria-label="Visitar perfil no GitHub">
+                        <img class="social-card__icon" src="img/github.png" alt="" id="iconGithub" loading="lazy"
+                            aria-hidden="true">
+                        GitHub
+                    </a>
+                </li>
 
-                <a href="#" class="social-card social-card--linkedin" role="listitem"
-                    aria-label="Visitar perfil no LinkedIn">
-                    <img class="social-card__icon" src="img/linkedin.png" alt="" loading="lazy" aria-hidden="true">
-                    LinkedIn
-                </a>
+                <li>
+                    <a href="#" class="social-card social-card--linkedin" aria-label="Visitar perfil no LinkedIn">
+                        <img class="social-card__icon" src="img/linkedin.png" alt="" loading="lazy" aria-hidden="true">
+                        LinkedIn
+                    </a>
+                </li>
 
-                <a href="https://www.instagram.com/diovanny_067/" target="_blank" rel="noopener noreferrer"
-                    class="social-card social-card--instagram" role="listitem"
-                    aria-label="Visitar perfil no Instagram">
-                    <img class="social-card__icon" src="img/instagram.png" alt="" loading="lazy" aria-hidden="true">
-                    Instagram
-                </a>
+                <li>
+                    <a href="https://www.instagram.com/diovanny_067/" target="_blank" rel="noopener noreferrer"
+                        class="social-card social-card--instagram" aria-label="Visitar perfil no Instagram">
+                        <img class="social-card__icon" src="img/instagram.png" alt="" loading="lazy" aria-hidden="true">
+                        Instagram
+                    </a>
+                </li>
 
-                <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com"
-                    role="listitem" aria-label="Copiar endereço de e-mail">
-                    <img class="social-card__icon icon" src="img/icon-envelope-branco.png" alt="" id="iconEmail"
-                        loading="lazy" aria-hidden="true">
-                    <span id="textoCopiarEmail">Copiar E-mail</span>
-                </button>
-            </div>
+                <li>
+                    <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com"
+                        aria-label="Copiar endereço de e-mail">
+                        <img class="social-card__icon icon" src="img/icon-envelope-branco.png" alt="" id="iconEmail"
+                            loading="lazy" aria-hidden="true">
+                        <span id="textoCopiarEmail">Copiar E-mail</span>
+                    </button>
+                </li>
+            </ul>
         </section>
 
     </main>

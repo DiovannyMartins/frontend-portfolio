@@ -87,7 +87,10 @@
   padding: 10px 15px;
   font-size: 18px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .nav__link:hover {
@@ -111,7 +114,9 @@
   border-radius: 15px;
   padding: 10px 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .theme-toggle:hover {
@@ -140,7 +145,11 @@
     width: 100%;
     height: calc(100vh - 80px);
     background-color: var(--bg-primary);
-    transition: right 0.3s ease;
+    /* Esconde da navegação por teclado enquanto o menu está fechado */
+    visibility: hidden;
+    transition:
+      right 0.3s ease,
+      visibility 0.3s ease;
   }
 
   .nav__list {
@@ -153,5 +162,6 @@
   /* Estado "aberto" controlado via JS adicionando essa classe no <nav> */
   .nav--active {
     right: 0;
+    visibility: visible;
   }
 }

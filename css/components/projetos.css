@@ -67,7 +67,10 @@
   font-size: 16px;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .projects__filter-btn:hover {
@@ -114,6 +117,12 @@
   display: none;
 }
 
+/* Mensagem de "nenhum resultado" (controlada via JS pelo atributo hidden) */
+.projects__empty {
+  padding: 0 20px 30px;
+  text-align: center;
+}
+
 .project-card__text {
   font-size: 16px;
   text-align: justify;
@@ -127,7 +136,9 @@
   padding: 10px 15px;
   font-size: 18px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .project-card__link:hover {
