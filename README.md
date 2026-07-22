@@ -14,7 +14,7 @@ Portfólio pessoal desenvolvido com **HTML5**, **CSS3** e **JavaScript** para ap
 ## 📸 Preview
 
 <div align="center">
-  <img src="https://github.com/DiovannyMartins/frontend-portfolio/blob/main/img/imagem.webp" alt="Preview do Portfólio" width="800">
+  <img src="https://raw.githubusercontent.com/DiovannyMartins/frontend-portfolio/main/img/imagem.webp" alt="Preview do Portfólio" width="800">
 </div>
 
 ---
@@ -143,7 +143,7 @@ Basta abrir no navegador ou usar uma extensão como **Live Server** no VS Code.
 
 ##  Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT.
 
 ---
 
