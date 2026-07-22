@@ -3,44 +3,48 @@
  * ----------------------------
  * Persiste a preferência do usuário em localStorage e troca as imagens
  * que dependem de contraste.
+ *
+ * A classe .light-mode é aplicada no <html> por um script inline no <head>
+ * (anti-FOUC) — este módulo apenas sincroniza as imagens e o toggle.
  */
 
 export function initTema() {
   const themeToggle = document.getElementById("themeToggle");
-  const iconTema = document.getElementById("iconTema");
-  const iconSeta = document.getElementById("iconSeta");
-  const iconEmail = document.getElementById("iconEmail");
-  const logoImg = document.querySelector(".header__logo img");
-  const iconGithub = document.getElementById("iconGithub");
-  const body = document.body;
 
   if (!themeToggle) return;
 
-  function atualizarImagens(tema) {
-    const claro = tema === "light";
-    logoImg.src = claro ? "img/icon-logo-dark.png" : "img/icon-logo.png";
-    iconGithub.src = claro ? "img/github-dark.png" : "img/github.png";
-    iconTema.src = claro ? "img/icon-sol.png" : "img/icon-lua.png";
-    iconSeta.src = claro
-      ? "img/icon-seta-preto.png"
-      : "img/icon-seta-branco.png";
-    iconEmail.src = claro
-      ? "img/icon-envelope-preto.png"
-      : "img/icon-envelope-branco.png";
+  const root = document.documentElement;
+
+  // [elemento, imagem no tema claro, imagem no tema escuro]
+  const imagensPorTema = [
+    [document.querySelector(".header__logo img"), "img/icon-logo-dark.png", "img/icon-logo.png"],
+    [document.getElementById("iconGithub"), "img/github-dark.png", "img/github.png"],
+    [document.getElementById("iconTema"), "img/icon-sol.png", "img/icon-lua.png"],
+    [document.getElementById("iconSeta"), "img/icon-seta-preto.png", "img/icon-seta-branco.png"],
+    [document.getElementById("iconEmail"), "img/icon-envelope-preto.png", "img/icon-envelope-branco.png"],
+  ];
+
+  function temaAtual() {
+    return root.classList.contains("light-mode") ? "light" : "dark";
   }
 
-  // Aplica o tema salvo assim que a página carrega, antes de qualquer interação.
-  const temaSalvo = localStorage.getItem("tema");
-  if (temaSalvo === "light") {
-    body.classList.add("light-mode");
+  function atualizarImagens() {
+    const claro = temaAtual() === "light";
+
+    imagensPorTema.forEach(([img, srcClaro, srcEscuro]) => {
+      // Guarda individual: se uma imagem não existir na página, as outras continuam trocando
+      if (img) {
+        img.src = claro ? srcClaro : srcEscuro;
+      }
+    });
   }
-  atualizarImagens(temaSalvo === "light" ? "light" : "dark");
+
+  // Sincroniza as imagens com o tema já aplicado no carregamento da página.
+  atualizarImagens();
 
   themeToggle.addEventListener("click", () => {
-    body.classList.toggle("light-mode");
-    const novoTema = body.classList.contains("light-mode") ? "light" : "dark";
-
-    localStorage.setItem("tema", novoTema);
-    atualizarImagens(novoTema);
+    root.classList.toggle("light-mode");
+    localStorage.setItem("tema", temaAtual());
+    atualizarImagens();
   });
 }

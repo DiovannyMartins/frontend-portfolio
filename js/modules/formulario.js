@@ -29,17 +29,20 @@ export function initFormulario() {
   function marcarErro(campo, elementoErro, mensagem) {
     campo.classList.add("input--invalid");
     campo.classList.remove("input--valid");
+    campo.setAttribute("aria-invalid", "true");
     elementoErro.textContent = mensagem;
   }
 
   function limparErro(campo, elementoErro) {
     campo.classList.remove("input--invalid");
+    campo.removeAttribute("aria-invalid");
     elementoErro.textContent = "";
   }
 
   function marcarValido(campo) {
     campo.classList.add("input--valid");
     campo.classList.remove("input--invalid");
+    campo.setAttribute("aria-invalid", "false");
   }
 
   // Validação em tempo real ao digitar

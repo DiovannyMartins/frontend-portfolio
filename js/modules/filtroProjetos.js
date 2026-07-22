@@ -1,15 +1,49 @@
 /*
- * MÓDULO: Filtro de projetos
- * -------------------------------
- * Filtra os cards de projeto por categoria, mantendo o estado
- * de acessibilidade (aria-pressed) sincronizado com o botão ativo.
+ * MÓDULO: Filtro e busca de projetos
+ * ---------------------------------------
+ * Centraliza a visibilidade dos cards: categoria ativa + termo de busca
+ * são avaliados juntos pela mesma função, evitando que um filtro
+ * sobrescreva o estado do outro. Também exibe a mensagem de
+ * "nenhum projeto encontrado" quando a combinação não retorna resultados.
  */
 
 export function initFiltroProjetos() {
   const botoes = document.querySelectorAll(".projects__filter-btn");
+  const campoBusca = document.getElementById("buscaProjetos");
   const cards = document.querySelectorAll(".project-card");
+  const mensagemVazio = document.getElementById("projetosVazio");
 
-  if (botoes.length === 0) return;
+  if (botoes.length === 0 || cards.length === 0) return;
+
+  let filtroAtivo = "todos";
+  let termoBusca = "";
+
+  function aplicarFiltros() {
+    let totalVisiveis = 0;
+
+    cards.forEach((card) => {
+      const correspondeCategoria =
+        filtroAtivo === "todos" || card.dataset.categoria === filtroAtivo;
+
+      const titulo = card
+        .querySelector(".project-card__title")
+        .textContent.toLowerCase();
+      const descricao = card
+        .querySelector(".project-card__text")
+        .textContent.toLowerCase();
+      const correspondeBusca =
+        titulo.includes(termoBusca) || descricao.includes(termoBusca);
+
+      const visivel = correspondeCategoria && correspondeBusca;
+      card.classList.toggle("project-card--hidden", !visivel);
+
+      if (visivel) totalVisiveis++;
+    });
+
+    if (mensagemVazio) {
+      mensagemVazio.hidden = totalVisiveis > 0;
+    }
+  }
 
   botoes.forEach((botao) => {
     botao.addEventListener("click", () => {
@@ -21,13 +55,15 @@ export function initFiltroProjetos() {
       botao.classList.add("projects__filter-btn--active");
       botao.setAttribute("aria-pressed", "true");
 
-      const filtro = botao.dataset.filtro;
-
-      cards.forEach((card) => {
-        const corresponde =
-          filtro === "todos" || card.dataset.categoria === filtro;
-        card.classList.toggle("project-card--hidden", !corresponde);
-      });
+      filtroAtivo = botao.dataset.filtro;
+      aplicarFiltros();
     });
   });
+
+  if (campoBusca) {
+    campoBusca.addEventListener("input", () => {
+      termoBusca = campoBusca.value.toLowerCase().trim();
+      aplicarFiltros();
+    });
+  }
 }

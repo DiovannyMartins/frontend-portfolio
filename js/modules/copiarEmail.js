@@ -47,7 +47,7 @@ export function initCopiarEmail() {
     navigator.clipboard.writeText(email).then(() => {
       const textoOriginal = textoCopiarEmail.textContent;
       const iconOriginal = iconEmail.src;
-      const modoClaro = document.body.classList.contains("light-mode");
+      const modoClaro = document.documentElement.classList.contains("light-mode");
 
       textoCopiarEmail.textContent = "Copiado!";
       iconEmail.src = modoClaro

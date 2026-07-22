@@ -12,6 +12,9 @@ export function initTypingEffect() {
   const velocidadeMs = 100;
   let indice = 0;
 
+  // O HTML já traz o texto como fallback (SEO/sem JS) — limpa para digitar do zero
+  alvo.textContent = "";
+
   function digitar() {
     if (indice >= texto.length) return;
 
