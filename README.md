@@ -48,7 +48,6 @@ Portfólio pessoal desenvolvido com **HTML5**, **CSS3** e **JavaScript** para ap
 - **aria-pressed** nos botões de filtro
 - **aria-current** no link ativo do menu
 - **Focus visible** customizado para navegação por teclado
-- **prefers-reduced-motion** respeita preferência do usuário
 - **Imagens otimizadas** em WebP com lazy loading
 
 ---
@@ -130,7 +129,6 @@ Basta abrir no navegador ou usar uma extensão como **Live Server** no VS Code.
 ### Acessibilidade
 - ✅ Skip link para navegação por teclado
 - ✅ ARIA labels e roles em elementos interativos
-- ✅ Suporte a `prefers-reduced-motion`
 - ✅ Contraste de cores melhorado
 
 ### UX/UI
