@@ -14,15 +14,6 @@
   }
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
-
 /* Scroll reveal: aplicado a qualquer seção que deva ter fade-in ao entrar na tela */
 .reveal {
   opacity: 0;
@@ -35,35 +26,6 @@
 .reveal--visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* Skeleton loading para carregamento de conteúdo */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-secondary) 0%,
-    var(--bg-button) 50%,
-    var(--bg-secondary) 100%
-  );
-  background-size: 200px 100%;
-  animation: skeleton-loading 1.5s infinite linear;
-  border-radius: 8px;
-}
-
-.skeleton-text {
-  height: 16px;
-  margin-bottom: 8px;
-}
-
-.skeleton-title {
-  height: 24px;
-  width: 60%;
-  margin-bottom: 16px;
-}
-
-.skeleton-card {
-  height: 200px;
-  margin-bottom: 16px;
 }
 
 /* Respeita preferência do usuário por movimento reduzido */
@@ -80,10 +42,5 @@
   .reveal {
     opacity: 1;
     transform: none;
-  }
-
-  .skeleton {
-    animation: none;
-    background: var(--bg-secondary);
   }
 }
