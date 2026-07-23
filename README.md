@@ -1,11 +1,22 @@
 # Frontend Portfolio
 
-Projeto desenvolvido para consolidar conhecimentos sobre manipulação do DOM, organização de CSS modular e JavaScript puro sem dependências. Portfólio pessoal responsivo com dark/light mode, filtro e busca de projetos em tempo real, formulário de contato com validação e acessibilidade completa.
+Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript puro, focado em performance, acessibilidade e organização de código.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Responsive](https://img.shields.io/badge/Responsive-Sim-green?style=for-the-badge)
+
+---
+
+## Destaques
+
+- 100% JavaScript Vanilla
+- Zero dependências
+- Mobile First
+- Dark/Light Mode
+- Acessível (ARIA)
+- SEO otimizado
 
 ---
 
@@ -16,6 +27,8 @@ Projeto desenvolvido para consolidar conhecimentos sobre manipulação do DOM, o
   <br>
   <a href="https://diovannymartins.github.io/frontend-portfolio/">Ver ao vivo</a>
 </div>
+
+> Dica: Grave um GIF mostrando menu mobile, troca de tema, filtro e busca para demonstrar interatividade.
 
 ---
 
@@ -33,11 +46,9 @@ Projeto desenvolvido para consolidar conhecimentos sobre manipulação do DOM, o
 
 ## Sobre o projeto
 
-Um portfólio front-end precisa transmitir competência técnica no primeiro segundo — sem depender de frameworks pesados que o recrutador nunca vai instalar.
+O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, dispensando etapas de build ou dependências externas. As decisões técnicas principais:
 
-Este projeto resolve isso sendo **leve, acessível e funcional do clone ao deploy**. As decisões técnicas principais:
-
-- **Zero dependências**: nenhum framework, nenhum build step. Abre o `index.html` e funciona. Isso elimina barreiras para quem quer avaliar o código.
+- **Zero dependências**: nenhum framework, nenhum build step. Abre o `index.html` e funciona.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, cards, contato) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
 - **JavaScript em ES Modules**: cada funcionalidade (tema, menu, filtro, formulário, scroll spy) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento.
 - **Anti-FOUC no tema**: o script de tema roda no `<head>` antes da renderização, evitando o flash do tema errado.
@@ -171,7 +182,6 @@ Este projeto não possui suite de testes automatizados no momento. A validação
 
 - **GitHub:** [@DiovannyMartins](https://github.com/DiovannyMartins)
 - **LinkedIn:** [Diovanny Martins](https://linkedin.com/in/diovanny-martins)
-- **Instagram:** [@diovanny_067](https://www.instagram.com/diovanny_067/)
 - **E-mail:** diovannydev@gmail.com
 
 ---
