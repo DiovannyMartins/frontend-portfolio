@@ -1,18 +1,11 @@
 # Frontend Portfolio
 
-Portfólio pessoal responsivo com dark/light mode, filtro e busca de projetos em tempo real, formulário de contato com validação e acessibilidade completa — construído 100% com HTML5, CSS3 e JavaScript puro.
-
-**Ao vivo:** [diovannymartins.github.io/frontend-portfolio](https://diovannymartins.github.io/frontend-portfolio/)
-
----
-
-## Badges
+Projeto desenvolvido para consolidar conhecimentos sobre manipulação do DOM, organização de CSS modular e JavaScript puro sem dependências. Portfólio pessoal responsivo com dark/light mode, filtro e busca de projetos em tempo real, formulário de contato com validação e acessibilidade completa.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-2088FF?style=for-the-badge&logo=github-pages&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Responsive](https://img.shields.io/badge/Responsive-Sim-green?style=for-the-badge)
 
 ---
 
@@ -20,7 +13,21 @@ Portfólio pessoal responsivo com dark/light mode, filtro e busca de projetos em
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/DiovannyMartins/frontend-portfolio/main/img/imagem.webp" alt="Preview do portfólio rodando no navegador" width="800">
+  <br>
+  <a href="https://diovannymartins.github.io/frontend-portfolio/">Ver ao vivo</a>
 </div>
+
+---
+
+## Tecnologias
+
+| Stack | Detalhe |
+|-------|---------|
+| HTML5 | Semântica, ARIA, meta tags Open Graph/Twitter Card |
+| CSS3 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular |
+| JavaScript (ES6+) | ES Modules, sem dependências externas |
+| Git/GitHub | Versionamento e deploy via GitHub Pages |
+| Google Fonts | Fjalla One (títulos) e Inter (corpo) |
 
 ---
 
@@ -36,18 +43,6 @@ Este projeto resolve isso sendo **leve, acessível e funcional do clone ao deplo
 - **Anti-FOUC no tema**: o script de tema roda no `<head>` antes da renderização, evitando o flash do tema errado.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
 - **Performance**: imagens em WebP com lazy loading, `preload` da imagem hero, `preconnect` para fontes, `theme-color` para mobile.
-
----
-
-## Tecnologias
-
-| Stack | Detalhe |
-|-------|---------|
-| HTML5 | Semântica, ARIA, meta tags Open Graph/Twitter Card |
-| CSS3 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular |
-| JavaScript (ES6+) | ES Modules, sem dependências externas |
-| Git/GitHub | Versionamento e deploy via GitHub Pages |
-| Google Fonts | Fjalla One (títulos) e Inter (corpo) |
 
 ---
 
@@ -130,6 +125,19 @@ frontend-portfolio/
 ├── sitemap.xml                # Mapa do site para SEO
 └── README.md
 ```
+
+---
+
+## O que aprendi
+
+- **Manipulação do DOM** — criação e remoção de elementos, event delegation, manipulação de classes e atributos
+- **Organização de código** — separação em módulos ES6, cada funcionalidade isolada e testável
+- **CSS modular** — uso de `@import` para organizar estilos em base, componentes e utilitários
+- **Responsividade** — mobile-first com media queries, grid e flexbox
+- **Acessibilidade** — ARIA labels, navegação por teclado, skip link, focus management
+- **Performance** — lazy loading de imagens, preload de recursos críticos, preconnect para fontes externas
+- **Persistência de estado** — uso de `localStorage` para manter preferências do usuário entre sessões
+- **Validação de formulário** — feedback visual em tempo real sem dependências externas
 
 ---
 
