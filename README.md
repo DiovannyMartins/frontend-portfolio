@@ -28,8 +28,6 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript puro, fo
   <a href="https://diovannymartins.github.io/frontend-portfolio/">Ver ao vivo</a>
 </div>
 
-> Dica: Grave um GIF mostrando menu mobile, troca de tema, filtro e busca para demonstrar interatividade.
-
 ---
 
 ## Tecnologias
