@@ -46,7 +46,11 @@ export function initMenuMobile() {
     const clicouNoMenu = nav.contains(event.target);
     const clicouNoBotao = menuToggle.contains(event.target);
 
-    if (!clicouNoMenu && !clicouNoBotao && nav.classList.contains("nav--active")) {
+    if (
+      !clicouNoMenu &&
+      !clicouNoBotao &&
+      nav.classList.contains("nav--active")
+    ) {
       fecharMenu();
     }
   });

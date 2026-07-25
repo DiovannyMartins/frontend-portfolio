@@ -45,7 +45,9 @@
   padding: 12px 20px;
   font-size: 16px;
   font-family: inherit;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .projects__search-input:focus {
