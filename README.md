@@ -148,30 +148,6 @@ frontend-portfolio/
 
 ---
 
-## Testes
-
-Este projeto não possui suite de testes automatizados no momento. A validação é feita manualmente:
-
-- Teste de responsividade (Chrome DevTools: mobile, tablet, desktop)
-- Navegação por teclado (Tab, Enter, Escape)
-- Validação de formulário (campos vazios, e-mail inválido)
-- Alternância de tema e persistência após reload
-- Filtro e busca de projetos (combinações e estado vazio)
-
----
-
-## Roadmap / Melhorias futuras
-
-- [ ] Migrar para um gerador estático (Astro ou 11ty) para otimizar build
-- [ ] Adicionar testes E2E com Playwright
-- [ ] Implementar página de detalhes para cada projeto
-- [ ] Adicionar modo de alto contraste
-- [ ] Integrar formulário com backend (Formspree ou similar)
-- [ ] Adicionar métricas de performance (Lighthouse CI)
-- [ ] Suporte a múltiplos idiomas (i18n)
-
----
-
 ## Autor
 
 **Diovanny Martins** — Desenvolvedor Front-End
