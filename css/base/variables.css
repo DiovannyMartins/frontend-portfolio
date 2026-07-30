@@ -12,21 +12,20 @@
   --text-primary: rgb(255, 255, 255);
   --text-secondary: rgb(203, 213, 225);
 
+  --shadow-light: rgba(232, 232, 232, 0.2);
+  --shadow-dark: rgb(60, 60, 60);
+
   --font-heading: "Fjalla One", sans-serif;
   --font-body: "Inter", sans-serif;
 }
 
-/*
- * Tema claro: sobrescreve só as variáveis de cor, mantendo toda a estrutura
- * do restante do CSS intacta. É isso que torna o dark/light mode barato
- * de manter — nenhum componente precisa saber que o tema existe.
- * A classe vai no <html> (não no <body>) para o script anti-FOUC do <head>
- * conseguir aplicá-la antes do body existir.
- */
 html.light-mode {
   --bg-primary: rgb(245, 245, 245);
   --bg-secondary: rgb(230, 230, 230);
   --bg-button: rgb(210, 210, 215);
   --text-primary: rgb(20, 20, 20);
   --text-secondary: rgb(60, 60, 60);
+
+  --shadow-light: rgba(200, 200, 200, 0.4);
+  --shadow-dark: rgba(60, 60, 60, 0.25);
 }

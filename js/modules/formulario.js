@@ -1,11 +1,3 @@
-/*
- * MÓDULO: Formulário de contato
- * -----------------------------------
- * Validação client-side simples. Não substitui validação de backend
- * (que não existe aqui, já que é um formulário simulado), mas garante
- * boa experiência de preenchimento.
- */
-
 export function initFormulario() {
   const form = document.getElementById("formContato");
   if (!form) return;
@@ -45,46 +37,41 @@ export function initFormulario() {
     campo.setAttribute("aria-invalid", "false");
   }
 
-  // Validação em tempo real ao digitar
-  campoNome.addEventListener("input", () => {
-    if (campoNome.value.trim().length >= 3) {
-      marcarValido(campoNome);
-      limparErro(campoNome, erroNome);
-    } else if (campoNome.value.trim().length > 0) {
-      marcarErro(campoNome, erroNome, "Digite seu nome completo.");
-    } else {
-      limparErro(campoNome, erroNome);
-      campoNome.classList.remove("input--valid");
-    }
-  });
+  function configurarValidacaoCampo(campo, elementoErro, validador, msgErro) {
+    campo.addEventListener("input", () => {
+      const valor = campo.value.trim();
+      if (valor.length > 0 && validador(valor)) {
+        marcarValido(campo);
+        limparErro(campo, elementoErro);
+      } else if (valor.length > 0) {
+        marcarErro(campo, elementoErro, msgErro);
+      } else {
+        limparErro(campo, elementoErro);
+        campo.classList.remove("input--valid");
+      }
+    });
+  }
 
-  campoEmail.addEventListener("input", () => {
-    if (validarEmail(campoEmail.value.trim())) {
-      marcarValido(campoEmail);
-      limparErro(campoEmail, erroEmail);
-    } else if (campoEmail.value.trim().length > 0) {
-      marcarErro(campoEmail, erroEmail, "Digite um e-mail válido.");
-    } else {
-      limparErro(campoEmail, erroEmail);
-      campoEmail.classList.remove("input--valid");
-    }
-  });
+  configurarValidacaoCampo(
+    campoNome,
+    erroNome,
+    (v) => v.length >= 3,
+    "Digite seu nome completo.",
+  );
 
-  campoMensagem.addEventListener("input", () => {
-    if (campoMensagem.value.trim().length >= 10) {
-      marcarValido(campoMensagem);
-      limparErro(campoMensagem, erroMensagem);
-    } else if (campoMensagem.value.trim().length > 0) {
-      marcarErro(
-        campoMensagem,
-        erroMensagem,
-        "Escreva uma mensagem com pelo menos 10 caracteres.",
-      );
-    } else {
-      limparErro(campoMensagem, erroMensagem);
-      campoMensagem.classList.remove("input--valid");
-    }
-  });
+  configurarValidacaoCampo(
+    campoEmail,
+    erroEmail,
+    (v) => validarEmail(v),
+    "Digite um e-mail válido.",
+  );
+
+  configurarValidacaoCampo(
+    campoMensagem,
+    erroMensagem,
+    (v) => v.length >= 10,
+    "Escreva uma mensagem com pelo menos 10 caracteres.",
+  );
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -125,7 +112,6 @@ export function initFormulario() {
       "Mensagem enviada com sucesso! Em breve entro em contato.";
     form.reset();
 
-    // Remove classes de válido após reset
     campoNome.classList.remove("input--valid");
     campoEmail.classList.remove("input--valid");
     campoMensagem.classList.remove("input--valid");

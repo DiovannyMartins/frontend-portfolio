@@ -4,6 +4,12 @@
  * Regras de texto que se aplicam ao documento inteiro, independente de componente.
  */
 
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
+
 h2 {
   font-size: 35px;
 }

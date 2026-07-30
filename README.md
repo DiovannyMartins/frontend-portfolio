@@ -105,7 +105,7 @@ frontend-portfolio/
 │   ├── components/
 │   │   ├── header.css         # Header e navegação
 │   │   ├── hero.css           # Seção hero
-│   │   ├── cards.css          # Cards de tecnologias
+│   │   ├── about-skills.css   # Sobre mim e cards de tecnologias
 │   │   ├── projetos.css       # Grid e filtros de projetos
 │   │   ├── contato.css        # Formulário e redes sociais
 │   │   ├── botoes.css         # Botões globais
@@ -119,14 +119,12 @@ frontend-portfolio/
 │   ├── modules/
 │   │   ├── tema.js            # Dark/Light mode
 │   │   ├── menu.js            # Menu mobile
-│   │   ├── scrollSpy.js       # Destaque do link ativo
-│   │   ├── scrollReveal.js    # Animação ao rolar
+│   │   ├── scroll.js          # Scroll spy, reveal e voltar ao topo
 │   │   ├── filtroProjetos.js  # Filtro e busca de projetos
 │   │   ├── formulario.js      # Validação do formulário
-│   │   ├── copiarEmail.js     # Copiar e-mail + toast
-│   │   ├── voltarTopo.js      # Botão voltar ao topo
-│   │   ├── typingEffect.js    # Efeito de digitação
-│   │   └── anoRodape.js       # Ano dinâmico no footer
+│   │   ├── copiarEmail.js     # Copiar e-mail
+│   │   ├── toast.js           # Notificações toast
+│   │   └── typingEffect.js    # Efeito de digitação
 │   └── main.js                # Entry point (inicializa módulos)
 ├── img/                       # Imagens e ícones (WebP otimizado)
 ├── index.html                 # Página principal

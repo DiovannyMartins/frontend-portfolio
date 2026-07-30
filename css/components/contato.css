@@ -84,6 +84,26 @@
   color: rgb(120, 220, 150);
 }
 
+.contact__submit {
+  background-color: var(--bg-button);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 15px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  align-self: flex-start;
+}
+
+.contact__submit:hover {
+  transform: translateY(-0.2em);
+  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+}
+
 /* --- Cards de rede social --- */
 
 .contact__social {
@@ -127,10 +147,6 @@
   box-shadow: 0 0 20px rgba(0, 119, 181, 0.3);
 }
 
-.social-card--instagram:hover {
-  box-shadow: 0 0 20px rgba(225, 48, 108, 0.3);
-}
-
 /* copy-email-btn é um <button>, então herda .social-card mas precisa resetar estilos nativos de botão */
 .copy-email-btn {
   border: 2px solid transparent;
@@ -149,5 +165,9 @@
   .contact {
     height: auto;
     gap: 25px;
+  }
+
+  .contact__submit {
+    align-self: center;
   }
 }

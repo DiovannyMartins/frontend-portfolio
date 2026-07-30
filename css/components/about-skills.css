@@ -7,7 +7,7 @@
   background-color: var(--bg-secondary);
   color: var(--text-primary);
 
-  height: 300px;
+  min-height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,8 +65,8 @@
   padding: 20px;
   border-radius: 30px;
   box-shadow:
-    10px 10px 20px rgba(232, 232, 232, 0.2),
-    -10px -10px 20px rgb(60, 60, 60);
+    10px 10px 20px var(--shadow-light),
+    -10px -10px 20px var(--shadow-dark);
   transition: transform 0.3s ease;
 }
 
@@ -95,7 +95,7 @@
 
 @media (max-width: 768px) {
   .about {
-    height: 270px;
+    min-height: 270px;
     justify-content: center;
     padding: 10px;
   }

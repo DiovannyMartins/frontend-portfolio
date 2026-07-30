@@ -3,26 +3,6 @@
  * -------------------------------------------------------------------------
  */
 
-.contact__submit {
-  background-color: var(--bg-button);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 15px;
-  padding: 12px 20px;
-  font-size: 16px;
-  font-family: inherit;
-  cursor: pointer;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  align-self: flex-start;
-}
-
-.contact__submit:hover {
-  transform: translateY(-0.2em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
-}
-
 .back-to-top {
   position: fixed;
   bottom: 30px;
@@ -60,15 +40,9 @@
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
 
-/* Modificador aplicado via JS conforme a posição do scroll (ver voltarTopo.js) */
+/* Modificador aplicado via JS conforme a posição do scroll (ver scroll.js) */
 .back-to-top--visible {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
-}
-
-@media (max-width: 768px) {
-  .contact__submit {
-    align-self: center;
-  }
 }
