@@ -47,8 +47,8 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript puro, fo
 O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, dispensando etapas de build ou dependências externas. As decisões técnicas principais:
 
 - **Zero dependências**: nenhum framework, nenhum build step. Abre o `index.html` e funciona.
-- **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, cards, contato) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
-- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, filtro, formulário, scroll spy) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento.
+- **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
+- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento.
 - **Anti-FOUC no tema**: o script de tema roda no `<head>` antes da renderização, evitando o flash do tema errado.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
 - **Performance**: imagens em WebP com lazy loading, `preload` da imagem hero, `preconnect` para fontes, `theme-color` para mobile.
