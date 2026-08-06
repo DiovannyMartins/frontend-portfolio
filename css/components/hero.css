@@ -63,7 +63,7 @@
 
 @media (max-width: 768px) {
   .hero {
-    height: 310px;
+    min-height: 310px;
     justify-content: center;
     align-items: center;
     padding: 10px;

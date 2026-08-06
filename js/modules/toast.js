@@ -8,10 +8,16 @@ export function criarToast(mensagem, sucesso = true) {
   toast.className = "toast-notification";
   toast.setAttribute("role", "status");
   toast.setAttribute("aria-live", "polite");
-  toast.innerHTML = `
-    <span class="toast__icon">${sucesso ? "✓" : "✕"}</span>
-    <span class="toast__message">${mensagem}</span>
-  `;
+  const icon = document.createElement("span");
+  icon.className = "toast__icon";
+  icon.textContent = sucesso ? "✓" : "✕";
+
+  const message = document.createElement("span");
+  message.className = "toast__message";
+  message.textContent = mensagem;
+
+  toast.appendChild(icon);
+  toast.appendChild(message);
 
   document.body.appendChild(toast);
 

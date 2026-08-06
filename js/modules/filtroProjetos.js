@@ -25,12 +25,14 @@ export function initFiltroProjetos() {
       const correspondeCategoria =
         filtroAtivo === "todos" || card.dataset.categoria === filtroAtivo;
 
-      const titulo = card
-        .querySelector(".project-card__title")
-        .textContent.toLowerCase();
-      const descricao = card
-        .querySelector(".project-card__text")
-        .textContent.toLowerCase();
+      const tituloElement = card.querySelector(".project-card__title");
+      const descricaoElement = card.querySelector(".project-card__text");
+      const titulo = tituloElement
+        ? tituloElement.textContent.toLowerCase()
+        : "";
+      const descricao = descricaoElement
+        ? descricaoElement.textContent.toLowerCase()
+        : "";
       const correspondeBusca =
         titulo.includes(termoBusca) || descricao.includes(termoBusca);
 
