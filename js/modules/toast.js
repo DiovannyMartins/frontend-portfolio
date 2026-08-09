@@ -21,6 +21,9 @@ export function criarToast(mensagem, sucesso = true) {
 
   document.body.appendChild(toast);
 
+  // Força um reflow lendo offsetHeight. Sem isso, o navegador agrupa a
+  // adição do elemento e da classe .toast--visible no mesmo frame, e a
+  // transição CSS de opacity/transform nunca dispara.
   toast.offsetHeight;
   toast.classList.add("toast--visible");
 

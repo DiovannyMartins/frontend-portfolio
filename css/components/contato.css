@@ -1,8 +1,3 @@
-/*
- * COMPONENTE: CONTATO (formulário + cards de redes sociais)
- * -------------------------------------------------------------
- */
-
 .contact {
   min-height: 550px;
   display: flex;
@@ -21,8 +16,6 @@
   flex-direction: column;
   gap: 10px;
 }
-
-/* --- Formulário --- */
 
 .contact__form {
   display: flex;
@@ -60,13 +53,11 @@
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
-/* Modificador aplicado via JS quando a validação falha (ver formulario.js) */
 .contact__field .input--invalid {
   border-color: rgb(220, 80, 80);
   box-shadow: 0 0 0 3px rgba(220, 80, 80, 0.2);
 }
 
-/* Modificador aplicado via JS quando o campo é válido */
 .contact__field .input--valid {
   border-color: rgb(80, 200, 120);
   box-shadow: 0 0 0 3px rgba(80, 200, 120, 0.2);
@@ -103,8 +94,6 @@
   transform: translateY(-0.2em);
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
-
-/* --- Cards de rede social --- */
 
 .contact__social {
   display: flex;
@@ -147,7 +136,8 @@
   box-shadow: 0 0 20px rgba(0, 119, 181, 0.3);
 }
 
-/* copy-email-btn é um <button>, então herda .social-card mas precisa resetar estilos nativos de botão */
+/* copy-email-btn é um <button>, então precisa resetar estilos nativos
+   (fonte, cursor, alinhamento) que o <a> da .social-card não tem */
 .copy-email-btn {
   border: 2px solid transparent;
   font-family: inherit;

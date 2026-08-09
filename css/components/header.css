@@ -1,17 +1,10 @@
-/*
- * COMPONENTE: HEADER / NAVEGAÇÃO
- * -------------------------------
- * Nomenclatura BEM:
- *   .header            → bloco
- *   .header__logo      → elemento do bloco header
- *   .nav__link--active → modificador do elemento .nav__link
- */
-
 .header {
   background-color: var(--bg-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Cor fixa (não usa custom property): no tema claro essa borda continua branca
+     semi-transparente por design — uma borda escura sumiria no fundo claro. */
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
 
   position: fixed;
@@ -40,7 +33,6 @@
   padding-right: 15px;
 }
 
-/* Hamburguer: escondido por padrão, só aparece no breakpoint mobile (ver responsividade) */
 .header__menu-toggle {
   display: none;
   background: none;
@@ -59,7 +51,6 @@
     opacity 0.3s ease;
 }
 
-/* Animação hamburguer → X, controlada pela classe .header__menu-toggle--active via JS */
 .header__menu-toggle--active .header__menu-toggle-bar:nth-child(2) {
   opacity: 0;
 }
@@ -71,8 +62,6 @@
 .header__menu-toggle--active .header__menu-toggle-bar:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
-
-/* --- Navegação --- */
 
 .nav__list {
   display: flex;
@@ -105,8 +94,6 @@
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
 }
 
-/* --- Botão de tema (fica dentro da lista de navegação) --- */
-
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -125,8 +112,6 @@
   transform: translateY(-0.25em);
   box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
 }
-
-/* --- Responsividade: menu vira drawer lateral no mobile --- */
 
 @media (max-width: 768px) {
   .header__menu-toggle {
@@ -147,7 +132,7 @@
     width: 100%;
     height: calc(100vh - 80px);
     background-color: var(--bg-primary);
-    /* Esconde da navegação por teclado enquanto o menu está fechado */
+    /* visibility esconde o menu da navegação por teclado enquanto fechado */
     visibility: hidden;
     transition:
       right 0.3s ease,
@@ -161,7 +146,6 @@
     gap: 30px;
   }
 
-  /* Estado "aberto" controlado via JS adicionando essa classe no <nav> */
   .nav--active {
     right: 0;
     visibility: visible;

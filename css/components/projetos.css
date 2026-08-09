@@ -1,10 +1,3 @@
-/*
- * COMPONENTE: PROJETOS (grid + filtros)
- * ----------------------------------------
- * .project-card--hidden é aplicado/removido via JS (ver filtroProjetos.js)
- * para ocultar cards que não batem com a categoria selecionada.
- */
-
 .projects {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
@@ -119,7 +112,6 @@
   display: none;
 }
 
-/* Mensagem de "nenhum resultado" (controlada via JS pelo atributo hidden) */
 .projects__empty {
   padding: 0 20px 30px;
   text-align: center;

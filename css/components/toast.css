@@ -1,9 +1,3 @@
-/*
- * COMPONENTE: TOAST NOTIFICATION
- * ----------------------------------
- * Notificações temporárias que aparecem no canto da tela.
- */
-
 .toast-notification {
   position: fixed;
   bottom: 100px;

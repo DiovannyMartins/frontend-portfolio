@@ -1,8 +1,3 @@
-/*
- * UTILITÁRIOS DE ANIMAÇÃO
- * --------------------------
- */
-
 @keyframes piscar {
   0%,
   50% {
@@ -14,7 +9,6 @@
   }
 }
 
-/* Scroll reveal: aplicado a qualquer seção que deva ter fade-in ao entrar na tela */
 .reveal {
   opacity: 0;
   transform: translateY(40px);

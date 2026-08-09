@@ -15,7 +15,6 @@
         }
     </script>
 
-    <!-- CSS: um único ponto de entrada. main.css apenas importa os módulos (ver css/main.css) -->
     <link rel="stylesheet" href="css/main.css">
 
     <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
@@ -48,7 +47,6 @@
 
     <a href="#main" class="skip-link">Pular para o conteúdo principal</a>
 
-    <!-- ============ HEADER / NAVEGAÇÃO ============ -->
     <header class="header" role="banner">
         <a href="#home" class="header__logo" aria-label="Diovanny.dev - Página inicial">
             <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64">
@@ -80,10 +78,9 @@
 
     <main id="main" role="main">
 
-        <!-- ============ HERO ============ -->
         <section class="hero" id="home" aria-labelledby="hero-heading">
             <div class="hero__content">
-                <!-- Texto servirá de fallback caso o JS do efeito de digitação não carregue -->
+                <!-- Texto no HTML serve de fallback caso o JS do efeito de digitação não carregue -->
                 <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Front-End">Desenvolvedor Front-End
                 </h1>
                 <p class="hero__text">Desenvolvendo interfaces modernas, responsivas e interativas com HTML5, CSS3 e
@@ -97,7 +94,6 @@
             </div>
         </section>
 
-        <!-- ============ SOBRE MIM ============ -->
         <section class="about reveal" id="sobre" aria-labelledby="sobre-title">
             <h2 class="about__title" id="sobre-title">Sobre mim</h2>
             <p class="about__text">
@@ -107,7 +103,6 @@
             </p>
         </section>
 
-        <!-- ============ TECNOLOGIAS ============ -->
         <section class="skills reveal" aria-labelledby="skills-title">
             <h2 class="skills__title" id="skills-title">Minhas Tecnologias</h2>
 
@@ -132,7 +127,6 @@
             </div>
         </section>
 
-        <!-- ============ PROJETOS ============ -->
         <section id="projetos" class="projects reveal" aria-labelledby="projetos-title">
             <div class="projects__header">
                 <h2 class="projects__title" id="projetos-title">Meus Projetos</h2>
@@ -189,11 +183,10 @@
                 </article>
             </div>
 
-            <!-- Exibida via JS quando filtro + busca não retornam resultados -->
+            <!-- Exibida via JS quando nenhum projeto corresponde aos filtros ativos -->
             <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.</p>
         </section>
 
-        <!-- ============ CONTATO ============ -->
         <section class="contact reveal" id="contato" aria-labelledby="contato-title">
             <div class="contact__info">
                 <h2 class="contact__title" id="contato-title">Contato</h2>
@@ -264,7 +257,6 @@
         <p>© <span id="anoAtual"></span> Diovanny.dev - Todos os direitos reservados</p>
     </footer>
 
-    <!-- type="module" habilita import/export nativo do ES6 -->
     <script type="module" src="js/main.js"></script>
 </body>
 

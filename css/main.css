@@ -1,12 +1,3 @@
-/*
- * PONTO DE ENTRADA DO CSS
- * -----------------------
- * Este arquivo não contém regras próprias — só orquestra a ordem de carregamento.
- * A ordem importa: base (reset/variáveis) sempre primeiro, depois componentes,
- * e utilitários por último (para poderem sobrescrever regras de componentes quando necessário).
- * Essa abordagem é inspirada em ITCSS (Inverted Triangle CSS).
- */
-
 @import url("base/variables.css");
 @import url("base/reset.css");
 @import url("base/typography.css");

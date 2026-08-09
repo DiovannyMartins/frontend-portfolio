@@ -1,10 +1,3 @@
-/*
- * RESET BÁSICO
- * ------------
- * Remove estilos padrão inconsistentes entre navegadores antes de
- * qualquer estilização própria começar.
- */
-
 * {
   margin: 0;
   padding: 0;

@@ -1,12 +1,3 @@
-/*
- * MÓDULO: Filtro e busca de projetos
- * ---------------------------------------
- * Centraliza a visibilidade dos cards: categoria ativa + termo de busca
- * são avaliados juntos pela mesma função, evitando que um filtro
- * sobrescreva o estado do outro. Também exibe a mensagem de
- * "nenhum projeto encontrado" quando a combinação não retorna resultados.
- */
-
 export function initFiltroProjetos() {
   const botoes = document.querySelectorAll(".projects__filter-btn");
   const campoBusca = document.getElementById("buscaProjetos");
@@ -15,6 +6,8 @@ export function initFiltroProjetos() {
 
   if (botoes.length === 0 || cards.length === 0) return;
 
+  // "todos" é um valor sentinela — não corresponde a nenhum data-categoria real,
+  // apenas sinaliza que nenhum filtro de categoria está ativo.
   let filtroAtivo = "todos";
   let termoBusca = "";
 

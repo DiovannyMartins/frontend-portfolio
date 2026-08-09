@@ -38,6 +38,9 @@ export function initFormulario() {
   }
 
   function configurarValidacaoCampo(campo, elementoErro, validador, msgErro) {
+    // Estratégia de UX: campo vazio = neutro (sem borda colorida), campo
+    // preenchido e inválido = vermelho, campo preenchido e válido = verde.
+    // Assim o usuário não vê erros antes mesmo de interagir com o campo.
     campo.addEventListener("input", () => {
       const valor = campo.value.trim();
       if (valor.length > 0 && validador(valor)) {
@@ -73,6 +76,10 @@ export function initFormulario() {
     "Escreva uma mensagem com pelo menos 10 caracteres.",
   );
 
+  // A validação no submit duplica a lógica dos listeners de input porque
+  // tem um contrato diferente: aqui forçamos erro em todos os campos
+  // inválidos de uma vez (mesmo os que o usuário nunca tocou), para que
+  // o formulário inteiro seja validado no momento do envio.
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 

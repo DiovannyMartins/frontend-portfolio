@@ -1,13 +1,3 @@
-/*
- * MÓDULO: Dark / Light mode
- * ----------------------------
- * Persiste a preferência do usuário em localStorage e troca as imagens
- * que dependem de contraste.
- *
- * A classe .light-mode é aplicada no <html> por um script inline no <head>
- * (anti-FOUC) — este módulo apenas sincroniza as imagens e o toggle.
- */
-
 export function initTema() {
   const themeToggle = document.getElementById("themeToggle");
 
@@ -52,14 +42,12 @@ export function initTema() {
     const claro = temaAtual() === "light";
 
     imagensPorTema.forEach(([img, srcClaro, srcEscuro]) => {
-      // Guarda individual: se uma imagem não existir na página, as outras continuam trocando
       if (img) {
         img.src = claro ? srcClaro : srcEscuro;
       }
     });
   }
 
-  // Sincroniza as imagens com o tema já aplicado no carregamento da página.
   atualizarImagens();
 
   themeToggle.addEventListener("click", () => {

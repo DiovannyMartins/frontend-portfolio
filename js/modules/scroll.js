@@ -18,6 +18,8 @@ function initScrollReveal() {
         }
       });
     },
+    // Dispara quando 15% do elemento está visível — evita que seções grandes
+    // fora da tela já sejam marcadas como "visíveis" antes da hora.
     { threshold: 0.15 },
   );
 
@@ -47,6 +49,10 @@ function initScrollSpy() {
         });
       });
     },
+    // Margens negativas de 50% encolhem a área de observação para uma linha
+    // horizontal no centro da tela. A seção só é considerada "ativa" quando
+    // o ponto médio dela cruza o meio do viewport, evitando ambiguidade entre
+    // seções adjacentes (ex: topo de #projetos ainda visível enquanto #contato já entrou).
     { rootMargin: "-50% 0px -50% 0px" },
   );
 

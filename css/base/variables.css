@@ -1,10 +1,3 @@
-/*
- * VARIÁVEIS GLOBAIS (DESIGN TOKENS)
- * ----------------------------------
- * Centralizar cores/espaçamentos aqui evita "cores mágicas" espalhadas pelo código
- * e permite trocar o tema inteiro alterando só este arquivo.
- */
-
 :root {
   --bg-primary: rgb(30, 30, 30);
   --bg-secondary: rgb(45, 45, 48);

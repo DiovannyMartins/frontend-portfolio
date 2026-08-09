@@ -1,15 +1,8 @@
-/*
- * MÓDULO: Menu mobile
- * ---------------------
- * Controla abertura/fechamento do menu no breakpoint mobile,
- * incluindo a animação do ícone hamburguer → X.
- */
-
 export function initMenuMobile() {
   const menuToggle = document.getElementById("menuToggle");
   const nav = document.querySelector(".nav");
 
-  if (!menuToggle || !nav) return; // guarda de segurança: evita erro se o módulo rodar em outra página sem esses elementos
+  if (!menuToggle || !nav) return;
 
   function abrirMenu() {
     nav.classList.add("nav--active");
@@ -34,14 +27,10 @@ export function initMenuMobile() {
     }
   });
 
-  // Fecha o menu automaticamente ao clicar em um link.
   document.querySelectorAll(".nav__link").forEach((link) => {
-    link.addEventListener("click", () => {
-      fecharMenu();
-    });
+    link.addEventListener("click", fecharMenu);
   });
 
-  // Fecha o menu ao clicar fora dele.
   document.addEventListener("click", (event) => {
     const clicouNoMenu = nav.contains(event.target);
     const clicouNoBotao = menuToggle.contains(event.target);
@@ -55,7 +44,6 @@ export function initMenuMobile() {
     }
   });
 
-  // Fecha o menu ao pressionar Escape.
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && nav.classList.contains("nav--active")) {
       fecharMenu();
