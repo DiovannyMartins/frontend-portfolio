@@ -20,16 +20,6 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript puro, fo
 
 ---
 
-## Demo
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/DiovannyMartins/frontend-portfolio/main/img/imagem.webp" alt="Preview do portfólio rodando no navegador" width="800">
-  <br>
-  <a href="https://diovannymartins.github.io/frontend-portfolio/">Ver ao vivo</a>
-</div>
-
----
-
 ## Tecnologias
 
 | Stack | Detalhe |
