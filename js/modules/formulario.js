@@ -13,6 +13,7 @@ export function initFormulario() {
 
   const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const FEEDBACK_DURACAO_MS = 5000;
+  let feedbackTimer;
 
   function validarEmail(email) {
     return REGEX_EMAIL.test(email);
@@ -82,6 +83,8 @@ export function initFormulario() {
   // o formulário inteiro seja validado no momento do envio.
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    clearTimeout(feedbackTimer);
+    feedbackForm.textContent = "";
 
     let formValido = true;
 
@@ -116,14 +119,10 @@ export function initFormulario() {
     if (!formValido) return;
 
     feedbackForm.textContent =
-      "Mensagem enviada com sucesso! Em breve entro em contato.";
-    form.reset();
+      "Formulário validado. O envio ainda não está configurado; copie o e-mail abaixo para enviar sua mensagem.";
 
-    campoNome.classList.remove("input--valid");
-    campoEmail.classList.remove("input--valid");
-    campoMensagem.classList.remove("input--valid");
-
-    setTimeout(() => {
+    clearTimeout(feedbackTimer);
+    feedbackTimer = setTimeout(() => {
       feedbackForm.textContent = "";
     }, FEEDBACK_DURACAO_MS);
   });

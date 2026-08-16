@@ -4,6 +4,7 @@ export function initTema() {
   if (!themeToggle) return;
 
   const root = document.documentElement;
+  const themeColor = document.querySelector('meta[name="theme-color"]');
 
   // [elemento, imagem no tema claro, imagem no tema escuro]
   const imagensPorTema = [
@@ -48,11 +49,19 @@ export function initTema() {
     });
   }
 
+  function atualizarThemeColor() {
+    if (themeColor) {
+      themeColor.content = temaAtual() === "light" ? "#f5f5f5" : "#1e1e1e";
+    }
+  }
+
   atualizarImagens();
+  atualizarThemeColor();
 
   themeToggle.addEventListener("click", () => {
     root.classList.toggle("light-mode");
     localStorage.setItem("tema", temaAtual());
     atualizarImagens();
+    atualizarThemeColor();
   });
 }

@@ -44,7 +44,7 @@ function initScrollSpy() {
           link.removeAttribute("aria-current");
           if (link.getAttribute("href") === `#${id}`) {
             link.classList.add("nav__link--active");
-            link.setAttribute("aria-current", "page");
+            link.setAttribute("aria-current", "location");
           }
         });
       });
@@ -63,14 +63,13 @@ function initVoltarTopo() {
   const btnTopo = document.getElementById("btnTopo");
   if (!btnTopo) return;
 
-  window.addEventListener(
-    "scroll",
-    () => {
-      const deveMostrar = window.scrollY > 400;
-      btnTopo.classList.toggle("back-to-top--visible", deveMostrar);
-    },
-    { passive: true },
-  );
+  function atualizarVisibilidade() {
+    const deveMostrar = window.scrollY > 400;
+    btnTopo.classList.toggle("back-to-top--visible", deveMostrar);
+  }
+
+  window.addEventListener("scroll", atualizarVisibilidade, { passive: true });
+  atualizarVisibilidade();
 
   btnTopo.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

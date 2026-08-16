@@ -8,15 +8,21 @@ export function initCopiarEmail() {
   if (!btnCopiarEmail) return;
 
   const FEEDBACK_DURACAO_MS = 2000;
+  const textoOriginal = textoCopiarEmail.textContent;
+  const iconOriginal = iconEmail.src;
+  let feedbackTimer;
 
   btnCopiarEmail.addEventListener("click", () => {
     const email = btnCopiarEmail.dataset.email;
 
+    if (!navigator.clipboard?.writeText) {
+      criarToast("Não foi possível copiar o e-mail neste navegador.", false);
+      return;
+    }
+
     navigator.clipboard
       .writeText(email)
       .then(() => {
-        const textoOriginal = textoCopiarEmail.textContent;
-        const iconOriginal = iconEmail.src;
         const modoClaro =
           document.documentElement.classList.contains("light-mode");
 
@@ -27,7 +33,8 @@ export function initCopiarEmail() {
 
         criarToast("E-mail copiado com sucesso!");
 
-        setTimeout(() => {
+        clearTimeout(feedbackTimer);
+        feedbackTimer = setTimeout(() => {
           textoCopiarEmail.textContent = textoOriginal;
           iconEmail.src = iconOriginal;
         }, FEEDBACK_DURACAO_MS);

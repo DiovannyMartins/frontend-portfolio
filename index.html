@@ -8,17 +8,17 @@
         content="Portfólio de Diovanny Martins, desenvolvedor Front-End especializado em HTML5, CSS3 e JavaScript. Confira meus projetos e entre em contato.">
     <link rel="icon" href="img/icon-logo.png" type="image/png">
 
+    <meta name="theme-color" content="#1e1e1e">
+
     <!-- Anti-FOUC: aplica o tema salvo antes da página renderizar, evitando o "flash" do tema errado -->
     <script>
         if (localStorage.getItem("tema") === "light") {
             document.documentElement.classList.add("light-mode");
+            document.querySelector('meta[name="theme-color"]').content = "#f5f5f5";
         }
     </script>
 
     <link rel="stylesheet" href="css/main.css">
-
-    <meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Diovanny Martins | Desenvolvedor Front-End">
@@ -78,7 +78,7 @@
 
     <main id="main" role="main">
 
-        <section class="hero" id="home" aria-labelledby="hero-heading">
+        <section class="hero" id="home" aria-labelledby="typingText">
             <div class="hero__content">
                 <!-- Texto no HTML serve de fallback caso o JS do efeito de digitação não carregue -->
                 <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Front-End">Desenvolvedor Front-End
@@ -221,7 +221,7 @@
 
                     <button type="submit" class="contact__submit">Enviar Mensagem</button>
 
-                    <p id="feedbackForm" class="contact__feedback"></p>
+                    <p id="feedbackForm" class="contact__feedback" role="status"></p>
                 </form>
             </div>
 
@@ -236,7 +236,8 @@
                 </li>
 
                 <li>
-                    <a href="#" class="social-card social-card--linkedin" aria-label="Visitar perfil no LinkedIn">
+                    <a href="https://linkedin.com/in/diovanny-martins" target="_blank" rel="noopener noreferrer"
+                        class="social-card social-card--linkedin" aria-label="Visitar perfil no LinkedIn">
                         <img class="social-card__icon" src="img/linkedin.png" alt="" loading="lazy" aria-hidden="true">
                         LinkedIn
                     </a>
