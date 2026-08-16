@@ -5,7 +5,7 @@
   align-items: center;
   /* Cor fixa (não usa custom property): no tema claro essa borda continua branca
      semi-transparente por design — uma borda escura sumiria no fundo claro. */
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid var(--border-subtle);
 
   position: fixed;
   top: 0;
@@ -38,6 +38,8 @@
   background: none;
   border: none;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .header__menu-toggle-bar {
@@ -103,6 +105,8 @@
   border-radius: 15px;
   padding: 10px 15px;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;

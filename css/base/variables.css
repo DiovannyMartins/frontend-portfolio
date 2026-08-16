@@ -4,6 +4,12 @@
   --bg-button: rgb(62, 62, 66);
   --text-primary: rgb(255, 255, 255);
   --text-secondary: rgb(203, 213, 225);
+  --border-subtle: rgba(255, 255, 255, 0.28);
+  --focus-ring: rgb(129, 140, 248);
+  --input-focus: rgba(255, 255, 255, 0.7);
+  --input-focus-shadow: rgba(255, 255, 255, 0.16);
+  --status-success: rgb(80, 200, 120);
+  --status-error: rgb(255, 130, 130);
 
   --shadow-light: rgba(232, 232, 232, 0.2);
   --shadow-dark: rgb(60, 60, 60);
@@ -18,6 +24,12 @@ html.light-mode {
   --bg-button: rgb(210, 210, 215);
   --text-primary: rgb(20, 20, 20);
   --text-secondary: rgb(60, 60, 60);
+  --border-subtle: rgba(20, 20, 20, 0.24);
+  --focus-ring: rgb(67, 56, 202);
+  --input-focus: rgba(20, 20, 20, 0.7);
+  --input-focus-shadow: rgba(20, 20, 20, 0.12);
+  --status-success: rgb(20, 130, 70);
+  --status-error: rgb(180, 35, 35);
 
   --shadow-light: rgba(200, 200, 200, 0.4);
   --shadow-dark: rgba(60, 60, 60, 0.25);

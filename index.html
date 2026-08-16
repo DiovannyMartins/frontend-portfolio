@@ -54,21 +54,21 @@
         </a>
 
         <div class="header__actions">
-            <button class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+            <button type="button" class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mainNav">
                 <span class="header__menu-toggle-bar"></span>
                 <span class="header__menu-toggle-bar"></span>
                 <span class="header__menu-toggle-bar"></span>
             </button>
         </div>
 
-        <nav class="nav" aria-label="Navegação principal">
+        <nav class="nav" id="mainNav" aria-label="Navegação principal">
             <ul class="nav__list" role="list">
                 <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
                 <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
                 <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
                 <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
                 <li class="nav__item">
-                    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema claro e escuro">
+                    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Ativar tema claro" aria-pressed="false">
                         <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
                     </button>
                 </li>
@@ -151,7 +151,7 @@
 
             <div class="projects__search">
                 <label for="buscaProjetos" class="sr-only">Buscar projetos</label>
-                <input type="search" id="buscaProjetos" class="projects__search-input" placeholder="Buscar projetos...">
+                <input type="search" id="buscaProjetos" class="projects__search-input" placeholder="Buscar projetos..." autocomplete="off">
             </div>
 
             <div class="projects__grid">
@@ -201,27 +201,27 @@
                 <form id="formContato" class="contact__form" novalidate>
                     <div class="contact__field">
                         <label for="nome" class="sr-only">Nome</label>
-                        <input type="text" id="nome" name="nome" placeholder="Seu nome" aria-describedby="erroNome">
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome" autocomplete="name" minlength="3" maxlength="100" required aria-describedby="erroNome">
                         <span class="contact__error" id="erroNome" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
                         <label for="email" class="sr-only">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="Seu e-mail"
+                        <input type="email" id="email" name="email" placeholder="Seu e-mail" autocomplete="email" maxlength="254" required
                             aria-describedby="erroEmail">
                         <span class="contact__error" id="erroEmail" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
                         <label for="mensagem" class="sr-only">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem"
+                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem" minlength="10" maxlength="5000" required
                             aria-describedby="erroMensagem"></textarea>
                         <span class="contact__error" id="erroMensagem" aria-live="polite"></span>
                     </div>
 
                     <button type="submit" class="contact__submit">Enviar Mensagem</button>
 
-                    <p id="feedbackForm" class="contact__feedback" role="status"></p>
+                    <p id="feedbackForm" class="contact__feedback" role="status" aria-live="polite"></p>
                 </form>
             </div>
 
@@ -244,7 +244,7 @@
                 </li>
 
                 <li>
-                    <button class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com"
+                    <button type="button" class="social-card copy-email-btn" id="btnCopiarEmail" data-email="diovannydev@gmail.com"
                         aria-label="Copiar endereço de e-mail">
                         <img class="social-card__icon icon" src="img/icon-envelope-branco.png" alt="" id="iconEmail"
                             loading="lazy" aria-hidden="true">
@@ -256,7 +256,7 @@
 
     </main>
 
-    <button id="btnTopo" class="back-to-top" aria-label="Voltar ao topo da página">
+    <button type="button" id="btnTopo" class="back-to-top" aria-label="Voltar ao topo da página">
         <img src="img/icon-seta-branco.png" alt="" id="iconSeta" class="icon" loading="lazy" aria-hidden="true">
     </button>
 

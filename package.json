@@ -1,0 +1,32 @@
+{
+  "name": "frontend-portfolio",
+  "version": "1.0.0",
+  "description": "Portfólio front-end responsivo com Vite, backend Express e scripts de automação.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:all": "concurrently -n API,WEB -c yellow,cyan \"npm run server\" \"npm run dev\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node --watch server/index.js",
+    "start": "node server/index.js",
+    "sitemap": "node scripts/gerar-sitemap.js",
+    "imagens": "node scripts/otimizar-imagens.js",
+    "check": "node scripts/verificar-assets.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "nodemailer": "^9.0.5"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4",
+    "sharp": "^0.35.3",
+    "vite": "^8.2.1"
+  }
+}

@@ -81,10 +81,11 @@ export function initFormulario() {
   // tem um contrato diferente: aqui forçamos erro em todos os campos
   // inválidos de uma vez (mesmo os que o usuário nunca tocou), para que
   // o formulário inteiro seja validado no momento do envio.
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearTimeout(feedbackTimer);
     feedbackForm.textContent = "";
+    feedbackForm.classList.remove("contact__feedback--error");
 
     let formValido = true;
 
@@ -116,14 +117,92 @@ export function initFormulario() {
       limparErro(campoMensagem, erroMensagem);
     }
 
-    if (!formValido) return;
+    if (!formValido) {
+      form.querySelector("[aria-invalid='true']")?.focus();
+      return;
+    }
 
-    feedbackForm.textContent =
-      "Formulário validado. O envio ainda não está configurado; copie o e-mail abaixo para enviar sua mensagem.";
+    const botaoEnviar = form.querySelector(".contact__submit");
+    const textoOriginal = botaoEnviar.textContent;
+    botaoEnviar.disabled = true;
+    form.setAttribute("aria-busy", "true");
+    botaoEnviar.textContent = "Enviando...";
 
-    clearTimeout(feedbackTimer);
-    feedbackTimer = setTimeout(() => {
-      feedbackForm.textContent = "";
-    }, FEEDBACK_DURACAO_MS);
+    const controller = new AbortController();
+    const TIMEOUT_ENVIO_MS = 10000;
+    const timerEnvio = setTimeout(() => controller.abort(), TIMEOUT_ENVIO_MS);
+
+    try {
+      // Checa se a API está ativa antes de enviar. Em hospedagem estática
+      // (Live Server, GitHub Pages) não há backend: avisa e evita o POST 405.
+      const health = await fetch("/api/health", { signal: controller.signal });
+      if (!health.ok) {
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent =
+          "O envio online não está ativo nesta hospedagem. Teste com \"npm run dev:all\" ou copie meu e-mail abaixo.";
+        return;
+      }
+
+      const resposta = await fetch("/api/contato", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: campoNome.value.trim(),
+          email: campoEmail.value.trim(),
+          mensagem: campoMensagem.value.trim(),
+        }),
+        signal: controller.signal,
+      });
+
+      const ehJson = resposta.headers
+        .get("content-type")
+        ?.includes("application/json");
+      const dados = ehJson
+        ? await resposta.json().catch((erro) => {
+            if (controller.signal.aborted) throw erro;
+            return {};
+          })
+        : {};
+
+      if (resposta.ok) {
+        feedbackForm.textContent =
+          "Mensagem enviada com sucesso! Em breve entrarei em contato.";
+        form.reset();
+        campoNome.classList.remove("input--valid");
+        campoEmail.classList.remove("input--valid");
+        campoMensagem.classList.remove("input--valid");
+      } else if (ehJson && dados?.errors) {
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent = Object.values(dados.errors).join(" ");
+      } else if (ehJson && dados?.error) {
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent = dados.error;
+      } else {
+        // Resposta não-JSON (404/405 do próprio servidor estático) significa
+        // que o backend não está ativo nesta origem — ex.: Live Server ou
+        // GitHub Pages, que não rodam o Express.
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent =
+          "O envio online não está ativo nesta hospedagem. Teste com \"npm run dev:all\" ou copie meu e-mail abaixo.";
+      }
+    } catch {
+      if (controller.signal.aborted) {
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent =
+          "O envio demorou demais. Verifique sua conexão e tente novamente.";
+      } else {
+        feedbackForm.classList.add("contact__feedback--error");
+        feedbackForm.textContent =
+          "Não foi possível enviar. Verifique sua conexão e tente novamente.";
+      }
+    } finally {
+      clearTimeout(timerEnvio);
+      botaoEnviar.disabled = false;
+      form.removeAttribute("aria-busy");
+      botaoEnviar.textContent = textoOriginal;
+      feedbackTimer = setTimeout(() => {
+        feedbackForm.textContent = "";
+      }, FEEDBACK_DURACAO_MS);
+    }
   });
 }

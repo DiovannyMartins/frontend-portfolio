@@ -9,6 +9,11 @@ function initScrollReveal() {
 
   if (elementos.length === 0) return;
 
+if (!("IntersectionObserver" in window)) {
+    elementos.forEach((elemento) => elemento.classList.add("reveal--visible"));
+    return;
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -30,7 +35,7 @@ function initScrollSpy() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav__link");
 
-  if (sections.length === 0) return;
+  if (sections.length === 0 || !("IntersectionObserver" in window)) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -71,7 +76,7 @@ function initVoltarTopo() {
   window.addEventListener("scroll", atualizarVisibilidade, { passive: true });
   atualizarVisibilidade();
 
-  btnTopo.addEventListener("click", () => {
+btnTopo.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }

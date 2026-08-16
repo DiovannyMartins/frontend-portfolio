@@ -49,22 +49,22 @@
 .contact__field input:focus,
 .contact__field textarea:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
 .contact__field .input--invalid {
-  border-color: rgb(220, 80, 80);
-  box-shadow: 0 0 0 3px rgba(220, 80, 80, 0.2);
+  border-color: var(--status-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-error) 20%, transparent);
 }
 
 .contact__field .input--valid {
-  border-color: rgb(80, 200, 120);
-  box-shadow: 0 0 0 3px rgba(80, 200, 120, 0.2);
+  border-color: var(--status-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-success) 20%, transparent);
 }
 
 .contact__error {
-  color: rgb(255, 120, 120);
+  color: var(--status-error);
   font-size: 13px;
   min-height: 16px;
 }
@@ -72,7 +72,11 @@
 .contact__feedback {
   font-size: 15px;
   min-height: 20px;
-  color: rgb(120, 220, 150);
+  color: var(--status-success);
+}
+
+.contact__feedback--error {
+  color: var(--status-error);
 }
 
 .contact__submit {
@@ -88,6 +92,12 @@
     transform 0.3s ease,
     box-shadow 0.3s ease;
   align-self: flex-start;
+}
+
+.contact__submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
 }
 
 .contact__submit:hover {
@@ -108,7 +118,7 @@
   align-items: center;
   gap: 10px;
 
-  width: 320px;
+  width: min(320px, 100%);
   padding: 10px;
   background-color: var(--bg-button);
   color: var(--text-primary);

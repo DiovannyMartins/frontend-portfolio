@@ -1,0 +1,21 @@
+# Dependências
+node_modules/
+
+# Build do Vite
+dist/
+
+# Variáveis de ambiente (contêm segredos, nunca commitar)
+.env
+.env.local
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Artefatos de ferramentas de teste de navegador
+.playwright-mcp/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

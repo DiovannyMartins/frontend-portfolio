@@ -45,8 +45,8 @@
 
 .projects__search-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }
 
 .projects__search-input::placeholder {
@@ -80,7 +80,7 @@
 
 .projects__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   justify-content: center;
   align-items: center;
   gap: 30px;

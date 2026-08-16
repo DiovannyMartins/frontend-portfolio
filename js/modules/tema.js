@@ -7,6 +7,8 @@ export function initTema() {
   const themeColor = document.querySelector('meta[name="theme-color"]');
 
   // [elemento, imagem no tema claro, imagem no tema escuro]
+  // Caminhos em string (e não import) para que o site funcione também em
+  // hospedagem estática crua (ex.: GitHub Pages), sem build do Vite.
   const imagensPorTema = [
     [
       document.querySelector(".header__logo img"),
@@ -55,13 +57,24 @@ export function initTema() {
     }
   }
 
+  function atualizarAcessibilidade() {
+    const claro = temaAtual() === "light";
+    themeToggle.setAttribute("aria-pressed", String(claro));
+    themeToggle.setAttribute(
+      "aria-label",
+      claro ? "Ativar tema escuro" : "Ativar tema claro",
+    );
+  }
+
   atualizarImagens();
   atualizarThemeColor();
+  atualizarAcessibilidade();
 
   themeToggle.addEventListener("click", () => {
     root.classList.toggle("light-mode");
     localStorage.setItem("tema", temaAtual());
     atualizarImagens();
     atualizarThemeColor();
+    atualizarAcessibilidade();
   });
 }
