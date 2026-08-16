@@ -4,6 +4,15 @@ import { enviarEmail } from "../lib/email.js";
 const router = Router();
 
 // Validação server-side: nunca confie apenas na validação do navegador.
+function validarEmail(email) {
+  const partes = email.split("@");
+  if (partes.length !== 2) return false;
+  const [local, dominio] = partes;
+  if (!local || !dominio || /\s/.test(email)) return false;
+  const rotulos = dominio.split(".");
+  return rotulos.length >= 2 && rotulos.every((rotulo) => rotulo.length > 0);
+}
+
 function validar(payload) {
   const nome = (payload?.nome ?? "").trim();
   const email = (payload?.email ?? "").trim();
@@ -12,8 +21,11 @@ function validar(payload) {
 
   if (nome.length < 3) erros.nome = "Informe seu nome completo.";
   if (nome.length > 100) erros.nome = "O nome deve ter no máximo 100 caracteres.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) erros.email = "Informe um e-mail válido.";
-  if (email.length > 254) erros.email = "O e-mail deve ter no máximo 254 caracteres.";
+  if (email.length > 254) {
+    erros.email = "O e-mail deve ter no máximo 254 caracteres.";
+  } else if (!validarEmail(email)) {
+    erros.email = "Informe um e-mail válido.";
+  }
   if (mensagem.length < 10) erros.mensagem = "A mensagem deve ter pelo menos 10 caracteres.";
   if (mensagem.length > 5000) erros.mensagem = "A mensagem deve ter no máximo 5.000 caracteres.";
 

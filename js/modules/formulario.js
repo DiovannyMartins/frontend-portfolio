@@ -11,12 +11,16 @@ export function initFormulario() {
   const erroEmail = document.getElementById("erroEmail");
   const erroMensagem = document.getElementById("erroMensagem");
 
-  const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const FEEDBACK_DURACAO_MS = 5000;
+const FEEDBACK_DURACAO_MS = 5000;
   let feedbackTimer;
 
   function validarEmail(email) {
-    return REGEX_EMAIL.test(email);
+    const partes = email.split("@");
+    if (partes.length !== 2) return false;
+    const [local, dominio] = partes;
+    if (!local || !dominio || /\s/.test(email)) return false;
+    const rotulos = dominio.split(".");
+    return rotulos.length >= 2 && rotulos.every((rotulo) => rotulo.length > 0);
   }
 
   function marcarErro(campo, elementoErro, mensagem) {

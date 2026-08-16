@@ -16,7 +16,7 @@ const ROTAS = [""];
 const hoje = new Date().toISOString().split("T")[0];
 
 const urls = ROTAS.map((rota) => {
-  const loc = `${URL_BASE}/${rota}`.replace(/\/$/, "/");
+  const loc = `${URL_BASE.replace(/\/$/, "")}/${rota.replace(/^\//, "")}`;
   return `  <url>
     <loc>${loc}</loc>
     <lastmod>${hoje}</lastmod>
