@@ -3,8 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Cor fixa (não usa custom property): no tema claro essa borda continua branca
-     semi-transparente por design — uma borda escura sumiria no fundo claro. */
+  /* A cor da borda varia por tema via --border-subtle. */
   border-bottom: 1px solid var(--border-subtle);
 
   position: fixed;
