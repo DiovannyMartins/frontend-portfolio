@@ -1,4 +1,4 @@
-import { cp } from "node:fs/promises";
+import { cp, mkdir } from "node:fs/promises";
 import { defineConfig } from "vite";
 
 // base relativa: o build funciona tanto na raiz quanto em subpastas
@@ -7,12 +7,14 @@ export default defineConfig({
   base: "./",
   plugins: [
     {
-      name: "copiar-imagens",
-      // As imagens referenciadas por string no JS (tema.js, copiarEmail.js)
-      // não passam pelo processamento do Vite, então precisam existir
-      // verbatim em dist/img/ para o build funcionar.
+      name: "copiar-arquivos-estaticos",
+      // Imagens referenciadas por string no JS (tema.js, copiarEmail.js) e o
+      // script anti-FOUC (js/tema-inicial.js) não passam pelo processamento do
+      // Vite, então precisam existir verbatim em dist/ para o build funcionar.
       closeBundle: async () => {
         await cp("img", "dist/img", { recursive: true });
+        await mkdir("dist/js", { recursive: true });
+        await cp("js/tema-inicial.js", "dist/js/tema-inicial.js");
       },
     },
   ],

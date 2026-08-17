@@ -47,6 +47,8 @@ for (const arquivo of arquivos) {
 if (convertidos === 0) {
   console.log("Nenhuma imagem grande para converter (ícones < 10 KB são mantidos em PNG).");
 } else {
-  console.log(`\nConvertidas ${convertidos} imagem(ns). Atualize as referências .png -> .webp no HTML/JS.`);
+  console.log(
+    `\nConvertidas ${convertidos} imagem(ns). Atualize as referências .png -> .webp no HTML/JS.`,
+  );
 }
 console.log(`Ícones ignorados: ${ignorados}`);

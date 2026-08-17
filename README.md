@@ -16,8 +16,12 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 - JavaScript Vanilla (sem frameworks)
 - Vite como dev server e build (minificação, hashing de assets)
-- Backend Express com validação server-side, rate limit e envio de e-mail (Nodemailer)
+- Backend Express com validação server-side, rate limit, envio de e-mail (Nodemailer) e cabeçalhos de segurança (Helmet/CSP)
+- Validação de e-mail em fonte única compartilhada entre frontend e backend
+- Testes automatizados com o runner nativo do Node (`node --test`)
+- ESLint + Prettier para lint e formatação consistente
 - Scripts de automação: sitemap, verificação de assets e otimização de imagens
+- Anti-spam com honeypot no formulário de contato
 - Responsivo (layout adapta-se a todas as telas)
 - Dark/Light Mode
 - Acessível (ARIA)
@@ -27,16 +31,18 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 ## Tecnologias
 
-| Stack | Detalhe |
-|-------|---------|
-| HTML5 | Semântica, ARIA, meta tags Open Graph/Twitter Card |
-| CSS3 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular |
-| JavaScript (ES6+) | ES Modules — frontend sem dependências de runtime |
-| Vite | Dev server, build de produção e proxy para a API em desenvolvimento |
-| Node.js / Express | API para o formulário de contato (validação, rate limit, e-mail) |
-| Nodemailer | Envio de e-mail a partir do formulário |
-| Git/GitHub | Versionamento e deploy via GitHub Pages (frontend) |
-| Google Fonts | Fjalla One (títulos) e Inter (corpo) |
+| Stack             | Detalhe                                                             |
+| ----------------- | ------------------------------------------------------------------- |
+| HTML5             | Semântica, ARIA, meta tags Open Graph/Twitter Card                  |
+| CSS3              | Variáveis CSS, Grid, Flexbox, animações, `@import` modular          |
+| JavaScript (ES6+) | ES Modules — frontend sem dependências de runtime                   |
+| Vite              | Dev server, build de produção e proxy para a API em desenvolvimento |
+| Node.js / Express | API para o formulário de contato (validação, rate limit, e-mail)    |
+| Helmet            | Cabeçalhos de segurança e Content-Security-Policy no Express        |
+| Nodemailer        | Envio de e-mail a partir do formulário                              |
+| ESLint + Prettier | Lint estático e formatação consistente do código                    |
+| Git/GitHub        | Versionamento e deploy via GitHub Pages (frontend)                  |
+| Google Fonts      | Fjalla One (títulos) e Inter (corpo)                                |
 
 ---
 
@@ -46,9 +52,12 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 
 - **Vite para desenvolvimento e build**: dev server com HMR, proxy para a API, minificação e hashing de assets no build. O site continua estático e pode ser publicado em qualquer hosting estático.
 - **Backend Express opcional**: usado apenas para o formulário de contato. Sem variáveis SMTP, roda em "modo log" (exibe a mensagem no console) — **apenas em desenvolvimento**; em produção o servidor não inicia sem SMTP.
+- **Configuração centralizada**: `server/lib/config.js` carrega o `.env` no top-level e exporta um único objeto `config` (porta, origens CORS, SMTP, trust proxy). Como imports são avaliados antes do módulo que os importa, todo o servidor lê variáveis já carregadas.
+- **Segurança no backend**: Helmet com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
-- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build.
-- **Anti-FOUC no tema**: o script de tema roda no `<head>` antes da renderização, evitando o flash do tema errado.
+- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
+- **Anti-FOUC no tema**: `js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
+- **Testes com `node --test`**: cobertura da validação, CORS, rate limit e dos endpoints da API, sem dependências adicionais.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
 - **Performance**: imagens em WebP com lazy loading, `preload` da imagem hero, `preconnect` para fontes, `theme-color` para mobile.
 
@@ -61,13 +70,15 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 - **Scroll spy** que destaca o link do menu conforme a seção visível
 - **Filtro de projetos** por categoria (Dashboard, Landing Page, E-commerce)
 - **Busca em tempo real** por título ou descrição dos projetos
-- **Formulário de contato** com validação visual e feedback em tempo real (bordas verdes/vermelhas)
+- **Formulário de contato** com validação visual e feedback em tempo real (bordas verdes/vermelhas) e honeypot anti-spam
 - **Botão copiar e-mail** com toast notification de confirmação
 - **Scroll reveal** nas seções ao rolar a página
 - **Botão voltar ao topo** com animação fade
 - **Efeito de digitação** no título hero
 - **Skip link** para navegação por teclado
 - **Imagens otimizadas** em WebP com lazy loading
+- **Testes automatizados** da API (`npm test`)
+- **Lint e formatação** com ESLint e Prettier (`npm run lint`, `npm run format`)
 - **SEO**: `sitemap.xml`, `robots.txt`, Open Graph, Twitter Card
 
 ---
@@ -111,21 +122,26 @@ Copy-Item server/.env.example server/.env
 ```
 
 - **Sem SMTP configurado**: o servidor roda em "modo log" — as mensagens aparecem no console do terminal. **Apenas para desenvolvimento local**: em produção o servidor **não inicia** sem SMTP, evitando que e-mails e mensagens dos visitantes vazem para os logs da plataforma.
-- **Com SMTP configurado**: preencha `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` e `EMAIL_DESTINO` no `.env` (para Gmail, use uma senha de app). Se o frontend e a API estiverem em origens diferentes, configure também `FRONTEND_ORIGIN` (origens autorizadas, separadas por vírgula).
+- **Com SMTP configurado**: preencha `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` e `EMAIL_DESTINO` no `.env` (para Gmail, use uma senha de app). Se o frontend e a API estiverem em origens diferentes, configure também `FRONTEND_ORIGIN` (origens autorizadas, separadas por vírgula) e, se estiver atrás de proxy (Render, Railway, Nginx), `TRUST_PROXY=true` para o rate limit enxergar o IP real do cliente.
 
 ### Scripts disponíveis
 
-| Comando | Descrição |
-|---------|-----------|
-| `npm run dev` | Inicia o Vite (frontend) com proxy para a API |
-| `npm run dev:all` | Inicia frontend e backend juntos |
-| `npm run server` | Inicia apenas o backend Express (usado pelo `dev:all`) |
-| `npm run build` | Gera o build de produção em `dist/` |
-| `npm run preview` | Serve localmente o build gerado |
-| `npm start` | Inicia o servidor Express (serve a API; para também servir o `dist/`, defina `NODE_ENV=production`) |
-| `npm run sitemap` | Regenera o `sitemap.xml` em `public/` |
-| `npm run check` | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs |
-| `npm run imagens` | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP |
+| Comando                | Descrição                                                                                           |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Inicia o Vite (frontend) com proxy para a API                                                       |
+| `npm run dev:all`      | Inicia frontend e backend juntos                                                                    |
+| `npm run server`       | Inicia apenas o backend Express (usado pelo `dev:all`)                                              |
+| `npm run build`        | Gera o build de produção em `dist/`                                                                 |
+| `npm run preview`      | Serve localmente o build gerado                                                                     |
+| `npm start`            | Inicia o servidor Express (serve a API; para também servir o `dist/`, defina `NODE_ENV=production`) |
+| `npm test`             | Roda os testes automatizados da API (`node --test`)                                                 |
+| `npm run lint`         | Verifica o código com ESLint                                                                        |
+| `npm run lint:fix`     | Corrige automaticamente os problemas de lint                                                        |
+| `npm run format`       | Formata todos os arquivos com Prettier                                                              |
+| `npm run format:check` | Verifica se todos os arquivos seguem o padrão do Prettier                                           |
+| `npm run sitemap`      | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`)  |
+| `npm run check`        | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                    |
+| `npm run imagens`      | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                            |
 
 ### Deploy
 
@@ -142,7 +158,7 @@ Copy-Item server/.env.example server/.env
   NODE_ENV=production npm start
   ```
 
-  Configure `PORT` e as variáveis SMTP (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_DESTINO`) no ambiente da plataforma — em produção o servidor não inicia sem elas (o "modo log" é restrito ao desenvolvimento local).
+  Configure `PORT`, `FRONTEND_ORIGIN` e as variáveis SMTP (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_DESTINO`) no ambiente da plataforma — em produção o servidor não inicia sem elas (o "modo log" é restrito ao desenvolvimento local). Em hospedagens atrás de proxy, defina também `TRUST_PROXY=true`.
 
 ---
 
@@ -153,6 +169,8 @@ frontend-portfolio/
 ├── public/
 │   ├── robots.txt            # Diretrizes para crawlers
 │   └── sitemap.xml           # Mapa do site (gerado via npm run sitemap)
+├── shared/
+│   └── validacao.js          # Validação de e-mail (fonte única frontend/backend)
 ├── css/
 │   ├── base/
 │   │   ├── reset.css          # Reset e normalização
@@ -172,6 +190,7 @@ frontend-portfolio/
 │   │   └── animacoes.css      # Keyframes e scroll reveal
 │   └── main.css               # Entry point (importa todos os módulos)
 ├── js/
+│   ├── tema-inicial.js        # Anti-FOUC (aplica o tema antes do render, no <head>)
 │   ├── modules/
 │   │   ├── tema.js            # Dark/Light mode
 │   │   ├── menu.js            # Menu mobile
@@ -184,9 +203,12 @@ frontend-portfolio/
 │   └── main.js                # Entry point (inicializa módulos)
 ├── server/
 │   ├── index.js               # Inicializa o servidor Express
-│   ├── app.js                 # App Express (middlewares, rotas, estático)
-│   ├── routes/contato.js      # POST /api/contato com validação
-│   ├── lib/email.js           # Envio de e-mail (Nodemailer / modo log)
+│   ├── app.js                 # App Express (middlewares, rotas, estático) — factory criarApp()
+│   ├── app.test.js            # Testes automatizados da API (node --test)
+│   ├── routes/contato.js      # POST /api/contato com validação e honeypot
+│   ├── lib/
+│   │   ├── config.js          # Carrega o .env e centraliza a configuração
+│   │   └── email.js           # Envio de e-mail (Nodemailer / modo log)
 │   └── .env.example           # Modelo de variáveis de ambiente
 ├── scripts/
 │   ├── gerar-sitemap.js       # Regenera public/sitemap.xml
@@ -194,7 +216,10 @@ frontend-portfolio/
 │   └── otimizar-imagens.js    # Converte PNGs/JPGs para WebP
 ├── img/                       # Imagens e ícones (WebP otimizado)
 ├── index.html                 # Página principal (entry point do Vite)
-├── vite.config.js             # Configuração do Vite
+├── vite.config.js             # Configuração do Vite (build, proxy e cópia de estáticos)
+├── eslint.config.js           # Configuração do ESLint (flat config)
+├── .prettierrc.json           # Configuração do Prettier
+├── .prettierignore            # Arquivos ignorados pelo Prettier
 ├── package.json               # Scripts e dependências
 └── README.md
 ```
@@ -210,8 +235,11 @@ frontend-portfolio/
 - **Acessibilidade** — ARIA labels, navegação por teclado, skip link, focus management
 - **Performance** — lazy loading de imagens, preload de recursos críticos, preconnect para fontes externas
 - **Persistência de estado** — uso de `localStorage` para manter preferências do usuário entre sessões
-- **Validação de formulário** — feedback visual em tempo real no frontend e validação server-side no Express
-- **Backend com Express** — rotas, middlewares, rate limit, envio de e-mail com Nodemailer e modo log para desenvolvimento
+- **Validação de formulário** — feedback visual em tempo real no frontend e validação server-side no Express, com regras compartilhadas em fonte única
+- **Backend com Express** — rotas, middlewares, rate limit, envio de e-mail com Nodemailer, modo log para desenvolvimento e configuração centralizada (`.env`)
+- **Segurança web** — Helmet/CSP, honeypot anti-spam, limite de payload e validação de entrada no servidor
+- **Testes automatizados** — cobertura da API com o runner nativo do Node (`node --test`) e `fetch`
+- **Qualidade de código** — ESLint e Prettier para manter o código consistente e sem problemas comuns
 - **Automação com Node.js** — scripts para gerar sitemap, verificar referências de assets e otimizar imagens
 
 ---

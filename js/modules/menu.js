@@ -35,11 +35,7 @@ export function initMenuMobile() {
     const clicouNoMenu = nav.contains(event.target);
     const clicouNoBotao = menuToggle.contains(event.target);
 
-    if (
-      !clicouNoMenu &&
-      !clicouNoBotao &&
-      nav.classList.contains("nav--active")
-    ) {
+    if (!clicouNoMenu && !clicouNoBotao && nav.classList.contains("nav--active")) {
       fecharMenu();
     }
   });
@@ -48,6 +44,15 @@ export function initMenuMobile() {
     if (event.key === "Escape" && nav.classList.contains("nav--active")) {
       fecharMenu();
       menuToggle.focus();
+    }
+  });
+
+  // Ao redimensionar para desktop, o toggle some (display: none no CSS) e o
+  // menu aberto não deve permanecer no estado "ativo".
+  window.addEventListener("resize", () => {
+    const toggleVisivel = getComputedStyle(menuToggle).display !== "none";
+    if (nav.classList.contains("nav--active") && !toggleVisivel) {
+      fecharMenu();
     }
   });
 }

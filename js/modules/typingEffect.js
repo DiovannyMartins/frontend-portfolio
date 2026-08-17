@@ -2,7 +2,7 @@ export function initTypingEffect() {
   const alvo = document.getElementById("typingText");
   if (!alvo) return;
 
-const texto = alvo.textContent.trim();
+  const texto = alvo.textContent.trim();
   const velocidadeMs = 100;
   let indice = 0;
 

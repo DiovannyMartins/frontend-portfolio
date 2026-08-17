@@ -1,3 +1,5 @@
+import { validarEmail } from "../../shared/validacao.js";
+
 export function initFormulario() {
   const form = document.getElementById("formContato");
   if (!form) return;
@@ -5,23 +7,34 @@ export function initFormulario() {
   const campoNome = document.getElementById("nome");
   const campoEmail = document.getElementById("email");
   const campoMensagem = document.getElementById("mensagem");
+  const campoWebsite = document.getElementById("website");
   const feedbackForm = document.getElementById("feedbackForm");
 
-  const erroNome = document.getElementById("erroNome");
-  const erroEmail = document.getElementById("erroEmail");
-  const erroMensagem = document.getElementById("erroMensagem");
+  // Única fonte de regras de validação: os listeners de "input" (validação em
+  // tempo real) e o submit (validação completa) usam a mesma função avaliarCampo.
+  const CAMPOS = [
+    {
+      campo: campoNome,
+      erro: document.getElementById("erroNome"),
+      validador: (valor) => valor.length >= 3,
+      msgErro: "Digite seu nome completo.",
+    },
+    {
+      campo: campoEmail,
+      erro: document.getElementById("erroEmail"),
+      validador: (valor) => validarEmail(valor),
+      msgErro: "Digite um e-mail válido.",
+    },
+    {
+      campo: campoMensagem,
+      erro: document.getElementById("erroMensagem"),
+      validador: (valor) => valor.length >= 10,
+      msgErro: "Escreva uma mensagem com pelo menos 10 caracteres.",
+    },
+  ];
 
-const FEEDBACK_DURACAO_MS = 5000;
+  const FEEDBACK_DURACAO_MS = 5000;
   let feedbackTimer;
-
-  function validarEmail(email) {
-    const partes = email.split("@");
-    if (partes.length !== 2) return false;
-    const [local, dominio] = partes;
-    if (!local || !dominio || /\s/.test(email)) return false;
-    const rotulos = dominio.split(".");
-    return rotulos.length >= 2 && rotulos.every((rotulo) => rotulo.length > 0);
-  }
 
   function marcarErro(campo, elementoErro, mensagem) {
     campo.classList.add("input--invalid");
@@ -42,84 +55,46 @@ const FEEDBACK_DURACAO_MS = 5000;
     campo.setAttribute("aria-invalid", "false");
   }
 
-  function configurarValidacaoCampo(campo, elementoErro, validador, msgErro) {
-    // Estratégia de UX: campo vazio = neutro (sem borda colorida), campo
-    // preenchido e inválido = vermelho, campo preenchido e válido = verde.
-    // Assim o usuário não vê erros antes mesmo de interagir com o campo.
-    campo.addEventListener("input", () => {
-      const valor = campo.value.trim();
-      if (valor.length > 0 && validador(valor)) {
-        marcarValido(campo);
-        limparErro(campo, elementoErro);
-      } else if (valor.length > 0) {
-        marcarErro(campo, elementoErro, msgErro);
+  // Estratégia de UX: campo vazio = neutro (sem borda colorida), campo
+  // preenchido e inválido = vermelho, campo preenchido e válido = verde.
+  // Assim o usuário não vê erros antes mesmo de interagir com o campo.
+  // No submit, `forcarErro` marca os campos obrigatórios vazios como erro.
+  function avaliarCampo({ campo, erro, validador, msgErro }, { forcarErro = false } = {}) {
+    const valor = campo.value.trim();
+
+    if (valor.length === 0) {
+      if (forcarErro) {
+        marcarErro(campo, erro, msgErro);
       } else {
-        limparErro(campo, elementoErro);
+        limparErro(campo, erro);
         campo.classList.remove("input--valid");
       }
-    });
+      return false;
+    }
+
+    if (validador(valor)) {
+      marcarValido(campo);
+      limparErro(campo, erro);
+      return true;
+    }
+
+    marcarErro(campo, erro, msgErro);
+    return false;
   }
 
-  configurarValidacaoCampo(
-    campoNome,
-    erroNome,
-    (v) => v.length >= 3,
-    "Digite seu nome completo.",
-  );
+  CAMPOS.forEach(({ campo, erro, validador, msgErro }) => {
+    campo.addEventListener("input", () => {
+      avaliarCampo({ campo, erro, validador, msgErro });
+    });
+  });
 
-  configurarValidacaoCampo(
-    campoEmail,
-    erroEmail,
-    (v) => validarEmail(v),
-    "Digite um e-mail válido.",
-  );
-
-  configurarValidacaoCampo(
-    campoMensagem,
-    erroMensagem,
-    (v) => v.length >= 10,
-    "Escreva uma mensagem com pelo menos 10 caracteres.",
-  );
-
-  // A validação no submit duplica a lógica dos listeners de input porque
-  // tem um contrato diferente: aqui forçamos erro em todos os campos
-  // inválidos de uma vez (mesmo os que o usuário nunca tocou), para que
-  // o formulário inteiro seja validado no momento do envio.
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearTimeout(feedbackTimer);
     feedbackForm.textContent = "";
     feedbackForm.classList.remove("contact__feedback--error");
 
-    let formValido = true;
-
-    if (campoNome.value.trim().length < 3) {
-      marcarErro(campoNome, erroNome, "Digite seu nome completo.");
-      formValido = false;
-    } else {
-      marcarValido(campoNome);
-      limparErro(campoNome, erroNome);
-    }
-
-    if (!validarEmail(campoEmail.value.trim())) {
-      marcarErro(campoEmail, erroEmail, "Digite um e-mail válido.");
-      formValido = false;
-    } else {
-      marcarValido(campoEmail);
-      limparErro(campoEmail, erroEmail);
-    }
-
-    if (campoMensagem.value.trim().length < 10) {
-      marcarErro(
-        campoMensagem,
-        erroMensagem,
-        "Escreva uma mensagem com pelo menos 10 caracteres.",
-      );
-      formValido = false;
-    } else {
-      marcarValido(campoMensagem);
-      limparErro(campoMensagem, erroMensagem);
-    }
+    const formValido = CAMPOS.every((item) => avaliarCampo(item, { forcarErro: true }));
 
     if (!formValido) {
       form.querySelector("[aria-invalid='true']")?.focus();
@@ -143,7 +118,7 @@ const FEEDBACK_DURACAO_MS = 5000;
       if (!health.ok) {
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent =
-          "O envio online não está ativo nesta hospedagem. Teste com \"npm run dev:all\" ou copie meu e-mail abaixo.";
+          'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';
         return;
       }
 
@@ -154,13 +129,12 @@ const FEEDBACK_DURACAO_MS = 5000;
           nome: campoNome.value.trim(),
           email: campoEmail.value.trim(),
           mensagem: campoMensagem.value.trim(),
+          website: campoWebsite?.value ?? "",
         }),
         signal: controller.signal,
       });
 
-      const ehJson = resposta.headers
-        .get("content-type")
-        ?.includes("application/json");
+      const ehJson = resposta.headers.get("content-type")?.includes("application/json");
       const dados = ehJson
         ? await resposta.json().catch((erro) => {
             if (controller.signal.aborted) throw erro;
@@ -169,12 +143,9 @@ const FEEDBACK_DURACAO_MS = 5000;
         : {};
 
       if (resposta.ok) {
-        feedbackForm.textContent =
-          "Mensagem enviada com sucesso! Em breve entrarei em contato.";
+        feedbackForm.textContent = "Mensagem enviada com sucesso! Em breve entrarei em contato.";
         form.reset();
-        campoNome.classList.remove("input--valid");
-        campoEmail.classList.remove("input--valid");
-        campoMensagem.classList.remove("input--valid");
+        CAMPOS.forEach(({ campo }) => campo.classList.remove("input--valid"));
       } else if (ehJson && dados?.errors) {
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent = Object.values(dados.errors).join(" ");
@@ -187,7 +158,7 @@ const FEEDBACK_DURACAO_MS = 5000;
         // GitHub Pages, que não rodam o Express.
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent =
-          "O envio online não está ativo nesta hospedagem. Teste com \"npm run dev:all\" ou copie meu e-mail abaixo.";
+          'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';
       }
     } catch {
       if (controller.signal.aborted) {

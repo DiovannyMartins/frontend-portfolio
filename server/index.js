@@ -1,21 +1,8 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import dotenv from "dotenv";
-import app from "./app.js";
+import criarApp from "./app.js";
+import { config } from "./lib/config.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Carrega o .env que fica junto do servidor. O dotenv por padrão procura
-// ".env" no diretório de trabalho (raiz do projeto), onde o arquivo não está.
-dotenv.config({ path: path.resolve(__dirname, ".env") });
-
-const ehProducao = process.env.NODE_ENV === "production";
-
-if (ehProducao) {
-  const smtpFaltando =
-    !process.env.SMTP_HOST ||
-    !process.env.SMTP_USER ||
-    !process.env.SMTP_PASS;
+if (config.isProduction) {
+  const smtpFaltando = !config.smtp.host || !config.smtp.user || !config.smtp.pass;
 
   if (smtpFaltando) {
     console.error(
@@ -27,8 +14,8 @@ if (ehProducao) {
   }
 }
 
-const PORTA = Number(process.env.PORT) || 3001;
+const app = criarApp();
 
-app.listen(PORTA, () => {
-  console.log(`API rodando em http://localhost:${PORTA}`);
+app.listen(config.port, () => {
+  console.log(`API rodando em http://localhost:${config.port}`);
 });

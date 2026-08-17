@@ -65,18 +65,15 @@ function copiarComFallback(texto) {
   area.value = texto;
   area.setAttribute("readonly", "");
   area.style.position = "fixed";
-area.style.opacity = "0";
+  area.style.opacity = "0";
   document.body.appendChild(area);
 
-  let copiou = false;
   try {
     area.select();
-    copiou = document.execCommand("copy");
+    return document.execCommand("copy")
+      ? Promise.resolve()
+      : Promise.reject(new Error("Cópia não suportada"));
   } finally {
     area.remove();
   }
-
-  return copiou
-    ? Promise.resolve()
-    : Promise.reject(new Error("Cópia não suportada"));
 }

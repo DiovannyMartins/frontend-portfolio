@@ -1,32 +1,31 @@
 import nodemailer from "nodemailer";
+import { config } from "./config.js";
 
 // Sem SMTP configurado no .env, o servidor roda em "modo log":
 // as mensagens aparecem no console em vez de serem enviadas por e-mail,
 // permitindo testar todo o fluxo localmente sem credenciais.
 function criarTransporte() {
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: Number(process.env.SMTP_PORT) === 465,
+    host: config.smtp.host,
+    port: config.smtp.port,
+    secure: config.smtp.port === 465,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: config.smtp.user,
+      pass: config.smtp.pass,
     },
   });
 }
 
 export async function enviarEmail({ nome, email, mensagem }) {
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+  if (!config.smtp.host || !config.smtp.user || !config.smtp.pass) {
     console.log("=== MENSAGEM RECEBIDA (modo log) ===");
     console.log({ nome, email, mensagem });
     return;
   }
 
-  const destino = process.env.EMAIL_DESTINO || process.env.SMTP_USER;
-
   await criarTransporte().sendMail({
-    from: `"Site Portfólio" <${process.env.SMTP_USER}>`,
-    to: destino,
+    from: `"Site Portfólio" <${config.smtp.user}>`,
+    to: config.emailDestino,
     replyTo: email,
     subject: `Novo contato de ${nome}`,
     text: `Nome: ${nome}\nE-mail: ${email}\n\nMensagem:\n${mensagem}`,

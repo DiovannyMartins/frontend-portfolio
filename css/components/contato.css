@@ -31,6 +31,18 @@
   gap: 5px;
 }
 
+/* Honeypot anti-spam: sai do fluxo e fica fora da tela, mas não usa
+   display:none — bots que ignoram campos "escondidos" assim acabam
+   preenchendo e são descartados no servidor. */
+.contact__field--honeypot {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .contact__field input,
 .contact__field textarea {
   background-color: var(--bg-secondary);

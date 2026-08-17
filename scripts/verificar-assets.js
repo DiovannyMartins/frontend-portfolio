@@ -8,9 +8,9 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.resolve(__dirname, "..");
 
-const ARQUIVOS_INICIAIS = ["index.html"];
-const PASTAS_JS = [path.join(RAIZ, "js")];
-const PASTAS_CSS = [path.join(RAIZ, "css")];
+const ARQUIVO_INICIAL = "index.html";
+const PASTA_JS = path.join(RAIZ, "js");
+const PASTA_CSS = path.join(RAIZ, "css");
 const PASTA_IMG = path.join(RAIZ, "img");
 
 async function listarArquivos(dir) {
@@ -28,9 +28,9 @@ async function listarArquivos(dir) {
 }
 
 async function arquivosExistentes() {
-  const arquivos = [...ARQUIVOS_INICIAIS.map((f) => path.join(RAIZ, f))];
-  arquivos.push(...(await listarArquivos(PASTAS_JS[0])));
-  arquivos.push(...(await listarArquivos(PASTAS_CSS[0])));
+  const arquivos = [path.join(RAIZ, ARQUIVO_INICIAL)];
+  arquivos.push(...(await listarArquivos(PASTA_JS)));
+  arquivos.push(...(await listarArquivos(PASTA_CSS)));
   return arquivos;
 }
 
@@ -57,7 +57,12 @@ function extrairReferencias(conteudo, formato) {
     let match;
     while ((match = padrao.exec(conteudo)) !== null) {
       const url = match[1].trim();
-      if (url.startsWith("#") || url.startsWith("data:") || url.startsWith("mailto:") || /^[a-z]+:\/\//i.test(url)) {
+      if (
+        url.startsWith("#") ||
+        url.startsWith("data:") ||
+        url.startsWith("mailto:") ||
+        /^[a-z]+:\/\//i.test(url)
+      ) {
         continue;
       }
       refs.push({ url, base });
@@ -88,7 +93,8 @@ async function main() {
       referencias.add(path.relative(RAIZ, alvo).replace(/\\/g, "/"));
       try {
         const info = await stat(alvo);
-        if (!info.isFile()) erros.push(`Não é um arquivo: ${url} (em ${path.relative(RAIZ, arquivo)})`);
+        if (!info.isFile())
+          erros.push(`Não é um arquivo: ${url} (em ${path.relative(RAIZ, arquivo)})`);
       } catch {
         erros.push(`Arquivo não encontrado: ${url} (em ${path.relative(RAIZ, arquivo)})`);
       }

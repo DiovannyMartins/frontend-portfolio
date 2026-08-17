@@ -1,17 +1,10 @@
 import { Router } from "express";
+import { validarEmail } from "../../shared/validacao.js";
 import { enviarEmail } from "../lib/email.js";
 
 const router = Router();
 
 // Validação server-side: nunca confie apenas na validação do navegador.
-function validarEmail(email) {
-  const partes = email.split("@");
-  if (partes.length !== 2) return false;
-  const [local, dominio] = partes;
-  if (!local || !dominio || /\s/.test(email)) return false;
-  const rotulos = dominio.split(".");
-  return rotulos.length >= 2 && rotulos.every((rotulo) => rotulo.length > 0);
-}
 
 function validar(payload) {
   const nome = (payload?.nome ?? "").trim();
@@ -37,6 +30,12 @@ function validar(payload) {
 }
 
 router.post("/", async (req, res) => {
+  // Honeypot anti-spam: bot preencheu o campo invisível, então recebe sucesso
+  // simulado sem enviar e-mail (não revela a armadilha nem gasta quota).
+  if (req.body?.website) {
+    return res.json({ success: true, message: "Mensagem enviada com sucesso!" });
+  }
+
   const { valido, erros, dados } = validar(req.body);
 
   if (!valido) {

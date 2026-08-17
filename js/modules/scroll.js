@@ -9,7 +9,7 @@ function initScrollReveal() {
 
   if (elementos.length === 0) return;
 
-if (!("IntersectionObserver" in window)) {
+  if (!("IntersectionObserver" in window)) {
     elementos.forEach((elemento) => elemento.classList.add("reveal--visible"));
     return;
   }
@@ -76,7 +76,7 @@ function initVoltarTopo() {
   window.addEventListener("scroll", atualizarVisibilidade, { passive: true });
   atualizarVisibilidade();
 
-btnTopo.addEventListener("click", () => {
+  btnTopo.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }

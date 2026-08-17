@@ -20,14 +20,9 @@ export function initFiltroProjetos() {
 
       const tituloElement = card.querySelector(".project-card__title");
       const descricaoElement = card.querySelector(".project-card__text");
-      const titulo = tituloElement
-        ? tituloElement.textContent.toLowerCase()
-        : "";
-      const descricao = descricaoElement
-        ? descricaoElement.textContent.toLowerCase()
-        : "";
-      const correspondeBusca =
-        titulo.includes(termoBusca) || descricao.includes(termoBusca);
+      const titulo = tituloElement ? tituloElement.textContent.toLowerCase() : "";
+      const descricao = descricaoElement ? descricaoElement.textContent.toLowerCase() : "";
+      const correspondeBusca = titulo.includes(termoBusca) || descricao.includes(termoBusca);
 
       const visivel = correspondeCategoria && correspondeBusca;
       card.classList.toggle("project-card--hidden", !visivel);
