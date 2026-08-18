@@ -246,7 +246,7 @@ frontend-portfolio/
 
 ## Autor
 
-**Diovanny Martins** — Desenvolvedor Front-End
+**Diovanny Martins** — Desenvolvedor Full-Stack
 
 - **GitHub:** [@DiovannyMartins](https://github.com/DiovannyMartins)
 - **LinkedIn:** [Diovanny Martins](https://linkedin.com/in/diovanny-martins)
