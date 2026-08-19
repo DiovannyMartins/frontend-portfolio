@@ -16,6 +16,15 @@ export function initFormulario() {
   // do atributo data-sitekey no HTML — é pública, não é segredo.
   let turnstileId = null;
   let tokenTurnstile = "";
+  // Estado do widget Turnstile: "carregando" (script ainda não carregou),
+  // "ok" (renderizado) ou "falha" (bloqueado/rede/domínio não autorizado).
+  let estadoTurnstile = "carregando";
+
+  // Em produção o servidor exige o token do Turnstile; em dev/preview não.
+  // Usado para mostrar uma mensagem clara quando o captcha não carrega
+  // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
+  const PRODUCAO =
+    location.hostname === "diovanny.dev" || location.hostname === "www.diovanny.dev";
 
   function renderizarTurnstile() {
     if (!widgetTurnstile || typeof window.turnstile === "undefined") return;
@@ -37,15 +46,18 @@ export function initFormulario() {
       },
       "error-callback": () => {
         tokenTurnstile = "";
+        estadoTurnstile = "falha";
       },
     });
+
+    estadoTurnstile = "ok";
   }
 
   // O script do Turnstile é carregado com async/defer no <head> e o objeto
   // window.turnstile ganha a API (render) gradualmente. Como o evento
   // "turnstile-loaded" pode disparar antes deste módulo rodar, usa-se um
-  // polling leve até a API estar disponível (desiste após 10s para nunca
-  // travar o envio — o servidor é quem valida em produção).
+  // polling leve até a API estar disponível (desiste após 10s). Se desistir
+  // sem renderizar, estadoTurnstile vira "falha" e o submit avisa em produção.
   function tentarRenderizarTurnstile() {
     if (typeof window.turnstile?.render === "function") {
       renderizarTurnstile();
@@ -59,7 +71,12 @@ export function initFormulario() {
       }
     }, 100);
 
-    setTimeout(() => clearInterval(timer), 10000);
+    setTimeout(() => {
+      clearInterval(timer);
+      if (estadoTurnstile === "carregando") {
+        estadoTurnstile = "falha";
+      }
+    }, 10000);
   }
 
   tentarRenderizarTurnstile();
@@ -155,9 +172,17 @@ export function initFormulario() {
       return;
     }
 
-    // Turnstile: se o widget foi renderizado, exige o token resolvido.
-    // Se a biblioteca falhou ao carregar (ex.: bloqueador), segue sem token
-    // para não travar o envio — o servidor é quem valida em produção.
+    // Turnstile: se o widget renderizou, exige o token resolvido. Se a
+    // biblioteca falhou ao carregar (bloqueador/rede/domínio), em produção
+    // avisa na hora em vez de enviar sem token e receber erro 400 do servidor.
+    if (PRODUCAO && estadoTurnstile === "falha") {
+      feedbackForm.classList.add("contact__feedback--error");
+      feedbackForm.textContent =
+        "Não foi possível carregar o verificador de segurança (captcha). " +
+        "Se você usa bloqueador de anúncios, desative-o e recarregue a página.";
+      return;
+    }
+
     if (turnstileId !== null && !tokenTurnstile) {
       feedbackForm.classList.add("contact__feedback--error");
       feedbackForm.textContent = "Complete o desafio de segurança antes de enviar.";
