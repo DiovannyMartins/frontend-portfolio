@@ -177,7 +177,7 @@ export function initFormulario() {
 
     try {
       // Checa se a API está ativa antes de enviar. Em hospedagem estática
-      // (Live Server, GitHub Pages) não há backend: avisa e evita o POST 405.
+      // sem backend não há API: avisa e evita o POST 405.
       const health = await fetch("/api/health", { signal: controller.signal });
       if (!health.ok) {
         feedbackForm.classList.add("contact__feedback--error");
@@ -219,8 +219,7 @@ export function initFormulario() {
         feedbackForm.textContent = dados.error;
       } else {
         // Resposta não-JSON (404/405 do próprio servidor estático) significa
-        // que o backend não está ativo nesta origem — ex.: Live Server ou
-        // GitHub Pages, que não rodam o Express.
+        // que o backend não está ativo nesta origem — ex.: Live Server.
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent =
           'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';

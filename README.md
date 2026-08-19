@@ -47,7 +47,7 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 | Cloudflare Pages  | Hospedagem do frontend + Pages Functions (API no mesmo domínio)      |
 | ESLint + Prettier | Lint estático e formatação consistente do código                     |
 | Git/GitHub        | Versionamento e deploy via Cloudflare Pages                          |
-| Google Fonts      | Fjalla One (títulos) e Inter (corpo)                                |
+| Google Fonts      | Inter (todo o texto)                                               |
 
 ---
 
@@ -115,7 +115,7 @@ npm run dev
 O formulário envia para `POST /api/contato`, então **precisa do backend rodando**. Antes de enviar, ele checa `GET /api/health`:
 
 - **Com backend** (`npm run dev:all` ou `npm start`): envio normal.
-- **Sem backend** (abrir o `index.html` direto, Live Server ou GitHub Pages): o formulário mostra a mensagem "O envio online não está ativo nesta hospedagem" e orienta a usar `npm run dev:all` — não tenta enviar nem gera erro de POST no console.
+- **Sem backend** (abrir o `index.html` direto ou Live Server): o formulário mostra a mensagem "O envio online não está ativo nesta hospedagem" e orienta a usar `npm run dev:all` — não tenta enviar nem gera erro de POST no console.
 
 Para testar o envio localmente, copie `server/.env.example` para `server/.env`:
 
@@ -175,7 +175,7 @@ npx wrangler login
 npm run pages:deploy
 ```
 
-O site fica disponível em `https://seu-projeto.pages.dev` e a API em `https://seu-projeto.pages.dev/api/...`.
+O site fica disponível em `https://diovanny.dev` (domínio próprio) e a API em `https://diovanny.dev/api/...`.
 
 ### Configurando as variáveis de ambiente no Cloudflare
 
@@ -197,7 +197,7 @@ npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name frontend-portf
 3. Como o domínio foi comprado no próprio Cloudflare, ele já aponta automaticamente para o Pages (nenhum ajuste de DNS manual é necessário).
 4. Pronto: o site e a API ficam online em `https://diovanny.dev` e `https://diovanny.dev/api/...`.
 
-> Dica: depois que o domínio próprio estiver ativo, atualize `FRONTEND_ORIGIN=https://diovanny.dev` (se for chamar a API de outro domínio) e os metadados de SEO (Open Graph/Twitter Card) no `index.html`.
+> O site **não** fica mais hospedado no GitHub Pages — a hospedagem oficial é o Cloudflare Pages no domínio próprio `diovanny.dev`.
 
 ### Deploy em outros hostings
 

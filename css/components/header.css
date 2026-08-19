@@ -19,10 +19,11 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-size: 30px;
   padding: 10px;
   text-decoration: none;
+  font-weight: bolder;
 }
 
 .header__actions {

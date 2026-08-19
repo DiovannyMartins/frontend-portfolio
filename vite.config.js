@@ -2,7 +2,7 @@ import { cp, mkdir } from "node:fs/promises";
 import { defineConfig } from "vite";
 
 // base relativa: o build funciona tanto na raiz quanto em subpastas
-// (ex.: GitHub Pages em /frontend-portfolio/) sem nenhum ajuste.
+// sem nenhum ajuste.
 export default defineConfig({
   base: "./",
   plugins: [
@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   server: {
     // Durante o desenvolvimento, encaminha chamadas à API para o backend
-    // Express, mantendo o frontend no Vite e o backend separado.
+    // Hono (npm run dev:server), mantendo o frontend no Vite e o backend separado.
     proxy: {
       "/api": "http://localhost:3001",
     },

@@ -8,7 +8,7 @@ export function initTema() {
 
   // [elemento, imagem no tema claro, imagem no tema escuro]
   // Caminhos em string (e não import) para que o site funcione também em
-  // hospedagem estática crua (ex.: GitHub Pages), sem build do Vite.
+  // hospedagem estática crua, sem build do Vite.
   const imagensPorTema = [
     [document.querySelector(".header__logo img"), "img/icon-logo-dark.png", "img/icon-logo.png"],
     [document.getElementById("iconGithub"), "img/github-dark.png", "img/github.png"],

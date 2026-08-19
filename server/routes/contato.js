@@ -32,7 +32,7 @@ export default function rotaContato(config) {
   const rota = new Hono();
 
   rota.post("/", async (c) => {
-    // Limite de tamanho do corpo antes de ler o JSON (16kb, como o Express).
+    // Limite de tamanho do corpo antes de ler o JSON (16kb).
     const tamanho = Number(c.req.header("content-length") || 0);
     if (tamanho > 16 * 1024) {
       return c.json({ success: false, error: "Mensagem muito grande." }, 413);
