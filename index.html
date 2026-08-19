@@ -33,11 +33,11 @@
     <meta name="twitter:image" content="https://diovanny.dev/img/imagem.webp">
 
     <!-- Cloudflare Turnstile (CAPTCHA do formulário de contato). URL exata:
-         não fazer proxy nem cache deste arquivo. `defer` para não bloquear a
-         renderização (executa uma única vez, em ordem); o formulario.js espera
-         pela API via polling. Evite `async` aqui: gera dupla execução
-         ("Turnstile already has been loaded"). -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+         não fazer proxy nem cache deste arquivo. Carregado de forma SÍNCRONA
+         (sem async/defer): o api.js usa um bootstrap regional e, se carregado
+         com defer/async, dispara "already has been loaded" e não expõe
+         window.turnstile.render, quebrando o widget. -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
