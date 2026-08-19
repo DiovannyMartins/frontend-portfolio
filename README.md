@@ -1,13 +1,15 @@
 # Frontend Portfolio
 
-Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacotado com **Vite**, com backend **Express** para o formulário de contato e scripts de automação em **Node.js**.
+Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacotado com **Vite**, com backend **Hono** para o formulário de contato (deploy no **Cloudflare Pages**) e scripts de automação em **Node.js**.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![Hono](https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)
+![Resend](https://img.shields.io/badge/Resend-000000?style=for-the-badge&logo=resend&logoColor=white)
 ![Responsive](https://img.shields.io/badge/Responsive-Sim-green?style=for-the-badge)
 
 ---
@@ -16,12 +18,13 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 - JavaScript Vanilla (sem frameworks)
 - Vite como dev server e build (minificação, hashing de assets)
-- Backend Express com validação server-side, rate limit, envio de e-mail (Nodemailer) e cabeçalhos de segurança (Helmet/CSP)
+- Backend Hono com validação server-side, rate limit, envio de e-mail (Resend) e cabeçalhos de segurança (secure-headers/CSP)
+- Deploy no Cloudflare Pages com Pages Functions (frontend e API no mesmo domínio)
 - Validação de e-mail em fonte única compartilhada entre frontend e backend
 - Testes automatizados com o runner nativo do Node (`node --test`)
 - ESLint + Prettier para lint e formatação consistente
 - Scripts de automação: sitemap, verificação de assets e otimização de imagens
-- Anti-spam com honeypot no formulário de contato
+- Anti-spam com honeypot e Cloudflare Turnstile (CAPTCHA) no formulário de contato
 - Responsivo (layout adapta-se a todas as telas)
 - Dark/Light Mode
 - Acessível (ARIA)
@@ -37,11 +40,13 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 | CSS3              | Variáveis CSS, Grid, Flexbox, animações, `@import` modular          |
 | JavaScript (ES6+) | ES Modules — frontend sem dependências de runtime                   |
 | Vite              | Dev server, build de produção e proxy para a API em desenvolvimento |
-| Node.js / Express | API para o formulário de contato (validação, rate limit, e-mail)    |
-| Helmet            | Cabeçalhos de segurança e Content-Security-Policy no Express        |
-| Nodemailer        | Envio de e-mail a partir do formulário                              |
-| ESLint + Prettier | Lint estático e formatação consistente do código                    |
-| Git/GitHub        | Versionamento e deploy via GitHub Pages (frontend)                  |
+| Hono              | API para o formulário de contato (validação, rate limit, e-mail)     |
+| secure-headers    | Cabeçalhos de segurança e Content-Security-Policy no Hono            |
+| Resend            | Envio de e-mail a partir do formulário (REST API, sem SMTP)          |
+| Cloudflare Turnstile | CAPTCHA do formulário (anti-bot), validado no servidor            |
+| Cloudflare Pages  | Hospedagem do frontend + Pages Functions (API no mesmo domínio)      |
+| ESLint + Prettier | Lint estático e formatação consistente do código                     |
+| Git/GitHub        | Versionamento e deploy via Cloudflare Pages                          |
 | Google Fonts      | Fjalla One (títulos) e Inter (corpo)                                |
 
 ---
@@ -51,9 +56,9 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, usando Vite apenas como ferramenta de desenvolvimento/build — o código continua JavaScript Vanilla, sem framework. As decisões técnicas principais:
 
 - **Vite para desenvolvimento e build**: dev server com HMR, proxy para a API, minificação e hashing de assets no build. O site continua estático e pode ser publicado em qualquer hosting estático.
-- **Backend Express opcional**: usado apenas para o formulário de contato. Sem variáveis SMTP, roda em "modo log" (exibe a mensagem no console) — **apenas em desenvolvimento**; em produção o servidor não inicia sem SMTP.
-- **Configuração centralizada**: `server/lib/config.js` carrega o `.env` no top-level e exporta um único objeto `config` (porta, origens CORS, SMTP, trust proxy). Como imports são avaliados antes do módulo que os importa, todo o servidor lê variáveis já carregadas.
-- **Segurança no backend**: Helmet com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
+- **Backend Hono opcional**: usado apenas para o formulário de contato. Sem variáveis do Resend, roda em "modo log" (exibe a mensagem no console) — **apenas em desenvolvimento**; em produção o servidor não inicia sem elas.
+- **Configuração centralizada**: `server/lib/config.js` expõe `carregarConfig(env)`, que lê um objeto de ambiente — `process.env` no Node ou `context.env` no Cloudflare Workers. O mesmo código roda nos dois runtimes.
+- **Segurança no backend**: secure-headers (Hono) com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
 - **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
 - **Anti-FOUC no tema**: `js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
@@ -121,44 +126,83 @@ Copy-Item server/.env.example server/.env
 # ou manualmente: crie um arquivo server/.env com o conteúdo de server/.env.example
 ```
 
-- **Sem SMTP configurado**: o servidor roda em "modo log" — as mensagens aparecem no console do terminal. **Apenas para desenvolvimento local**: em produção o servidor **não inicia** sem SMTP, evitando que e-mails e mensagens dos visitantes vazem para os logs da plataforma.
-- **Com SMTP configurado**: preencha `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` e `EMAIL_DESTINO` no `.env` (para Gmail, use uma senha de app). Se o frontend e a API estiverem em origens diferentes, configure também `FRONTEND_ORIGIN` (origens autorizadas, separadas por vírgula) e, se estiver atrás de proxy (Render, Railway, Nginx), `TRUST_PROXY=true` para o rate limit enxergar o IP real do cliente.
+- **Sem Resend configurado**: o servidor roda em "modo log" — as mensagens aparecem no console do terminal. **Apenas para desenvolvimento local**: em produção o servidor **não inicia** sem `RESEND_API_KEY` e `RESEND_FROM`, evitando que e-mails e mensagens dos visitantes vazem para os logs da plataforma.
+- **Com Resend configurado**: preencha `RESEND_API_KEY` (crie em [resend.com/api-keys](https://resend.com/api-keys)) e `RESEND_FROM` no `.env`. Na conta grátis, use `onboarding@resend.dev` e defina `EMAIL_DESTINO` como o **mesmo e-mail da sua conta Resend** (só é possível enviar para si mesmo sem domínio verificado). Se o frontend e a API estiverem em origens diferentes, configure também `FRONTEND_ORIGIN` (origens autorizadas, separadas por vírgula).
+
+#### CAPTCHA com Cloudflare Turnstile
+
+O formulário usa o [Turnstile](https://www.cloudflare.com/products/turnstile/) como proteção anti-bot:
+
+- A **sitekey** (pública) fica no `<div id="turnstile" data-sitekey="...">` do `index.html` e no script `https://challenges.cloudflare.com/turnstile/v0/api.js` (carregado sem `async`/`defer` no `<head>` — necessário para o `window.turnstile.render` estar pronto).
+- O widget usa **modo interativo** (`appearance: "always"` em `js/modules/formulario.js`): o desafio é sempre exibido, em vez de invisível/automático — dificulta bots que só resolvem o modo oculto.
+- O **token** gerado pelo widget é enviado no campo `turnstile` do corpo do POST.
+- No servidor, `server/routes/contato.js` valida o token via [siteverify](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) (`server/lib/turnstile.js`) usando a secret key.
+- **Sem `TURNSTILE_SECRET_KEY`** (ex.: dev local), a validação é ignorada — o captcha só bloqueia em produção.
+- O widget é resetado a cada tentativa de envio (o token é de uso único).
+
+Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **Turnstile** → **Add widget** (modo **Managed**, hostnames `diovanny.dev` e `frontend-portfolio-5at.pages.dev`). Em produção, a secret key vai como variável no Cloudflare (ver abaixo).
 
 ### Scripts disponíveis
 
-| Comando                | Descrição                                                                                           |
-| ---------------------- | --------------------------------------------------------------------------------------------------- |
-| `npm run dev`          | Inicia o Vite (frontend) com proxy para a API                                                       |
-| `npm run dev:all`      | Inicia frontend e backend juntos                                                                    |
-| `npm run server`       | Inicia apenas o backend Express (usado pelo `dev:all`)                                              |
-| `npm run build`        | Gera o build de produção em `dist/`                                                                 |
-| `npm run preview`      | Serve localmente o build gerado                                                                     |
-| `npm start`            | Inicia o servidor Express (serve a API; para também servir o `dist/`, defina `NODE_ENV=production`) |
-| `npm test`             | Roda os testes automatizados da API (`node --test`)                                                 |
-| `npm run lint`         | Verifica o código com ESLint                                                                        |
-| `npm run lint:fix`     | Corrige automaticamente os problemas de lint                                                        |
-| `npm run format`       | Formata todos os arquivos com Prettier                                                              |
-| `npm run format:check` | Verifica se todos os arquivos seguem o padrão do Prettier                                           |
-| `npm run sitemap`      | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`)  |
-| `npm run check`        | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                    |
-| `npm run imagens`      | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                            |
+| Comando                 | Descrição                                                                                    |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `npm run dev`           | Inicia o Vite (frontend) com proxy para a API                                                |
+| `npm run dev:all`       | Inicia frontend e backend juntos                                                             |
+| `npm run server`        | Inicia apenas o backend Hono (usado pelo `dev:all`)                                          |
+| `npm run build`         | Gera o build de produção em `dist/`                                                          |
+| `npm run preview`       | Serve localmente o build gerado                                                              |
+| `npm start`             | Inicia o servidor Hono (API; em produção não inicia sem as variáveis do Resend)              |
+| `npm run pages:dev`     | Sobe o Cloudflare Pages localmente (build + `wrangler pages dev`) — testa as Functions        |
+| `npm run pages:deploy`  | Builda e publica no Cloudflare Pages (`wrangler pages deploy dist`)                           |
+| `npm test`              | Roda os testes automatizados da API (`node --test`)                                          |
+| `npm run lint`          | Verifica o código com ESLint                                                                 |
+| `npm run lint:fix`      | Corrige automaticamente os problemas de lint                                                 |
+| `npm run format`        | Formata todos os arquivos com Prettier                                                       |
+| `npm run format:check`  | Verifica se todos os arquivos seguem o padrão do Prettier                                    |
+| `npm run sitemap`       | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
+| `npm run check`         | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs             |
+| `npm run imagens`       | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                     |
 
-### Deploy
+### Deploy — Cloudflare Pages
 
-- **Frontend estático**: `npm run build` e publique a pasta `dist/` (Netlify, Vercel...). Ou publique o repositório direto no GitHub Pages — o site funciona sem build porque as imagens são referenciadas por caminho.
-- **Frontend + API**: `npm run build` e depois `npm start` com `NODE_ENV=production` — o Express serve o `dist/` e a API no mesmo processo (Render, Railway, um VPS...). No Windows:
+O deploy recomendado é o **Cloudflare Pages**: ele serve o frontend (`dist/`) e as Pages Functions (`functions/`) no mesmo domínio, mantendo o site e a API sempre online juntos.
 
-  ```powershell
-  $env:NODE_ENV="production"; npm start
-  ```
+```bash
+# 1. Autentique na sua conta Cloudflare (primeira vez)
+npx wrangler login
 
-  No Linux/macOS:
+# 2. Publica o site (frontend + API) no seu projeto Pages
+npm run pages:deploy
+```
 
-  ```bash
-  NODE_ENV=production npm start
-  ```
+O site fica disponível em `https://seu-projeto.pages.dev` e a API em `https://seu-projeto.pages.dev/api/...`.
 
-  Configure `PORT`, `FRONTEND_ORIGIN` e as variáveis SMTP (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_DESTINO`) no ambiente da plataforma — em produção o servidor não inicia sem elas (o "modo log" é restrito ao desenvolvimento local). Em hospedagens atrás de proxy, defina também `TRUST_PROXY=true`.
+### Configurando as variáveis de ambiente no Cloudflare
+
+As variáveis do Resend **não** devem ir no `.env` em produção. Defina-as como secrets no projeto Pages (painel em **Settings → Environment variables**, ou via CLI):
+
+```bash
+npx wrangler pages secret put RESEND_API_KEY --project-name frontend-portfolio
+npx wrangler pages secret put RESEND_FROM --project-name frontend-portfolio
+npx wrangler pages secret put EMAIL_DESTINO --project-name frontend-portfolio
+npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name frontend-portfolio
+```
+
+> Na conta grátis do Resend, use `RESEND_FROM=onboarding@resend.dev` e `EMAIL_DESTINO` = o mesmo e-mail da sua conta Resend. Com um domínio verificado no Resend, dá para usar `contato@seudominio.com` e enviar para qualquer e-mail. A `TURNSTILE_SECRET_KEY` é criada em **Turnstile** no painel do Cloudflare (a sitekey, pública, vai no `index.html`).
+
+### Usando o domínio próprio (diovanny.dev)
+
+1. No painel do Cloudflare Pages, abra o projeto e vá em **Custom domains** → **Set up a custom domain**.
+2. Adicione `diovanny.dev` (e opcionalmente `www.diovanny.dev`).
+3. Como o domínio foi comprado no próprio Cloudflare, ele já aponta automaticamente para o Pages (nenhum ajuste de DNS manual é necessário).
+4. Pronto: o site e a API ficam online em `https://diovanny.dev` e `https://diovanny.dev/api/...`.
+
+> Dica: depois que o domínio próprio estiver ativo, atualize `FRONTEND_ORIGIN=https://diovanny.dev` (se for chamar a API de outro domínio) e os metadados de SEO (Open Graph/Twitter Card) no `index.html`.
+
+### Deploy em outros hostings
+
+- **Frontend estático**: `npm run build` e publique a pasta `dist/` (Netlify, Vercel...). O formulário exibirá "envio online não ativo" sem a API.
+- **VPS/Node**: `npm start` com as variáveis do Resend configuradas — o Hono sobe a API (para servir também o `dist/`, use um servidor estático à parte).
 
 ---
 
@@ -201,14 +245,18 @@ frontend-portfolio/
 │   │   ├── toast.js           # Notificações toast
 │   │   └── typingEffect.js    # Efeito de digitação
 │   └── main.js                # Entry point (inicializa módulos)
+├── functions/
+│   └── api/
+│       └── [[path]].js          # Pages Functions: qualquer rota /api/* monta o app Hono
 ├── server/
-│   ├── index.js               # Inicializa o servidor Express
-│   ├── app.js                 # App Express (middlewares, rotas, estático) — factory criarApp()
+│   ├── index.js               # Inicializa o servidor Hono no Node (@hono/node-server)
+│   ├── app.js                 # App Hono (secure-headers, CORS, rate limit, rotas) — factory criarApp()
 │   ├── app.test.js            # Testes automatizados da API (node --test)
-│   ├── routes/contato.js      # POST /api/contato com validação e honeypot
+│   ├── routes/contato.js      # POST /api/contato com validação, honeypot e Turnstile
 │   ├── lib/
-│   │   ├── config.js          # Carrega o .env e centraliza a configuração
-│   │   └── email.js           # Envio de e-mail (Nodemailer / modo log)
+│   │   ├── config.js          # carregarConfig(env) — lê process.env ou context.env
+│   │   ├── email.js           # Envio de e-mail via Resend (REST API / modo log)
+│   │   └── turnstile.js       # Valida o token do Cloudflare Turnstile (siteverify)
 │   └── .env.example           # Modelo de variáveis de ambiente
 ├── scripts/
 │   ├── gerar-sitemap.js       # Regenera public/sitemap.xml
@@ -217,6 +265,7 @@ frontend-portfolio/
 ├── img/                       # Imagens e ícones (WebP otimizado)
 ├── index.html                 # Página principal (entry point do Vite)
 ├── vite.config.js             # Configuração do Vite (build, proxy e cópia de estáticos)
+├── wrangler.toml              # Configuração do Cloudflare Pages
 ├── eslint.config.js           # Configuração do ESLint (flat config)
 ├── .prettierrc.json           # Configuração do Prettier
 ├── .prettierignore            # Arquivos ignorados pelo Prettier
@@ -235,9 +284,10 @@ frontend-portfolio/
 - **Acessibilidade** — ARIA labels, navegação por teclado, skip link, focus management
 - **Performance** — lazy loading de imagens, preload de recursos críticos, preconnect para fontes externas
 - **Persistência de estado** — uso de `localStorage` para manter preferências do usuário entre sessões
-- **Validação de formulário** — feedback visual em tempo real no frontend e validação server-side no Express, com regras compartilhadas em fonte única
-- **Backend com Express** — rotas, middlewares, rate limit, envio de e-mail com Nodemailer, modo log para desenvolvimento e configuração centralizada (`.env`)
-- **Segurança web** — Helmet/CSP, honeypot anti-spam, limite de payload e validação de entrada no servidor
+- **Validação de formulário** — feedback visual em tempo real no frontend e validação server-side no Hono, com regras compartilhadas em fonte única
+- **Backend com Hono** — rotas, middlewares, rate limit, envio de e-mail com Resend, modo log para desenvolvimento e configuração por ambiente (`process.env`/`context.env`)
+- **Cloudflare Pages + Functions** — deploy do frontend e da API no mesmo domínio, variáveis por secret e domínio próprio (diovanny.dev)
+- **Segurança web** — secure-headers/CSP, honeypot + Cloudflare Turnstile, limite de payload e validação de entrada no servidor
 - **Testes automatizados** — cobertura da API com o runner nativo do Node (`node --test`) e `fetch`
 - **Qualidade de código** — ESLint e Prettier para manter o código consistente e sem problemas comuns
 - **Automação com Node.js** — scripts para gerar sitemap, verificar referências de assets e otimizar imagens
@@ -248,6 +298,7 @@ frontend-portfolio/
 
 **Diovanny Martins** — Desenvolvedor Full-Stack
 
+- **Site:** [diovanny.dev](https://diovanny.dev)
 - **GitHub:** [@DiovannyMartins](https://github.com/DiovannyMartins)
 - **LinkedIn:** [Diovanny Martins](https://linkedin.com/in/diovanny-martins)
 - **E-mail:** diovannydev@gmail.com

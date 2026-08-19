@@ -10,6 +10,7 @@
     <link rel="icon" href="img/icon-logo.png" type="image/png" media="(prefers-color-scheme: dark)">
 
     <meta name="theme-color" content="#1e1e1e">
+    
 
     <!-- Anti-FOUC: aplica o tema salvo antes da página renderizar, evitando o "flash" do tema errado -->
     <script src="js/tema-inicial.js"></script>
@@ -20,16 +21,21 @@
     <meta property="og:title" content="Diovanny Martins | Desenvolvedor Full-Stack">
     <meta property="og:description"
         content="Portfólio de Diovanny Martins, desenvolvedor Full-Stack especializado em HTML5, CSS3, JavaScript e Node.js.">
-    <meta property="og:image" content="https://diovannymartins.github.io/frontend-portfolio/img/imagem.webp">
-    <meta property="og:url" content="https://diovannymartins.github.io/frontend-portfolio/">
-    <link rel="canonical" href="https://diovannymartins.github.io/frontend-portfolio/">
+    <meta property="og:image" content="https://diovanny.dev/img/imagem.webp">
+    <meta property="og:url" content="https://diovanny.dev/">
+    <link rel="canonical" href="https://diovanny.dev/">
     <meta property="og:locale" content="pt_BR">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Diovanny Martins | Desenvolvedor Full-Stack">
     <meta name="twitter:description"
         content="Portfólio de Diovanny Martins, desenvolvedor Full-Stack especializado em HTML5, CSS3, JavaScript e Node.js.">
-    <meta name="twitter:image" content="https://diovannymartins.github.io/frontend-portfolio/img/imagem.webp">
+    <meta name="twitter:image" content="https://diovanny.dev/img/imagem.webp">
+
+    <!-- Cloudflare Turnstile (CAPTCHA do formulário de contato). URL exata:
+         não fazer proxy nem cache deste arquivo. Sem async/defer: o api.js
+         precisa definir window.turnstile.render antes do nosso módulo rodar. -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -227,6 +233,10 @@
                         <label for="website">Deixe este campo em branco</label>
                         <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                     </div>
+
+                    <!-- Cloudflare Turnstile: renderizado via JS em js/modules/formulario.js.
+                         A sitekey é pública (não é segredo). -->
+                    <div id="turnstile" class="contact__turnstile" data-sitekey="0x4AAAAAAEU2aFPmQpc4dhZ9"></div>
 
                     <button type="submit" class="contact__submit">Enviar Mensagem</button>
 

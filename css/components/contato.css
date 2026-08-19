@@ -91,6 +91,16 @@
   color: var(--status-error);
 }
 
+/* Turnstile: envolve o widget para respeitar o espaçamento do form. Em modo
+   interativo (appearance: "always") o widget é mais alto que o invisível. */
+.contact__turnstile {
+  min-height: 90px;
+}
+
+.contact__turnstile iframe {
+  border-radius: 10px;
+}
+
 .contact__submit {
   background-color: var(--bg-button);
   color: var(--text-primary);

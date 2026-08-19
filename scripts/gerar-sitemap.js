@@ -12,7 +12,7 @@ const RAIZ = path.resolve(__dirname, "..");
 const DESTINO = path.join(RAIZ, "public", "sitemap.xml");
 
 // Edite conforme o domínio/página do portfólio.
-const URL_BASE = "https://diovannymartins.github.io/frontend-portfolio";
+const URL_BASE = "https://diovanny.dev";
 const ROTAS = [""];
 
 // Fallback (fonte controlada por versão) quando o git não está disponível.

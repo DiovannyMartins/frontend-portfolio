@@ -1,8 +1,7 @@
-import { Router } from "express";
+import { Hono } from "hono";
 import { validarEmail } from "../../shared/validacao.js";
 import { enviarEmail } from "../lib/email.js";
-
-const router = Router();
+import { verificarTurnstile } from "../lib/turnstile.js";
 
 // Validação server-side: nunca confie apenas na validação do navegador.
 
@@ -29,29 +28,63 @@ function validar(payload) {
   };
 }
 
-router.post("/", async (req, res) => {
-  // Honeypot anti-spam: bot preencheu o campo invisível, então recebe sucesso
-  // simulado sem enviar e-mail (não revela a armadilha nem gasta quota).
-  if (req.body?.website) {
-    return res.json({ success: true, message: "Mensagem enviada com sucesso!" });
-  }
+export default function rotaContato(config) {
+  const rota = new Hono();
 
-  const { valido, erros, dados } = validar(req.body);
+  rota.post("/", async (c) => {
+    // Limite de tamanho do corpo antes de ler o JSON (16kb, como o Express).
+    const tamanho = Number(c.req.header("content-length") || 0);
+    if (tamanho > 16 * 1024) {
+      return c.json({ success: false, error: "Mensagem muito grande." }, 413);
+    }
 
-  if (!valido) {
-    return res.status(400).json({ success: false, errors: erros });
-  }
+    let body;
+    try {
+      body = await c.req.json();
+    } catch {
+      return c.json({ success: false, error: "JSON inválido." }, 400);
+    }
 
-  try {
-    await enviarEmail(dados);
-    res.json({ success: true, message: "Mensagem enviada com sucesso!" });
-  } catch (erro) {
-    console.error("Falha ao enviar e-mail:", erro);
-    res.status(500).json({
-      success: false,
-      error: "Não foi possível enviar a mensagem agora. Tente novamente em instantes.",
-    });
-  }
-});
+    // Honeypot anti-spam: bot preencheu o campo invisível, então recebe sucesso
+    // simulado sem enviar e-mail (não revela a armadilha nem gasta quota).
+    if (body?.website) {
+      return c.json({ success: true, message: "Mensagem enviada com sucesso!" });
+    }
 
-export default router;
+    const { valido, erros, dados } = validar(body);
+
+    if (!valido) {
+      return c.json({ success: false, errors: erros }, 400);
+    }
+
+    // Cloudflare Turnstile: valida o token quando a secret key está
+    // configurada (produção). Sem ela, segue sem validar — útil em dev.
+    if (config.turnstile.secretKey) {
+      const token = (body?.turnstile ?? "").trim();
+      const captchaValido = await verificarTurnstile(token, config.turnstile.secretKey);
+
+      if (!captchaValido) {
+        return c.json(
+          { success: false, error: "Falha na verificação de segurança. Tente novamente." },
+          400,
+        );
+      }
+    }
+
+    try {
+      await enviarEmail(dados, config);
+      return c.json({ success: true, message: "Mensagem enviada com sucesso!" });
+    } catch (erro) {
+      console.error("Falha ao enviar e-mail:", erro);
+      return c.json(
+        {
+          success: false,
+          error: "Não foi possível enviar a mensagem agora. Tente novamente em instantes.",
+        },
+        500,
+      );
+    }
+  });
+
+  return rota;
+}

@@ -1,108 +1,84 @@
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import express from "express";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
+import { Hono } from "hono";
+import { secureHeaders } from "hono/secure-headers";
+import { MemoryStore, rateLimiter } from "hono-rate-limiter";
 import rotaContato from "./routes/contato.js";
-import { config } from "./lib/config.js";
+import { carregarConfig } from "./lib/config.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-export default function criarApp() {
-  const app = express();
+// O mesmo app roda em dois runtimes:
+// - Node (local/dev via @hono/node-server)
+// - Cloudflare Workers/Pages Functions (via app.fetch)
+// Por isso config recebe o objeto de ambiente (process.env ou context.env).
+export default function criarApp(env = process.env) {
+  const config = carregarConfig(env);
+  const app = new Hono();
 
   // Cabeçalhos de segurança. A CSP é ajustada para não quebrar o Google Fonts.
-  // O script anti-FOUC é um arquivo externo (js/tema-inicial.js), então
-  // script-src não precisa de 'unsafe-inline'.
   app.use(
-    helmet({
+    secureHeaders({
       contentSecurityPolicy: {
-        directives: {
-          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-          "script-src": ["'self'"],
-          "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-          "font-src": ["'self'", "https://fonts.gstatic.com"],
-        },
+        defaultSrc: ["'self'"],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        formAction: ["'self'"],
+        frameAncestors: ["'self'"],
+        imgSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"],
+        scriptSrc: ["'self'"],
+        scriptSrcAttr: ["'none'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        upgradeInsecureRequests: [],
       },
     }),
   );
 
-  // Atrás de proxy (Render, Railway, etc.), o Express precisa confiar no
-  // primeiro hop para que req.ip (usado pelo rate limit) seja o IP real.
-  if (config.trustProxy) {
-    app.set("trust proxy", 1);
-  }
-
   // CORS: libera requisições sem Origin (curl, health check), da MESMA origem
-  // (em produção o Express serve o build na mesma porta e os assets com
-  // `crossorigin` enviam um Origin igual ao Host) e as origens configuradas em
-  // FRONTEND_ORIGIN.
-  app.use((req, res, next) => {
-    const origem = req.headers.origin;
+  // e das origens configuradas em FRONTEND_ORIGIN.
+  app.use(async (c, next) => {
+    const origem = c.req.header("origin");
     if (!origem) return next();
 
-    const mesmaOrigem =
-      origem === `http://${req.headers.host}` || origem === `https://${req.headers.host}`;
+    const host = c.req.header("host");
+    const mesmaOrigem = origem === `http://${host}` || origem === `https://${host}`;
 
     if (mesmaOrigem || config.allowedOrigins.includes(origem)) {
-      res.setHeader("Access-Control-Allow-Origin", origem);
-      res.setHeader("Vary", "Origin");
+      c.header("Access-Control-Allow-Origin", origem);
+      c.header("Vary", "Origin");
 
-      if (req.method === "OPTIONS") {
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        return res.sendStatus(204);
+      if (c.req.method === "OPTIONS") {
+        c.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        c.header("Access-Control-Allow-Headers", "Content-Type");
+        return c.body(null, 204);
       }
 
       return next();
     }
 
-    return res.status(403).json({ success: false, error: "Origem não permitida." });
+    return c.json({ success: false, error: "Origem não permitida." }, 403);
   });
-
-  app.use(express.json({ limit: "16kb" }));
 
   // Limita envios por IP (ex.: 10 a cada 15 min) para reduzir spam no formulário.
-  const limitadorContato = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10,
-    standardHeaders: true,
-    legacyHeaders: false,
-    message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
-  });
+  // No Workers o MemoryStore é por isolate (best-effort); o Cloudflare Rate
+  // Limiting nativo pode substituí-lo via binding se necessário.
+  app.use(
+    "/api/contato",
+    rateLimiter({
+      windowMs: 15 * 60 * 1000,
+      limit: 10,
+      standardHeaders: true,
+      legacyHeaders: false,
+      keyGenerator: (c) =>
+        c.req.header("cf-connecting-ip") ||
+        c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ||
+        "local",
+      message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
+      store: new MemoryStore(),
+    }),
+  );
 
-  app.use("/api/contato", limitadorContato, rotaContato);
+  app.route("/api/contato", rotaContato(config));
 
-  // Health check usado por plataformas de hospedagem (Render, Railway, etc.)
-  app.get("/api/health", (req, res) => {
-    res.json({ ok: true });
-  });
-
-  // Em produção, o Express também serve o build estático gerado pelo Vite
-  // (npm run build), para que site e API fiquem em um único processo.
-  if (config.isProduction) {
-    const distDir = path.resolve(__dirname, "../dist");
-    app.use(express.static(distDir));
-
-    // SPA fallback: qualquer rota que não seja da API entrega o index.html.
-    app.use((req, res, next) => {
-      if (req.path.startsWith("/api")) return next();
-      res.sendFile(path.join(distDir, "index.html"));
-    });
-  }
-
-  // Respostas JSON consistentes para payloads malformados.
-  app.use((erro, req, res, next) => {
-    if (erro?.type === "entity.parse.failed") {
-      return res.status(400).json({ success: false, error: "JSON inválido." });
-    }
-
-    if (erro?.type === "entity.too.large") {
-      return res.status(413).json({ success: false, error: "Mensagem muito grande." });
-    }
-
-    return next(erro);
-  });
+  // Health check usado por plataformas de hospedagem.
+  app.get("/api/health", (c) => c.json({ ok: true }));
 
   return app;
 }

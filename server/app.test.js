@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
+import { serve } from "@hono/node-server";
 import criarApp from "./app.js";
 import { validarEmail } from "../shared/validacao.js";
 
 let servidor;
 
-async function iniciarServidor() {
-  servidor = criarApp().listen(0);
+async function iniciarServidor(env = {}) {
+  servidor = serve({ fetch: criarApp(env).fetch, port: 0 });
   await new Promise((resolve) => servidor.once("listening", resolve));
   return `http://127.0.0.1:${servidor.address().port}`;
 }
@@ -164,6 +165,88 @@ describe("API", () => {
     });
     assert.equal(resposta.status, 204);
     assert.equal(resposta.headers.get("access-control-allow-origin"), "http://localhost:5173");
+  });
+});
+
+describe("Turnstile", () => {
+  const corpoValido = {
+    nome: "Diovanny Martins",
+    email: "teste@dominio.com",
+    mensagem: "Mensagem com mais de dez caracteres.",
+    turnstile: "token-teste",
+  };
+
+  // Substitui o fetch global para simular o siteverify da Cloudflare.
+  function mockSiteverify({ success }) {
+    const fetchOriginal = globalThis.fetch;
+    globalThis.fetch = async (url, init) => {
+      if (String(url).includes("turnstile/v0/siteverify")) {
+        return new Response(JSON.stringify({ success }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      return fetchOriginal(url, init);
+    };
+    return () => {
+      globalThis.fetch = fetchOriginal;
+    };
+  }
+
+  it("sem secret key configurada não exige captcha (modo dev)", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, {
+      nome: "Diovanny Martins",
+      email: "teste@dominio.com",
+      mensagem: "Mensagem com mais de dez caracteres.",
+    });
+    assert.equal(resposta.status, 200);
+    const corpo = await resposta.json();
+    assert.equal(corpo.success, true);
+  });
+
+  it("com secret key rejeita envio sem token do captcha", async () => {
+    const restaurar = mockSiteverify({ success: true });
+    try {
+      const baseUrl = await iniciarServidor({ TURNSTILE_SECRET_KEY: "segredo" });
+      const resposta = await postarContato(baseUrl, {
+        nome: "Diovanny Martins",
+        email: "teste@dominio.com",
+        mensagem: "Mensagem com mais de dez caracteres.",
+      });
+      assert.equal(resposta.status, 400);
+      const corpo = await resposta.json();
+      assert.equal(corpo.success, false);
+      assert.match(corpo.error, /segurança/i);
+    } finally {
+      restaurar();
+    }
+  });
+
+  it("com secret key rejeita token inválido", async () => {
+    const restaurar = mockSiteverify({ success: false });
+    try {
+      const baseUrl = await iniciarServidor({ TURNSTILE_SECRET_KEY: "segredo" });
+      const resposta = await postarContato(baseUrl, corpoValido);
+      assert.equal(resposta.status, 400);
+      const corpo = await resposta.json();
+      assert.equal(corpo.success, false);
+    } finally {
+      restaurar();
+    }
+  });
+
+  it("com secret key aceita token válido", async () => {
+    const restaurar = mockSiteverify({ success: true });
+    try {
+      const baseUrl = await iniciarServidor({ TURNSTILE_SECRET_KEY: "segredo" });
+      const resposta = await postarContato(baseUrl, corpoValido);
+      assert.equal(resposta.status, 200);
+      const corpo = await resposta.json();
+      assert.equal(corpo.success, true);
+    } finally {
+      restaurar();
+    }
   });
 });
 

@@ -1,6 +1,9 @@
 # Dependências
 node_modules/
 
+# Artefatos do Wrangler (Cloudflare)
+.wrangler/
+
 # Build do Vite
 dist/
 

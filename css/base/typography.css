@@ -1,7 +1,8 @@
 h1,
 h2,
 h3 {
-  font-family: var(--font-heading);
+  font-family: var(--text-secondary);
+  font-weight: 900;
 }
 
 h2 {

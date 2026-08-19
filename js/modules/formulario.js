@@ -9,6 +9,60 @@ export function initFormulario() {
   const campoMensagem = document.getElementById("mensagem");
   const campoWebsite = document.getElementById("website");
   const feedbackForm = document.getElementById("feedbackForm");
+  const widgetTurnstile = document.getElementById("turnstile");
+
+  // Cloudflare Turnstile: renderizado explicitamente para ter o widgetId
+  // (permite resetar o token após cada tentativa de envio). A sitekey vem
+  // do atributo data-sitekey no HTML — é pública, não é segredo.
+  let turnstileId = null;
+  let tokenTurnstile = "";
+
+  function renderizarTurnstile() {
+    if (!widgetTurnstile || typeof window.turnstile === "undefined") return;
+    const sitekey = widgetTurnstile.dataset.sitekey;
+    if (!sitekey) return;
+
+    turnstileId = window.turnstile.render(widgetTurnstile, {
+      sitekey,
+      theme: "auto",
+      // appearance "always" = o desafio interativo é sempre exibido (não
+      // fica invisível/automático). Dificulta bots que só resolvem o modo
+      // invisível. Outras opções: "execute" e "interaction-only".
+      appearance: "always",
+      callback: (token) => {
+        tokenTurnstile = token;
+      },
+      "expired-callback": () => {
+        tokenTurnstile = "";
+      },
+      "error-callback": () => {
+        tokenTurnstile = "";
+      },
+    });
+  }
+
+  // O script do Turnstile é carregado com async/defer no <head> e o objeto
+  // window.turnstile ganha a API (render) gradualmente. Como o evento
+  // "turnstile-loaded" pode disparar antes deste módulo rodar, usa-se um
+  // polling leve até a API estar disponível (desiste após 10s para nunca
+  // travar o envio — o servidor é quem valida em produção).
+  function tentarRenderizarTurnstile() {
+    if (typeof window.turnstile?.render === "function") {
+      renderizarTurnstile();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      if (typeof window.turnstile?.render === "function") {
+        clearInterval(timer);
+        renderizarTurnstile();
+      }
+    }, 100);
+
+    setTimeout(() => clearInterval(timer), 10000);
+  }
+
+  tentarRenderizarTurnstile();
 
   // Única fonte de regras de validação: os listeners de "input" (validação em
   // tempo real) e o submit (validação completa) usam a mesma função avaliarCampo.
@@ -101,6 +155,16 @@ export function initFormulario() {
       return;
     }
 
+    // Turnstile: se o widget foi renderizado, exige o token resolvido.
+    // Se a biblioteca falhou ao carregar (ex.: bloqueador), segue sem token
+    // para não travar o envio — o servidor é quem valida em produção.
+    if (turnstileId !== null && !tokenTurnstile) {
+      feedbackForm.classList.add("contact__feedback--error");
+      feedbackForm.textContent = "Complete o desafio de segurança antes de enviar.";
+      widgetTurnstile?.focus?.();
+      return;
+    }
+
     const botaoEnviar = form.querySelector(".contact__submit");
     const textoOriginal = botaoEnviar.textContent;
     botaoEnviar.disabled = true;
@@ -130,6 +194,7 @@ export function initFormulario() {
           email: campoEmail.value.trim(),
           mensagem: campoMensagem.value.trim(),
           website: campoWebsite?.value ?? "",
+          turnstile: tokenTurnstile,
         }),
         signal: controller.signal,
       });
@@ -175,6 +240,14 @@ export function initFormulario() {
       botaoEnviar.disabled = false;
       form.removeAttribute("aria-busy");
       botaoEnviar.textContent = textoOriginal;
+
+      // O token do Turnstile é de uso único: após cada tentativa (sucesso ou
+      // erro) reseta o widget para gerar um token novo no próximo envio.
+      if (turnstileId !== null && window.turnstile) {
+        window.turnstile.reset(turnstileId);
+      }
+      tokenTurnstile = "";
+
       feedbackTimer = setTimeout(() => {
         feedbackForm.textContent = "";
       }, FEEDBACK_DURACAO_MS);
