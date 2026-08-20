@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-19T00:00:00.000Z",
+  "title": "Design System: Diovanny.dev",
+  "extensions": {
+    "colorMeta": {
+      "selection-indigo": {
+        "role": "primary",
+        "displayName": "Selection Indigo",
+        "canonical": "rgb(129, 140, 248)",
+        "tonalRamp": [
+          "oklch(0.15 0.16 264)",
+          "oklch(0.26 0.16 264)",
+          "oklch(0.38 0.16 264)",
+          "oklch(0.48 0.16 264)",
+          "oklch(0.58 0.16 264)",
+          "oklch(0.68 0.16 264)",
+          "oklch(0.82 0.12 264)",
+          "oklch(0.95 0.05 264)"
+        ]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Editor Base",
+        "canonical": "rgb(30, 30, 30)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 264)",
+          "oklch(0.22 0.004 264)",
+          "oklch(0.31 0.004 264)",
+          "oklch(0.40 0.004 264)",
+          "oklch(0.50 0.004 264)",
+          "oklch(0.62 0.004 264)",
+          "oklch(0.78 0.004 264)",
+          "oklch(0.95 0.004 264)"
+        ]
+      },
+      "neutral-surface": {
+        "role": "neutral",
+        "displayName": "Panel",
+        "canonical": "rgb(45, 45, 48)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 264)",
+          "oklch(0.22 0.004 264)",
+          "oklch(0.28 0.004 264)",
+          "oklch(0.40 0.004 264)",
+          "oklch(0.50 0.004 264)",
+          "oklch(0.62 0.004 264)",
+          "oklch(0.78 0.004 264)",
+          "oklch(0.95 0.004 264)"
+        ]
+      },
+      "neutral-control": {
+        "role": "neutral",
+        "displayName": "Control",
+        "canonical": "rgb(62, 62, 66)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 264)",
+          "oklch(0.22 0.004 264)",
+          "oklch(0.33 0.004 264)",
+          "oklch(0.42 0.004 264)",
+          "oklch(0.52 0.004 264)",
+          "oklch(0.62 0.004 264)",
+          "oklch(0.78 0.004 264)",
+          "oklch(0.95 0.004 264)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "rgb(255, 255, 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 264)",
+          "oklch(0.26 0.004 264)",
+          "oklch(0.38 0.004 264)",
+          "oklch(0.50 0.004 264)",
+          "oklch(0.62 0.004 264)",
+          "oklch(0.74 0.004 264)",
+          "oklch(0.88 0.004 264)",
+          "oklch(0.98 0.004 264)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "rgb(203, 213, 225)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 264)",
+          "oklch(0.26 0.004 264)",
+          "oklch(0.38 0.004 264)",
+          "oklch(0.50 0.004 264)",
+          "oklch(0.62 0.004 264)",
+          "oklch(0.74 0.004 264)",
+          "oklch(0.86 0.004 264)",
+          "oklch(0.95 0.004 264)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "rgba(255, 255, 255, 0.28)"
+      },
+      "success": {
+        "role": "status",
+        "displayName": "Success Green",
+        "canonical": "rgb(80, 200, 120)",
+        "tonalRamp": [
+          "oklch(0.15 0.14 150)",
+          "oklch(0.26 0.14 150)",
+          "oklch(0.38 0.14 150)",
+          "oklch(0.48 0.14 150)",
+          "oklch(0.60 0.14 150)",
+          "oklch(0.72 0.14 150)",
+          "oklch(0.82 0.10 150)",
+          "oklch(0.95 0.05 150)"
+        ]
+      },
+      "error": {
+        "role": "status",
+        "displayName": "Error Red",
+        "canonical": "rgb(255, 130, 130)",
+        "tonalRamp": [
+          "oklch(0.15 0.16 20)",
+          "oklch(0.26 0.16 20)",
+          "oklch(0.38 0.16 20)",
+          "oklch(0.48 0.16 20)",
+          "oklch(0.60 0.16 20)",
+          "oklch(0.72 0.16 20)",
+          "oklch(0.82 0.12 20)",
+          "oklch(0.95 0.05 20)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Título da hero apenas (com cursor de digitação)." },
+      "headline": { "displayName": "Headline", "purpose": "Títulos de seção (h2)." },
+      "title": { "displayName": "Title", "purpose": "Títulos de cards (h3)." },
+      "body": { "displayName": "Body", "purpose": "Parágrafos e textos corridos." },
+      "label": { "displayName": "Label", "purpose": "Rodapé e mensagens de erro de campo." }
+    },
+    "shadows": [
+      {
+        "name": "neumorphic-relief",
+        "value": "10px 10px 20px rgba(232, 232, 232, 0.2), -10px -10px 20px rgb(60, 60, 60)",
+        "purpose": "Relevo claro + escuro exclusivo dos cards de skills."
+      },
+      {
+        "name": "hover-glow",
+        "value": "0 0 0.5em 0 rgba(255, 255, 255, 0.5)",
+        "purpose": "Glow branco de resposta ao hover de botões, nav e chips."
+      },
+      {
+        "name": "toast-shadow",
+        "value": "0 4px 20px rgba(0, 0, 0, 0.3)",
+        "purpose": "Sombra levantada do toast."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "0.3s ease",
+        "purpose": "Transição padrão de transform, box-shadow, background e border."
+      },
+      {
+        "name": "reveal",
+        "value": "0.6s ease",
+        "purpose": "Scroll reveal: opacity + translateY(40px) ao entrar na viewport."
+      },
+      {
+        "name": "cursor-blink",
+        "value": "0.8s infinite",
+        "purpose": "Ciclo do cursor de digitação da hero."
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "768px" },
+      { "name": "skills-tight", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botão de ação geral (submit e filtros); levanta e acende no hover.",
+      "html": "<button class=\"ds-btn-primary\">SAVE CHANGES</button>",
+      "css": ".ds-btn-primary { background: var(--bg-button); color: var(--text-primary); border: none; border-radius: 15px; padding: 12px 20px; font-family: var(--font-body, Inter, sans-serif); font-size: 16px; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; } .ds-btn-primary:hover { transform: translateY(-0.2em); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5); } .ds-btn-primary:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "CTA Button",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "Chamada principal da hero, maior e mais espaçada.",
+      "html": "<a class=\"ds-btn-cta\" href=\"#\">VER PROJETOS</a>",
+      "css": ".ds-btn-cta { display: inline-flex; align-items: center; background: var(--bg-button); color: var(--text-primary); border-radius: 15px; padding: 15px 20px; font-family: var(--font-body, Inter, sans-serif); font-size: 18px; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; } .ds-btn-cta:hover { transform: translateY(-0.25em); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5); } .ds-btn-cta:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-active",
+      "description": "Filtro de categoria; o estado ativo usa fundo translúcido + glow.",
+      "html": "<button class=\"ds-chip ds-chip--active\">Dashboard</button>",
+      "css": ".ds-chip { background: var(--bg-button); color: var(--text-primary); border: none; border-radius: 15px; padding: 10px 20px; font-family: var(--font-body, Inter, sans-serif); font-size: 16px; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; } .ds-chip:hover { transform: translateY(-0.2em); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.3); } .ds-chip--active { background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.4); } .ds-chip:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Item de navegação do header, no mesmo idioma dos chips.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">Home</a>",
+      "css": ".ds-nav-link { display: inline-flex; background: var(--bg-button); color: var(--text-primary); border-radius: 15px; padding: 10px 15px; font-family: var(--font-body, Inter, sans-serif); font-size: 18px; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; } .ds-nav-link:hover { transform: translateY(-0.25em); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5); } .ds-nav-link:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de texto; foco muda borda e adiciona anel suave.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Seu nome\">",
+      "css": ".ds-input { width: 100%; max-width: 400px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--bg-button); border-radius: 10px; padding: 12px 15px; font-family: var(--font-body, Inter, sans-serif); font-size: 16px; transition: border-color 0.3s ease, box-shadow 0.3s ease; } .ds-input::placeholder { color: var(--text-secondary); } .ds-input:focus { outline: none; border-color: rgba(255, 255, 255, 0.7); box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16); }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": null,
+      "description": "Card de projeto que abre com uma thumbnail real do trabalho, seguida de título, texto e link.",
+      "html": "<article class=\"ds-card\"><img class=\"ds-card__thumb\" alt=\"\" src=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='400'%3E%3Crect width='640' height='400' fill='%232d2d30'/%3E%3Crect x='40' y='260' width='80' height='100' fill='%233e3e42'/%3E%3Crect x='140' y='190' width='80' height='170' fill='%233e3e42'/%3E%3Crect x='240' y='110' width='80' height='250' fill='%23818cf8'/%3E%3Crect x='340' y='170' width='80' height='190' fill='%233e3e42'/%3E%3Crect x='440' y='230' width='80' height='130' fill='%233e3e42'/%3E%3C/svg%3E\"><h3 class=\"ds-card__title\">Business Dashboard</h3><p class=\"ds-card__text\">Painel corporativo com sidebar, cards de métricas e gráficos.</p><a class=\"ds-card__link\" href=\"#\">Acessar Projeto</a></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; background: var(--bg-primary); color: var(--text-primary); border-radius: 15px; text-align: center; transition: transform 0.3s ease; } .ds-card:hover { transform: translateY(-5px); } .ds-card__thumb { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; display: block; } .ds-card__title { font-size: 20px; font-weight: 900; } .ds-card__text { font-size: 16px; color: var(--text-secondary); } .ds-card__link { background: var(--bg-button); color: var(--text-primary); border-radius: 15px; padding: 10px 15px; font-size: 18px; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease; } .ds-card__link:hover { transform: translateY(-0.25em); box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5); }"
+    },
+    {
+      "name": "Skills Card",
+      "kind": "card",
+      "refersTo": null,
+      "description": "Card de tecnologia com sombra neumórfica permanente.",
+      "html": "<article class=\"ds-skill\"><h3 class=\"ds-skill__title\">HTML5</h3><p class=\"ds-skill__text\">Estrutura de páginas web com semântica.</p></article>",
+      "css": ".ds-skill { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; padding: 20px; background: var(--bg-primary); color: var(--text-primary); border-radius: 30px; box-shadow: 10px 10px 20px rgba(232, 232, 232, 0.2), -10px -10px 20px rgb(60, 60, 60); transition: transform 0.3s ease; } .ds-skill:hover { transform: translateY(-5px); } .ds-skill__title { font-size: 20px; font-weight: 900; } .ds-skill__text { font-size: 16px; color: var(--text-secondary); }"
+    },
+    {
+      "name": "Toast",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Notificação flutuante de confirmação com ícone verde.",
+      "html": "<div class=\"ds-toast ds-toast--visible\"><span class=\"ds-toast__icon\">✓</span><span class=\"ds-toast__message\">E-mail copiado!</span></div>",
+      "css": ".ds-toast { position: fixed; bottom: 100px; right: 30px; display: flex; align-items: center; gap: 12px; background: var(--bg-secondary); color: var(--text-primary); padding: 16px 24px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border: 1px solid var(--bg-button); } .ds-toast__icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: rgb(80, 200, 120); color: white; font-size: 14px; font-weight: bold; } .ds-toast__message { font-size: 14px; font-weight: 500; }"
+    },
+    {
+      "name": "Social Card",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Link de rede social com ícone; desliza no hover.",
+      "html": "<a class=\"ds-social\" href=\"#\"><span class=\"ds-social__icon\">GitHub</span>GitHub</a>",
+      "css": ".ds-social { display: flex; align-items: center; gap: 10px; width: min(320px, 100%); padding: 10px; background: var(--bg-button); color: var(--text-primary); border-radius: 15px; border: 2px solid transparent; font-weight: bold; text-decoration: none; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; } .ds-social:hover { transform: translateX(-5px); border-color: rgba(255, 255, 255, 0.3); box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); } .ds-social__icon { font-weight: bold; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Code Editor",
+    "overview": "O sistema visual é um editor de código em dark mode: um fundo neutro-escuro (rgb(30, 30, 30)), um único acento índigo reservado a foco e feedback, e a Inter — a fonte de UI por excelência — em toda parte. Não há ornamento; a identidade vem da precisão de ferramenta, não da decoração. O design serve ao conteúdo como um editor serve ao trabalho: ordenado, legível, sem distração.\n\nA profundidade é majoritariamente plana, construída por três degraus tonais de cinza (Editor Base → Panel → Control). A sombra neumórfica aparece em exatamente um lugar — os cards de skills — e o glow branco suave responde ao hover dos controles. Sombra é destaque, não padrão.",
+    "keyCharacteristics": [
+      "Fundo neutro-escuro de IDE (rgb(30, 30, 30)) com um único acento índigo.",
+      "Inter (400–900) como única família tipográfica.",
+      "Superfícies planas com três degraus tonais; sombra apenas como destaque.",
+      "Raio de 15px dominante (controles e cards), 10px em inputs, 30px nos cards de skills.",
+      "Feedback de cor restrito a verde (sucesso) e vermelho (erro) em estados de formulário."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "O Selection Indigo marca três momentos: o anel de foco, o cursor de digitação e a barra de acento da hero. Fora desses três, a interface é puro cinza. Sua raridade é o ponto.", "section": "colors" },
+      { "name": "The Flat-By-Default Rule", "body": "Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (skills). Nunca como padrão de todos os cards.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use o Selection Indigo apenas no foco, no cursor de digitação e na barra de acento da hero — nunca como preenchimento decorativo.",
+      "Do construa hierarquia com os três degraus tonais (Editor Base, Panel, Control).",
+      "Do use raio 15px em controles, 10px em inputs e 30px apenas nos cards de skills.",
+      "Do abra os cards de projeto com uma thumbnail real do trabalho (nunca um placeholder decorativo).",
+      "Do mantenha Inter como única família; varie peso (400–900) e tamanho, não a fonte.",
+      "Do levante e acenda controles no hover (translateY + glow), com 0.3s ease."
+    ],
+    "donts": [
+      "Don't introduza uma segunda cor de acento ou qualquer paleta colorida além do índigo.",
+      "Don't aplique a sombra neumórfica fora dos cards de skills — ela é o destaque, não a regra.",
+      "Don't dê sombras estruturais a cards comuns; a superfície é plana em repouso.",
+      "Don't use raios maiores que 30px em cards, nem quebre a escala 10/15/30/50%.",
+      "Don't misture uma segunda família tipográfica na interface."
+    ]
+  }
+}
