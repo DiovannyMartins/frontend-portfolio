@@ -39,7 +39,10 @@ function extrairReferencias(conteudo, formato) {
 
   const regras =
     formato === "html"
-      ? [[/(?:src|href)\s*=\s*"([^"]+)"/g, "arquivo"]]
+      ? [
+          [/(?:src|href)\s*=\s*"([^"]+)"/g, "arquivo"],
+          [/srcset\s*=\s*"([^"]+)"/g, "srcset"],
+        ]
       : formato === "css"
         ? [
             [/@import\s+(?:url\(\s*)?["']?([^"')]+)["']?\s*\)?/g, "arquivo"],
@@ -56,16 +59,29 @@ function extrairReferencias(conteudo, formato) {
   for (const [padrao, base] of regras) {
     let match;
     while ((match = padrao.exec(conteudo)) !== null) {
-      const url = match[1].trim();
-      if (
-        url.startsWith("#") ||
-        url.startsWith("data:") ||
-        url.startsWith("mailto:") ||
-        /^[a-z]+:\/\//i.test(url)
-      ) {
-        continue;
+      const valor = match[1].trim();
+
+      // srcset lista vários candidatos ("img/a.webp 768w, img/b.webp 1280w"):
+      // cada URL é o primeiro token de cada entrada separada por vírgula.
+      const urls =
+        base === "srcset"
+          ? valor
+              .split(",")
+              .map((entrada) => entrada.trim().split(/\s+/)[0])
+              .filter(Boolean)
+          : [valor];
+
+      for (const url of urls) {
+        if (
+          url.startsWith("#") ||
+          url.startsWith("data:") ||
+          url.startsWith("mailto:") ||
+          /^[a-z]+:\/\//i.test(url)
+        ) {
+          continue;
+        }
+        refs.push({ url, base: base === "srcset" ? "arquivo" : base });
       }
-      refs.push({ url, base });
     }
   }
   return refs;
