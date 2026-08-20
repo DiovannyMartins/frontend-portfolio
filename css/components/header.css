@@ -74,10 +74,12 @@
 
 .nav__link {
   display: flex;
+  align-items: center;
   background-color: var(--bg-button);
   color: var(--text-primary);
   border-radius: 15px;
   padding: 10px 15px;
+  min-height: 44px;
   font-size: 18px;
   text-decoration: none;
   transition:
@@ -88,12 +90,12 @@
 
 .nav__link:hover {
   transform: translateY(-0.25em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 .nav__link--active {
-  background-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.4);
+  background-color: var(--bg-active);
+  box-shadow: 0 0 0.5em 0em var(--glow-active);
 }
 
 .theme-toggle {
@@ -114,7 +116,7 @@
 
 .theme-toggle:hover {
   transform: translateY(-0.25em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 @media (max-width: 768px) {

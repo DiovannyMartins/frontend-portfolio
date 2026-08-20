@@ -38,7 +38,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: rgb(80, 200, 120);
+  background-color: var(--status-success);
   color: white;
   font-size: 14px;
   font-weight: bold;

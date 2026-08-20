@@ -24,10 +24,22 @@
 }
 
 /* Cursor piscante do efeito de digitação. Fica no CSS (não no JS) porque é
-   puramente visual — separação de responsabilidades. */
+   puramente visual — separação de responsabilidades. O índigo é o Selection
+   Indigo (a cor de "seleção" do editor), revelado aqui em momento estático. */
 .hero__title::after {
   content: "|";
+  color: var(--focus-ring);
   animation: piscar 0.8s infinite;
+}
+
+/* Barra de acento sob o título — o "cursor block" do editor, o único
+   momento estático em que o Selection Indigo aparece fora do foco. */
+.hero__accent {
+  width: 64px;
+  height: 4px;
+  border-radius: 999px;
+  background-color: var(--focus-ring);
+  margin-top: -18px;
 }
 
 .hero__cta {
@@ -44,7 +56,7 @@
 
 .hero__cta:hover {
   transform: translateY(-0.25em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 .hero__image {

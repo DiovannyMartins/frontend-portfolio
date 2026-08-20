@@ -31,6 +31,13 @@
   gap: 5px;
 }
 
+.contact__label {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
 /* Honeypot anti-spam: sai do fluxo e fica fora da tela, mas não usa
    display:none — bots que ignoram campos "escondidos" assim acabam
    preenchendo e são descartados no servidor. */
@@ -124,7 +131,7 @@
 
 .contact__submit:hover {
   transform: translateY(-0.2em);
-  box-shadow: 0 0 0.5em 0em rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 .contact__social {
@@ -142,6 +149,7 @@
 
   width: min(320px, 100%);
   padding: 10px;
+  min-height: 44px;
   background-color: var(--bg-button);
   color: var(--text-primary);
   text-decoration: none;
@@ -157,11 +165,11 @@
 
 .social-card:hover {
   transform: translateX(-5px);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--border-hover);
 }
 
 .social-card--github:hover {
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px var(--glow-faint);
 }
 
 .social-card--linkedin:hover {
@@ -180,7 +188,7 @@
 }
 
 .copy-email-btn:hover {
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px var(--glow-faint);
 }
 
 @media (max-width: 768px) {
@@ -191,5 +199,10 @@
 
   .contact__submit {
     align-self: center;
+  }
+
+  .contact__turnstile {
+    display: flex;
+    justify-content: center;
   }
 }
