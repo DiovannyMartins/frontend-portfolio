@@ -300,7 +300,7 @@ frontend-portfolio/
 
 - **Site:** [diovanny.dev](https://diovanny.dev)
 - **GitHub:** [@DiovannyMartins](https://github.com/DiovannyMartins)
-- **LinkedIn:** [Diovanny Martins](https://linkedin.com/in/diovanny-martins)
+- **LinkedIn:** [Diovanny Martins](https://www.linkedin.com/in/diovanny-martins-455a9942b/?trk=public-profile-join-page)
 - **E-mail:** diovannydev@gmail.com
 
 ---
