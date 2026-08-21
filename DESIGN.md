@@ -90,7 +90,7 @@ O sistema alterna entre dark e light por `prefers-color-scheme` e persistência 
 Paleta monocromática de cinzas de interface sobre a qual um único índigo — a cor de seleção — marca foco e estados.
 
 ### Primary
-- **Selection Indigo** (`rgb(129, 140, 248)`): o anel de foco acessível (`--focus-ring`), o cursor de digitação da hero e a barra de acento sob o título. No light mode passa a `rgb(67, 56, 202)`. É o acento raro do sistema.
+- **Selection Indigo** (`rgb(129, 140, 248)`): o anel de foco acessível (`--focus-ring`), o cursor de digitação da hero, a barra de acento sob o título e a ação primária (CTA e submit). No light mode passa a `rgb(67, 56, 202)`. É o acento raro do sistema; sobre ele, o texto usa `--on-accent` (escuro no dark, branco no light).
 
 ### Neutral
 - **Editor Base** (`rgb(30, 30, 30)`): fundo principal e do header/hero. No light mode vira `rgb(245, 245, 245)`.
@@ -105,7 +105,7 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 - **Error Red** (`rgb(255, 130, 130)`): validação inválida e mensagens de erro.
 
 ### Named Rules
-**The One Accent Rule.** O Selection Indigo marca três momentos: o anel de foco, o cursor de digitação e a barra de acento da hero. Fora desses três, a interface é puro cinza. Sua raridade é o ponto.
+**The One Accent Rule.** O Selection Indigo marca quatro momentos: o anel de foco, o cursor de digitação, a barra de acento da hero e a ação primária (CTA/submit). Fora desses quatro, a interface é puro cinza. Sua raridade é o ponto.
 
 ## Typography
 
@@ -145,8 +145,9 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 
 ### Buttons
 - **Shape:** raio 15px, sem borda.
-- **Primary:** fundo `Control`, texto `Ink`, padding 10px 15px (navegação) ou 12px 20px (submit) ou 15px 20px (CTA da hero).
-- **Hover / Focus:** hover levanta (`translateY(-0.25em)`) e acende (`Hover Glow`); foco usa o anel índigo global (`outline: 3px solid Selection Indigo`, offset 2px). Transições de 0.3s ease.
+- **Primary (ação principal):** fundo `Selection Indigo`, texto `--on-accent`, padding 15px 20px (CTA da hero) ou 12px 20px (submit). É o único botão colorido do sistema.
+- **Secondary:** fundo `Control`, texto `Ink`, padding 10px 15px (navegação, filtros, links de projeto).
+- **Hover / Focus:** hover levanta (`translateY(-0.25em)`) e acende (glow branco nos secundários, glow índigo no primário); foco usa o anel índigo global (`outline: 3px solid Selection Indigo`, offset 2px). Transições de 0.3s ease.
 - **Disabled:** submit desabilitado reduz opacidade para 0.7 e troca o cursor para `wait`.
 
 ### Chips / Filtros
@@ -177,7 +178,7 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 ## Do's and Don'ts
 
 ### Do:
-- **Do** usar o Selection Indigo apenas no foco, no cursor de digitação e na barra de acento da hero — nunca como preenchimento decorativo.
+- **Do** usar o Selection Indigo apenas no foco, no cursor de digitação, na barra de acento da hero e na ação primária (CTA/submit) — nunca como preenchimento decorativo.
 - **Do** construir hierarquia com os três degraus tonais (`Editor Base`, `Panel`, `Control`).
 - **Do** usar raio 15px em controles, 10px em inputs e 30px apenas nos cards de skills.
 - **Do** abrir os cards de projeto com uma thumbnail real do trabalho (nunca um placeholder decorativo).

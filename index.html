@@ -167,10 +167,12 @@
 
             <div class="projects__grid">
                 <article class="project-card" data-categoria="dashboard">
-                    <img class="project-card__thumb" src="img/project-dashboard.webp"
-                        srcset="img/project-dashboard-768.webp 768w, img/project-dashboard.webp 1280w"
-                        sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Business Dashboard" loading="lazy"
-                        width="1280" height="800">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-dashboard.webp"
+                            srcset="img/project-dashboard-768.webp 768w, img/project-dashboard.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Business Dashboard" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Business Dashboard</h3>
                     <p class="project-card__text">Painel corporativo com sidebar de navegação, cards de métricas e
                         gráficos — organiza dados de negócio em uma visão única e escaneável.</p>
@@ -179,10 +181,12 @@
                 </article>
 
                 <article class="project-card" data-categoria="landing">
-                    <img class="project-card__thumb" src="img/project-saas.webp"
-                        srcset="img/project-saas-768.webp 768w, img/project-saas.webp 1280w"
-                        sizes="(max-width: 768px) 90vw, 380px" alt="Prévia da SaaS Landing Page" loading="lazy"
-                        width="1280" height="800">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-saas.webp"
+                            srcset="img/project-saas-768.webp 768w, img/project-saas.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia da SaaS Landing Page" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">SaaS Landing Page</h3>
                     <p class="project-card__text">Landing page de produto com hero, seção de features, pricing e
                         CTA — conduz o visitante da atenção à ação com hierarquia clara.</p>
@@ -191,10 +195,12 @@
                 </article>
 
                 <article class="project-card" data-categoria="ecommerce">
-                    <img class="project-card__thumb" src="img/project-ecommerce.webp"
-                        srcset="img/project-ecommerce-768.webp 768w, img/project-ecommerce.webp 1280w"
-                        sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Modern E-commerce" loading="lazy"
-                        width="1280" height="800">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-ecommerce.webp"
+                            srcset="img/project-ecommerce-768.webp 768w, img/project-ecommerce.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Modern E-commerce" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Modern E-commerce</h3>
                     <p class="project-card__text">Loja virtual com grade de produtos, cards de item e página de
                         produto — apresenta o catálogo de forma rápida de percorrer e comparar.</p>
@@ -203,10 +209,12 @@
                 </article>
 
                 <article class="project-card" data-categoria="dashboard">
-                    <img class="project-card__thumb" src="img/project-admin.webp"
-                        srcset="img/project-admin-768.webp 768w, img/project-admin.webp 1280w"
-                        sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Admin Dashboard" loading="lazy"
-                        width="1280" height="800">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-admin.webp"
+                            srcset="img/project-admin-768.webp 768w, img/project-admin.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Admin Dashboard" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Admin Dashboard</h3>
                     <p class="project-card__text">Painel de gerenciamento com sidebar, cards informativos e interface
                         responsiva — concentra controles e indicadores em um só lugar.</p>
@@ -216,7 +224,8 @@
             </div>
 
             <!-- Exibida via JS quando nenhum projeto corresponde aos filtros ativos -->
-            <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.</p>
+            <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.
+                Tente outro termo ou limpe o filtro.</p>
         </section>
 
         <section class="contact reveal" id="contato" aria-labelledby="contato-title">

@@ -1,11 +1,10 @@
 .contact {
-  min-height: 550px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 50px;
-  padding: 10px;
+  padding: 80px 20px;
 
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -109,12 +108,13 @@
 }
 
 .contact__submit {
-  background-color: var(--bg-button);
-  color: var(--text-primary);
+  background-color: var(--focus-ring);
+  color: var(--on-accent);
   border: none;
   border-radius: 15px;
   padding: 12px 20px;
   font-size: 16px;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition:
@@ -131,7 +131,7 @@
 
 .contact__submit:hover {
   transform: translateY(-0.2em);
-  box-shadow: 0 0 0.5em 0em var(--glow-hover);
+  box-shadow: 0 0 0.75em 0 var(--glow-accent);
 }
 
 .contact__social {
@@ -195,6 +195,7 @@
   .contact {
     height: auto;
     gap: 25px;
+    padding: 56px 20px;
   }
 
   .contact__submit {

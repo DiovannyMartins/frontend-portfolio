@@ -3,6 +3,9 @@ h2,
 h3 {
   font-family: var(--font-body);
   font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 h2 {
@@ -11,10 +14,11 @@ h2 {
 
 h3 {
   font-size: 20px;
+  letter-spacing: -0.01em;
 }
 
 p {
   color: var(--text-secondary);
   font-size: 18px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
