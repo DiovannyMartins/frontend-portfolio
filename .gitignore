@@ -10,7 +10,9 @@ dist/
 # Variáveis de ambiente (contêm segredos, nunca commitar)
 .env
 .env.local
-*.local
+.env.*.local
+!.env.example
+!.env.*.example
 
 # Logs
 *.log

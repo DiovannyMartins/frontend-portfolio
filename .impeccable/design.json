@@ -266,7 +266,7 @@
     "rules": [
       {
         "name": "The One Accent Rule",
-        "body": "O Selection Indigo marca três momentos: o anel de foco, o cursor de digitação e a barra de acento da hero. Fora desses três, a interface é puro cinza. Sua raridade é o ponto.",
+        "body": "O Selection Indigo marca quatro momentos: o anel de foco, o cursor de digitação, a barra de acento da hero e ações primárias (CTA hero, botão submit, chips ativos). Fora desses quatro, a interface é puro cinza. Sua raridade é o ponto.",
         "section": "colors"
       },
       {
@@ -276,7 +276,7 @@
       }
     ],
     "dos": [
-      "Do use o Selection Indigo apenas no foco, no cursor de digitação e na barra de acento da hero — nunca como preenchimento decorativo.",
+      "Do use o Selection Indigo no foco, no cursor de digitação, na barra de acento da hero e em ações primárias (CTA hero, botão submit, chips ativos) — nunca como preenchimento decorativo fora desses casos.",
       "Do construa hierarquia com os três degraus tonais (Editor Base, Panel, Control).",
       "Do use raio 15px em controles, 10px em inputs e 30px apenas nos cards de skills.",
       "Do abra os cards de projeto com uma thumbnail real do trabalho (nunca um placeholder decorativo).",

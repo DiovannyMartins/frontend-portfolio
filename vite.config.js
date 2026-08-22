@@ -5,6 +5,9 @@ import { defineConfig } from "vite";
 // sem nenhum ajuste.
 export default defineConfig({
   base: "./",
+  define: {
+    __IS_PRODUCTION__: JSON.stringify(process.env.NODE_ENV === "production"),
+  },
   plugins: [
     {
       name: "copiar-arquivos-estaticos",

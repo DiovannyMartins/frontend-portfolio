@@ -23,17 +23,21 @@ export function initFormulario() {
   // Em produção o servidor exige o token do Turnstile; em dev/preview não.
   // Usado para mostrar uma mensagem clara quando o captcha não carrega
   // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
-  const HOSTS_PRODUCAO = new Set([
-    "diovanny.dev",
-    "www.diovanny.dev",
-    "frontend-portfolio-5at.pages.dev",
-  ]);
-  const PRODUCAO = HOSTS_PRODUCAO.has(location.hostname);
+  // __IS_PRODUCTION__ é injetado pelo Vite em build time (process.env.NODE_ENV === "production").
+  // Em previews do Pages, NODE_ENV=production é definido no build, então o cliente
+  // e o servidor ficam alinhados.
+  const PRODUCAO = __IS_PRODUCTION__;
 
   function renderizarTurnstile() {
-    if (!widgetTurnstile || typeof window.turnstile === "undefined") return;
+    if (!widgetTurnstile || typeof window.turnstile === "undefined") {
+      estadoTurnstile = "falha";
+      return;
+    }
     const sitekey = widgetTurnstile.dataset.sitekey;
-    if (!sitekey) return;
+    if (!sitekey) {
+      estadoTurnstile = "falha";
+      return;
+    }
 
     turnstileId = window.turnstile.render(widgetTurnstile, {
       sitekey,
@@ -184,7 +188,7 @@ export function initFormulario() {
     // Turnstile: se o widget renderizou, exige o token resolvido. Se a
     // biblioteca falhou ao carregar (bloqueador/rede/domínio), em produção
     // avisa na hora em vez de enviar sem token e receber erro 400 do servidor.
-    if (PRODUCAO && estadoTurnstile === "falha") {
+    if (PRODUCAO && estadoTurnstile !== "ok") {
       feedbackForm.classList.add("contact__feedback--error");
       feedbackForm.textContent =
         "Não foi possível carregar o verificador de segurança (captcha). " +
@@ -192,7 +196,7 @@ export function initFormulario() {
       return;
     }
 
-    if (turnstileId !== null && !tokenTurnstile) {
+    if (PRODUCAO && !tokenTurnstile) {
       feedbackForm.classList.add("contact__feedback--error");
       feedbackForm.textContent = "Complete o desafio de segurança antes de enviar.";
       widgetTurnstile?.focus?.();

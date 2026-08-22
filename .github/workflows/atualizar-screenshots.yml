@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: screenshots
+  cancel-in-progress: false
+
 jobs:
   screenshots:
     runs-on: ubuntu-latest

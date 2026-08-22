@@ -4,8 +4,10 @@ export async function enviarEmail({ nome, email, mensagem }, config) {
   // Sem RESEND_API_KEY/RESEND_FROM no ambiente, roda em "modo log":
   // a mensagem aparece no console em vez de ser enviada por e-mail.
   if (!config.resend.apiKey || !config.resend.from) {
-    console.log("=== MENSAGEM RECEBIDA (modo log) ===");
-    console.log({ nome, email, mensagem });
+    if (config.logEmailFallback) {
+      console.log("=== MENSAGEM RECEBIDA (modo log) ===");
+      console.log({ nome: "[redacted]", email: "[redacted]", mensagem: "[redacted]" });
+    }
     return;
   }
 

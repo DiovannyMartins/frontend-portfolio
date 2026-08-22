@@ -1,6 +1,4 @@
 node_modules/
 dist/
-public/
-index.html
 package-lock.json
 .git/

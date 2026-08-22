@@ -68,10 +68,22 @@ export default function criarApp(env = process.env) {
       limit: 10,
       standardHeaders: true,
       legacyHeaders: false,
-      keyGenerator: (c) =>
-        c.req.header("cf-connecting-ip") ||
-        (config.trustProxy ? c.req.header("x-forwarded-for")?.split(",")[0]?.trim() : null) ||
-        "local",
+      keyGenerator: (c) => {
+        if (config.trustProxy) {
+          return (
+            c.req.header("cf-connecting-ip") ||
+            c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ||
+            "local"
+          );
+        }
+        // Sem proxy confiável: usa o IP real da conexão (Node)
+        // No Workers isso não é alcançável diretamente, mas lá trustProxy=true
+        const raw = c.req.raw;
+        if (raw?.socket?.remoteAddress) {
+          return raw.socket.remoteAddress;
+        }
+        return "local";
+      },
       message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
       store: new MemoryStore(),
     }),

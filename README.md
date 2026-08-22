@@ -234,7 +234,7 @@ frontend-portfolio/
 │   │   └── animacoes.css      # Keyframes e scroll reveal
 │   └── main.css               # Entry point (importa todos os módulos)
 ├── js/
-│   ├── tema-inicial.js        # Anti-FOUC (em public/js; aplica o tema antes do render)
+│   ├── tema-inicial.js        # Anti-FOUC (em public/js/; aplica o tema antes do render)
 │   ├── modules/
 │   │   ├── tema.js            # Dark/Light mode
 │   │   ├── menu.js            # Menu mobile
