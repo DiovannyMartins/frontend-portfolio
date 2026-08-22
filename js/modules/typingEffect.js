@@ -12,21 +12,6 @@ export function initTypingEffect() {
   alvo.textContent = "";
   barra?.classList.add("hero__accent--hidden");
 
-  // Syntax highlight: envolve a palavra-chave em um span índigo conforme a
-  // digitação alcança, como uma keyword destacada num editor de código.
-  function montarHtml(digitado) {
-    if (inicioChave === -1 || digitado.length <= inicioChave) return digitado;
-
-    const fimChave = inicioChave + palavraChave.length;
-    return (
-      digitado.slice(0, inicioChave) +
-      '<span class="hero__title-keyword">' +
-      digitado.slice(inicioChave, fimChave) +
-      "</span>" +
-      digitado.slice(fimChave)
-    );
-  }
-
   function digitar() {
     if (indice >= texto.length) {
       barra?.classList.remove("hero__accent--hidden");
@@ -34,7 +19,28 @@ export function initTypingEffect() {
     }
 
     indice++;
-    alvo.innerHTML = montarHtml(texto.slice(0, indice));
+    const digitado = texto.slice(0, indice);
+    alvo.textContent = "";
+
+    if (inicioChave !== -1 && digitado.length > inicioChave) {
+      const fimChave = Math.min(inicioChave + palavraChave.length, digitado.length);
+
+      if (inicioChave > 0) {
+        alvo.appendChild(document.createTextNode(digitado.slice(0, inicioChave)));
+      }
+
+      const span = document.createElement("span");
+      span.className = "hero__title-keyword";
+      span.textContent = digitado.slice(inicioChave, fimChave);
+      alvo.appendChild(span);
+
+      if (fimChave < digitado.length) {
+        alvo.appendChild(document.createTextNode(digitado.slice(fimChave)));
+      }
+    } else {
+      alvo.appendChild(document.createTextNode(digitado));
+    }
+
     setTimeout(digitar, velocidadeMs);
   }
 
