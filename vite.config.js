@@ -24,6 +24,8 @@ export default defineConfig({
           "icon-lua.png",
           "icon-seta-preto.png",
           "icon-seta-branco.png",
+          "icon-check-preto.png",
+          "icon-check-branco.png",
           "icon-envelope-preto.png",
           "icon-envelope-branco.png",
         ];
