@@ -131,7 +131,10 @@
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Título da hero apenas (com cursor de digitação)." },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Título da hero apenas (com cursor de digitação)."
+      },
       "headline": { "displayName": "Headline", "purpose": "Títulos de seção (h2)." },
       "title": { "displayName": "Title", "purpose": "Títulos de cards (h3)." },
       "body": { "displayName": "Body", "purpose": "Parágrafos e textos corridos." },
@@ -261,8 +264,16 @@
       "Feedback de cor restrito a verde (sucesso) e vermelho (erro) em estados de formulário."
     ],
     "rules": [
-      { "name": "The One Accent Rule", "body": "O Selection Indigo marca três momentos: o anel de foco, o cursor de digitação e a barra de acento da hero. Fora desses três, a interface é puro cinza. Sua raridade é o ponto.", "section": "colors" },
-      { "name": "The Flat-By-Default Rule", "body": "Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (skills). Nunca como padrão de todos os cards.", "section": "elevation" }
+      {
+        "name": "The One Accent Rule",
+        "body": "O Selection Indigo marca três momentos: o anel de foco, o cursor de digitação e a barra de acento da hero. Fora desses três, a interface é puro cinza. Sua raridade é o ponto.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (skills). Nunca como padrão de todos os cards.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do use o Selection Indigo apenas no foco, no cursor de digitação e na barra de acento da hero — nunca como preenchimento decorativo.",

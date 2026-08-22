@@ -1,7 +1,7 @@
 {
   "name": "frontend-portfolio",
   "version": "1.0.0",
-  "description": "Portfólio front-end responsivo com Vite, backend Express e scripts de automação.",
+  "description": "Portfólio Full-Stack responsivo com Vite, backend Hono e scripts de automação.",
   "private": true,
   "type": "module",
   "scripts": {

@@ -23,8 +23,12 @@ export function initFormulario() {
   // Em produção o servidor exige o token do Turnstile; em dev/preview não.
   // Usado para mostrar uma mensagem clara quando o captcha não carrega
   // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
-  const PRODUCAO =
-    location.hostname === "diovanny.dev" || location.hostname === "www.diovanny.dev";
+  const HOSTS_PRODUCAO = new Set([
+    "diovanny.dev",
+    "www.diovanny.dev",
+    "frontend-portfolio-5at.pages.dev",
+  ]);
+  const PRODUCAO = HOSTS_PRODUCAO.has(location.hostname);
 
   function renderizarTurnstile() {
     if (!widgetTurnstile || typeof window.turnstile === "undefined") return;
@@ -53,12 +57,17 @@ export function initFormulario() {
     estadoTurnstile = "ok";
   }
 
-  // O script do Turnstile é carregado com async/defer no <head> e o objeto
+  // O script do Turnstile é carregado de forma síncrona no <head> e o objeto
   // window.turnstile ganha a API (render) gradualmente. Como o evento
   // "turnstile-loaded" pode disparar antes deste módulo rodar, usa-se um
   // polling leve até a API estar disponível (desiste após 10s). Se desistir
   // sem renderizar, estadoTurnstile vira "falha" e o submit avisa em produção.
   function tentarRenderizarTurnstile() {
+    if (!PRODUCAO) {
+      estadoTurnstile = "ok";
+      return;
+    }
+
     if (typeof window.turnstile?.render === "function") {
       renderizarTurnstile();
       return;

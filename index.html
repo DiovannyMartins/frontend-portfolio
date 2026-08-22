@@ -13,7 +13,7 @@
     
 
     <!-- Anti-FOUC: aplica o tema salvo antes da página renderizar, evitando o "flash" do tema errado -->
-    <script src="js/tema-inicial.js"></script>
+    <script src="/js/tema-inicial.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
 
@@ -50,6 +50,10 @@
 
 <body>
 
+    <!-- Linha de progresso de leitura: cresce conforme o scroll, como um
+         indicador de "quanto do arquivo já foi lido" num editor. -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
     <a href="#main" class="skip-link">Pular para o conteúdo principal</a>
 
     <header class="header" role="banner">
@@ -58,7 +62,20 @@
             Diovanny.dev
         </a>
 
+        <nav class="nav" id="mainNav" aria-label="Navegação principal">
+            <ul class="nav__list" role="list">
+                <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
+                <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
+                <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
+                <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+
         <div class="header__actions">
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Ativar tema claro"
+                aria-pressed="false">
+                <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
+            </button>
             <button type="button" class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu"
                 aria-expanded="false" aria-controls="mainNav">
                 <span class="header__menu-toggle-bar"></span>
@@ -66,21 +83,6 @@
                 <span class="header__menu-toggle-bar"></span>
             </button>
         </div>
-
-        <nav class="nav" id="mainNav" aria-label="Navegação principal">
-            <ul class="nav__list" role="list">
-                <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
-                <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
-                <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
-                <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
-                <li class="nav__item">
-                    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Ativar tema claro"
-                        aria-pressed="false">
-                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
-                    </button>
-                </li>
-            </ul>
-        </nav>
     </header>
 
     <main id="main" role="main">

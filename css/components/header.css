@@ -1,7 +1,6 @@
 .header {
   background-color: var(--bg-primary);
   display: flex;
-  justify-content: space-between;
   align-items: center;
   /* A cor da borda varia por tema via --border-subtle. */
   border-bottom: 1px solid var(--border-subtle);
@@ -72,6 +71,11 @@
   list-style: none;
 }
 
+/* Empurra a navegação (e as ações após ela) para a direita no desktop. */
+.nav {
+  margin-left: auto;
+}
+
 .nav__link {
   display: flex;
   align-items: center;
@@ -129,6 +133,7 @@
   .header__actions {
     gap: 20px;
     margin-right: 10px;
+    margin-left: auto;
   }
 
   .nav {

@@ -112,7 +112,15 @@ async function main() {
         if (!info.isFile())
           erros.push(`Não é um arquivo: ${url} (em ${path.relative(RAIZ, arquivo)})`);
       } catch {
-        erros.push(`Arquivo não encontrado: ${url} (em ${path.relative(RAIZ, arquivo)})`);
+        const caminhoPublico = caminho.replace(/^[/\\]+/, "");
+        const publico = path.resolve(RAIZ, "public", caminhoPublico);
+        try {
+          const info = await stat(publico);
+          if (!info.isFile()) throw new Error();
+          referencias.add(path.relative(RAIZ, publico).replace(/\\/g, "/"));
+        } catch {
+          erros.push(`Arquivo não encontrado: ${url} (em ${path.relative(RAIZ, arquivo)})`);
+        }
       }
     }
   }

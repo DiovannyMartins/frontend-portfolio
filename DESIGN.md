@@ -79,6 +79,7 @@ A profundidade é majoritariamente plana, construída por três degraus tonais d
 O sistema alterna entre dark e light por `prefers-color-scheme` e persistência em `localStorage`. O dark é o estado canônico (definido em `:root`); o light inverte os tons mantendo a mesma gramática.
 
 **Key Characteristics:**
+
 - Fundo neutro-escuro de IDE (`rgb(30, 30, 30)`) com um único acento índigo.
 - Inter (400–900) como única família tipográfica.
 - Superfícies planas com três degraus tonais; sombra apenas como destaque.
@@ -90,9 +91,11 @@ O sistema alterna entre dark e light por `prefers-color-scheme` e persistência 
 Paleta monocromática de cinzas de interface sobre a qual um único índigo — a cor de seleção — marca foco e estados.
 
 ### Primary
+
 - **Selection Indigo** (`rgb(129, 140, 248)`): o anel de foco acessível (`--focus-ring`), o cursor de digitação da hero, a barra de acento sob o título e a ação primária (CTA e submit). No light mode passa a `rgb(67, 56, 202)`. É o acento raro do sistema; sobre ele, o texto usa `--on-accent` (escuro no dark, branco no light).
 
 ### Neutral
+
 - **Editor Base** (`rgb(30, 30, 30)`): fundo principal e do header/hero. No light mode vira `rgb(245, 245, 245)`.
 - **Panel** (`rgb(45, 45, 48)`): fundo das seções alternadas (about, projects, footer), de inputs e do toast. No light mode vira `rgb(230, 230, 230)`.
 - **Control** (`rgb(62, 62, 66)`): fundo de botões, chips de navegação, filtros e cards sociais. No light mode vira `rgb(210, 210, 215)`.
@@ -101,10 +104,12 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 - **Hairline** (`rgba(255, 255, 255, 0.28)`): borda sutil do header e bordas de estado. No light mode vira `rgba(20, 20, 20, 0.24)`.
 
 ### Status
+
 - **Success Green** (`rgb(80, 200, 120)`): validação válida e feedback de sucesso.
 - **Error Red** (`rgb(255, 130, 130)`): validação inválida e mensagens de erro.
 
 ### Named Rules
+
 **The One Accent Rule.** O Selection Indigo marca quatro momentos: o anel de foco, o cursor de digitação, a barra de acento da hero e a ação primária (CTA/submit). Fora desses quatro, a interface é puro cinza. Sua raridade é o ponto.
 
 ## Typography
@@ -115,7 +120,8 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 **Character:** Uma única família, pesos 400–900, carregada com eixo variável (14–32 opsz). A hierarquia vem do peso e do tamanho, nunca de uma segunda fonte — a disciplina de uma ferramenta de software.
 
 ### Hierarchy
-- **Display** (800, 50px, normal): o título da hero, com cursor de digitação anexado (`::after` com `content: "|"`). 40px em telas ≤ 768px.
+
+- **Display** (800, 50px, 1.15): o título da hero, com cursor de bloco índigo anexado (`::after`). 40px em telas ≤ 768px.
 - **Headline** (900, 35px, normal): títulos de seção (`h2`).
 - **Title** (900, 20px, normal): títulos de cards e subtítulos (`h3`).
 - **Body** (400, 18px, 1.5): parágrafos, em `ink-muted`. 14px e line-height 20px em telas ≤ 768px.
@@ -130,11 +136,13 @@ Página única com header fixo de ~80px (`scroll-margin-top` compensa âncoras).
 **Flat por padrão, com profundidade pontual.** A hierarquia nasce da alternância tonal de três degraus, não de sombras. Sombra e glow são reservados para dois momentos: a sombra neumórfica dos cards de skills e o glow de resposta ao hover dos controles. Não há elevação estrutural (nenhum card "flutua" por padrão).
 
 ### Shadow Vocabulary
+
 - **Neumorphic Relief** (`box-shadow: 10px 10px 20px var(--shadow-light), -10px -10px 20px var(--shadow-dark)`): apenas nos cards de skills, simulando relevo físico claro + escuro.
 - **Hover Glow** (`box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5)`): resposta padrão ao hover de botões, links de navegação e chips.
 - **Toast Shadow** (`box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3)`): única sombra "levantada" real, no toast.
 
 ### Named Rules
+
 **The Flat-By-Default Rule.** Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (skills). Nunca como padrão de todos os cards.
 
 ## Shapes
@@ -144,6 +152,7 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 ## Components
 
 ### Buttons
+
 - **Shape:** raio 15px, sem borda.
 - **Primary (ação principal):** fundo `Selection Indigo`, texto `--on-accent`, padding 15px 20px (CTA da hero) ou 12px 20px (submit). É o único botão colorido do sistema.
 - **Secondary:** fundo `Control`, texto `Ink`, padding 10px 15px (navegação, filtros, links de projeto).
@@ -151,10 +160,12 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 - **Disabled:** submit desabilitado reduz opacidade para 0.7 e troca o cursor para `wait`.
 
 ### Chips / Filtros
+
 - **Style:** fundo `Control`, texto `Ink`, raio 15px, padding 10px 20px.
 - **State:** ativo troca para `rgba(255, 255, 255, 0.25)` com glow (o mesmo padrão do link de navegação ativo). Estado comunicado por `aria-pressed`.
 
 ### Cards / Containers
+
 - **Corner Style:** 15px (project-card), 30px (skills-card).
 - **Background:** `Editor Base` (cards ficam sobre o `Panel` da seção).
 - **Project card:** abre com uma thumbnail de screenshot (`aspect-ratio: 16/10`, raio 10px, `object-fit: cover`) seguida de título, texto e link; plano e levanta no hover (`translateY(-5px)`).
@@ -162,22 +173,27 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 - **Internal Padding:** 20px (project-card), 20px (skills-card).
 
 ### Inputs / Fields
+
 - **Style:** fundo `Panel`, texto `Ink`, borda 1px `Control`, raio 10px, padding 12px 15px.
 - **Focus:** borda `rgba(255,255,255,0.7)` e anel `box-shadow: 0 0 0 3px` suave.
 - **Valid / Invalid:** borda verde/vermelha com anel em `color-mix(..., 20%, transparent)`; mensagem de erro em 13px `Error Red` com `aria-live`.
 
 ### Navigation
+
 - **Style:** header fixo com borda inferior hairline; links de navegação em chips (`Control`, raio 15px). Link ativo destacado por fundo translúcido. Em telas ≤ 768px vira um painel full-screen deslizante com hambúrguer animado (três barras → X).
 
 ### Toast (componente de assinatura)
+
 - **Style:** caixa flutuante no canto inferior direito (fundo `Panel`, raio 12px, borda `Control`, `Toast Shadow`), com ícone circular verde de confirmação. Aparece com `translateY(20px) scale(0.9) → 0/1` e desliza para um banner full-width em mobile.
 
 ### Botão Voltar ao Topo
+
 - **Style:** círculo de 50px (`Control`, raio 50%), fixo no canto inferior direito, que faz fade + escala ao entrar/ sair conforme o scroll.
 
 ## Do's and Don'ts
 
 ### Do:
+
 - **Do** usar o Selection Indigo apenas no foco, no cursor de digitação, na barra de acento da hero e na ação primária (CTA/submit) — nunca como preenchimento decorativo.
 - **Do** construir hierarquia com os três degraus tonais (`Editor Base`, `Panel`, `Control`).
 - **Do** usar raio 15px em controles, 10px em inputs e 30px apenas nos cards de skills.
@@ -186,6 +202,7 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 - **Do** levantar e acender controles no hover (`translateY` + glow), com 0.3s ease.
 
 ### Don't:
+
 - **Don't** introduzir uma segunda cor de acento ou qualquer paleta "colorida" além do índigo.
 - **Don't** aplicar a sombra neumórfica fora dos cards de skills — ela é o destaque, não a regra.
 - **Don't** dar sombras estruturais a cards comuns; a superfície é plana em repouso.

@@ -34,20 +34,20 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 ## Tecnologias
 
-| Stack             | Detalhe                                                             |
-| ----------------- | ------------------------------------------------------------------- |
-| HTML5             | Semântica, ARIA, meta tags Open Graph/Twitter Card                  |
-| CSS3              | Variáveis CSS, Grid, Flexbox, animações, `@import` modular          |
-| JavaScript (ES6+) | ES Modules — frontend sem dependências de runtime                   |
-| Vite              | Dev server, build de produção e proxy para a API em desenvolvimento |
-| Hono              | API para o formulário de contato (validação, rate limit, e-mail)     |
-| secure-headers    | Cabeçalhos de segurança e Content-Security-Policy no Hono            |
-| Resend            | Envio de e-mail a partir do formulário (REST API, sem SMTP)          |
-| Cloudflare Turnstile | CAPTCHA do formulário (anti-bot), validado no servidor            |
-| Cloudflare Pages  | Hospedagem do frontend + Pages Functions (API no mesmo domínio)      |
-| ESLint + Prettier | Lint estático e formatação consistente do código                     |
-| Git/GitHub        | Versionamento e deploy via Cloudflare Pages                          |
-| Google Fonts      | Inter (todo o texto)                                               |
+| Stack                | Detalhe                                                             |
+| -------------------- | ------------------------------------------------------------------- |
+| HTML5                | Semântica, ARIA, meta tags Open Graph/Twitter Card                  |
+| CSS3                 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular          |
+| JavaScript (ES6+)    | ES Modules — frontend sem dependências de runtime                   |
+| Vite                 | Dev server, build de produção e proxy para a API em desenvolvimento |
+| Hono                 | API para o formulário de contato (validação, rate limit, e-mail)    |
+| secure-headers       | Cabeçalhos de segurança e Content-Security-Policy no Hono           |
+| Resend               | Envio de e-mail a partir do formulário (REST API, sem SMTP)         |
+| Cloudflare Turnstile | CAPTCHA do formulário (anti-bot), validado no servidor              |
+| Cloudflare Pages     | Hospedagem do frontend + Pages Functions (API no mesmo domínio)     |
+| ESLint + Prettier    | Lint estático e formatação consistente do código                    |
+| Git/GitHub           | Versionamento e deploy via Cloudflare Pages                         |
+| Google Fonts         | Inter (todo o texto)                                                |
 
 ---
 
@@ -61,7 +61,7 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 - **Segurança no backend**: secure-headers (Hono) com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
 - **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
-- **Anti-FOUC no tema**: `js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
+- **Anti-FOUC no tema**: `public/js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
 - **Testes com `node --test`**: cobertura da validação, CORS, rate limit e dos endpoints da API, sem dependências adicionais.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
 - **Performance**: imagens em WebP com lazy loading, `preload` da imagem hero, `preconnect` para fontes, `theme-color` para mobile.
@@ -126,7 +126,7 @@ Copy-Item server/.env.example server/.env
 # ou manualmente: crie um arquivo server/.env com o conteúdo de server/.env.example
 ```
 
-- **Sem Resend configurado**: o servidor roda em "modo log" — as mensagens aparecem no console do terminal. **Apenas para desenvolvimento local**: em produção o servidor **não inicia** sem `RESEND_API_KEY` e `RESEND_FROM`, evitando que e-mails e mensagens dos visitantes vazem para os logs da plataforma.
+- **Sem Resend configurado**: o servidor roda em "modo log" — as mensagens aparecem no console do terminal. **Apenas para desenvolvimento local**: em produção o servidor **não inicia** sem Resend e Turnstile configurados, evitando que e-mails e mensagens dos visitantes vazem para os logs da plataforma.
 - **Com Resend configurado**: preencha `RESEND_API_KEY` (crie em [resend.com/api-keys](https://resend.com/api-keys)) e `RESEND_FROM` no `.env`. Na conta grátis, use `onboarding@resend.dev` e defina `EMAIL_DESTINO` como o **mesmo e-mail da sua conta Resend** (só é possível enviar para si mesmo sem domínio verificado). Se o frontend e a API estiverem em origens diferentes, configure também `FRONTEND_ORIGIN` (origens autorizadas, separadas por vírgula).
 
 #### CAPTCHA com Cloudflare Turnstile
@@ -144,24 +144,24 @@ Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **
 
 ### Scripts disponíveis
 
-| Comando                 | Descrição                                                                                    |
-| ----------------------- | -------------------------------------------------------------------------------------------- |
-| `npm run dev`           | Inicia o Vite (frontend) com proxy para a API                                                |
-| `npm run dev:all`       | Inicia frontend e backend juntos                                                             |
-| `npm run server`        | Inicia apenas o backend Hono (usado pelo `dev:all`)                                          |
-| `npm run build`         | Gera o build de produção em `dist/`                                                          |
-| `npm run preview`       | Serve localmente o build gerado                                                              |
-| `npm start`             | Inicia o servidor Hono (API; em produção não inicia sem as variáveis do Resend)              |
-| `npm run pages:dev`     | Sobe o Cloudflare Pages localmente (build + `wrangler pages dev`) — testa as Functions        |
-| `npm run pages:deploy`  | Builda e publica no Cloudflare Pages (`wrangler pages deploy dist`)                           |
-| `npm test`              | Roda os testes automatizados da API (`node --test`)                                          |
-| `npm run lint`          | Verifica o código com ESLint                                                                 |
-| `npm run lint:fix`      | Corrige automaticamente os problemas de lint                                                 |
-| `npm run format`        | Formata todos os arquivos com Prettier                                                       |
-| `npm run format:check`  | Verifica se todos os arquivos seguem o padrão do Prettier                                    |
-| `npm run sitemap`       | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
-| `npm run check`         | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs             |
-| `npm run imagens`       | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                     |
+| Comando                | Descrição                                                                                          |
+| ---------------------- | -------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Inicia o Vite (frontend) com proxy para a API                                                      |
+| `npm run dev:all`      | Inicia frontend e backend juntos                                                                   |
+| `npm run server`       | Inicia apenas o backend Hono (usado pelo `dev:all`)                                                |
+| `npm run build`        | Gera o build de produção em `dist/`                                                                |
+| `npm run preview`      | Serve localmente o build gerado                                                                    |
+| `npm start`            | Inicia o servidor Hono (API; em produção não inicia sem as variáveis do Resend)                    |
+| `npm run pages:dev`    | Sobe o Cloudflare Pages localmente (build + `wrangler pages dev`) — testa as Functions             |
+| `npm run pages:deploy` | Builda e publica no Cloudflare Pages (`wrangler pages deploy dist`)                                |
+| `npm test`             | Roda os testes automatizados da API (`node --test`)                                                |
+| `npm run lint`         | Verifica o código com ESLint                                                                       |
+| `npm run lint:fix`     | Corrige automaticamente os problemas de lint                                                       |
+| `npm run format`       | Formata todos os arquivos com Prettier                                                             |
+| `npm run format:check` | Verifica se todos os arquivos seguem o padrão do Prettier                                          |
+| `npm run sitemap`      | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
+| `npm run check`        | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                   |
+| `npm run imagens`      | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                           |
 
 ### Deploy — Cloudflare Pages
 
@@ -234,7 +234,7 @@ frontend-portfolio/
 │   │   └── animacoes.css      # Keyframes e scroll reveal
 │   └── main.css               # Entry point (importa todos os módulos)
 ├── js/
-│   ├── tema-inicial.js        # Anti-FOUC (aplica o tema antes do render, no <head>)
+│   ├── tema-inicial.js        # Anti-FOUC (em public/js; aplica o tema antes do render)
 │   ├── modules/
 │   │   ├── tema.js            # Dark/Light mode
 │   │   ├── menu.js            # Menu mobile

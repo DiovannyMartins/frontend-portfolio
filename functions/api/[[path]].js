@@ -5,6 +5,8 @@ import criarApp from "../../server/app.js";
 let app;
 
 export const onRequest = (context) => {
-  app ??= criarApp(context.env);
+  // Pages Functions é sempre o caminho de produção; não permita que a
+  // ausência acidental de NODE_ENV habilite o modo de desenvolvimento.
+  app ??= criarApp({ ...context.env, NODE_ENV: "production" });
   return app.fetch(context.request, context.env, context.executionCtx);
 };

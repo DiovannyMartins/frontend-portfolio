@@ -21,3 +21,28 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Transição cinematográfica de tema (View Transitions): o novo tema "desce"
+   como uma cortina sobre o antigo, que faz fade. Fallback: troca instantânea. */
+::view-transition-old(root) {
+  animation: tema-sair 0.45s ease both;
+}
+
+::view-transition-new(root) {
+  animation: tema-entrar 0.45s ease both;
+}
+
+@keyframes tema-sair {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes tema-entrar {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}

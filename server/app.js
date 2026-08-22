@@ -70,7 +70,7 @@ export default function criarApp(env = process.env) {
       legacyHeaders: false,
       keyGenerator: (c) =>
         c.req.header("cf-connecting-ip") ||
-        c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ||
+        (config.trustProxy ? c.req.header("x-forwarded-for")?.split(",")[0]?.trim() : null) ||
         "local",
       message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
       store: new MemoryStore(),
@@ -80,7 +80,10 @@ export default function criarApp(env = process.env) {
   app.route("/api/contato", rotaContato(config));
 
   // Health check usado por plataformas de hospedagem.
-  app.get("/api/health", (c) => c.json({ ok: true }));
+  app.get("/api/health", (c) => {
+    if (!config.productionReady) return c.json({ ok: false }, 503);
+    return c.json({ ok: true });
+  });
 
   return app;
 }

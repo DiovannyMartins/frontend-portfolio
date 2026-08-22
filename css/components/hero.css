@@ -23,13 +23,24 @@
   font-weight: 800;
 }
 
-/* Cursor piscante do efeito de digitação. Fica no CSS (não no JS) porque é
-   puramente visual — separação de responsabilidades. O índigo é o Selection
-   Indigo (a cor de "seleção" do editor), revelado aqui em momento estático. */
+/* Cursor de bloco do efeito de digitação — um retângulo índigo sólido, como
+   o cursor de um editor de código (não uma barra). O Selection Indigo aparece
+   aqui em momento estático. */
 .hero__title::after {
-  content: "|";
-  color: var(--focus-ring);
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 0.1em;
+  background-color: var(--focus-ring);
+  border-radius: 1px;
+  vertical-align: -0.05em;
   animation: piscar 0.8s infinite;
+}
+
+/* Keyword destacada na digitação (syntax highlight). */
+.hero__title-keyword {
+  color: var(--focus-ring);
 }
 
 /* Barra de acento sob o título — o "cursor block" do editor, o único
