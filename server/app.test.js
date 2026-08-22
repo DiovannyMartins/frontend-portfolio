@@ -61,6 +61,13 @@ describe("validarEmail", () => {
 });
 
 describe("API", () => {
+  it("sinaliza configuração incompleta em produção", async () => {
+    const baseUrl = await iniciarServidor({ NODE_ENV: "production" });
+    const resposta = await fetch(`${baseUrl}/api/health`);
+    assert.equal(resposta.status, 503);
+    assert.deepEqual(await resposta.json(), { ok: false });
+  });
+
   it("health check responde 200", async () => {
     const baseUrl = await iniciarServidor();
     const resposta = await fetch(`${baseUrl}/api/health`);
@@ -123,6 +130,20 @@ describe("API", () => {
     const corpo = await resposta.json();
     assert.equal(corpo.success, false);
     assert.equal(corpo.error, "JSON inválido.");
+  });
+
+  it("rejeita campos com tipos incorretos com 400", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, {
+      nome: 123,
+      email: {},
+      mensagem: [],
+    });
+    assert.equal(resposta.status, 400);
+    const corpo = await resposta.json();
+    assert.ok(corpo.errors.nome);
+    assert.ok(corpo.errors.email);
+    assert.ok(corpo.errors.mensagem);
   });
 
   it("rejeita payload acima do limite com 413", async () => {

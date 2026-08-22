@@ -8,13 +8,24 @@ export default defineConfig({
   plugins: [
     {
       name: "copiar-arquivos-estaticos",
-      // Imagens referenciadas por string no JS (tema.js, copiarEmail.js) e o
-      // script anti-FOUC (js/tema-inicial.js) não passam pelo processamento do
-      // Vite, então precisam existir verbatim em dist/ para o build funcionar.
+      // Imagens referenciadas por string no JS (tema.js, copiarEmail.js) não
+      // passam pelo processamento do Vite, então precisam existir verbatim em
+      // dist/ para o build funcionar. O script anti-FOUC já vive em public/.
       closeBundle: async () => {
-        await cp("img", "dist/img", { recursive: true });
-        await mkdir("dist/js", { recursive: true });
-        await cp("js/tema-inicial.js", "dist/js/tema-inicial.js");
+        const assetsDinamicos = [
+          "icon-logo-dark.png",
+          "icon-logo.png",
+          "github-dark.png",
+          "github.png",
+          "icon-sol.png",
+          "icon-lua.png",
+          "icon-seta-preto.png",
+          "icon-seta-branco.png",
+          "icon-envelope-preto.png",
+          "icon-envelope-branco.png",
+        ];
+        await mkdir("dist/img", { recursive: true });
+        await Promise.all(assetsDinamicos.map((asset) => cp(`img/${asset}`, `dist/img/${asset}`)));
       },
     },
   ],

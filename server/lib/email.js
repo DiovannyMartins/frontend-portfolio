@@ -9,20 +9,29 @@ export async function enviarEmail({ nome, email, mensagem }, config) {
     return;
   }
 
-  const resposta = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${config.resend.apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: config.resend.from,
-      to: [config.emailDestino],
-      reply_to: email,
-      subject: `Novo contato de ${nome}`,
-      text: `Nome: ${nome}\nE-mail: ${email}\n\nMensagem:\n${mensagem}`,
-    }),
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  let resposta;
+  try {
+    resposta = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.resend.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: config.resend.from,
+        to: [config.emailDestino],
+        reply_to: email,
+        subject: `Novo contato de ${nome}`,
+        text: `Nome: ${nome}\nE-mail: ${email}\n\nMensagem:\n${mensagem}`,
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!resposta.ok) {
     const corpo = await resposta.text();

@@ -52,10 +52,24 @@ export function initTema() {
   atualizarAcessibilidade();
 
   themeToggle.addEventListener("click", () => {
-    root.classList.toggle("light-mode");
-    localStorage.setItem("tema", temaAtual());
-    atualizarImagens();
-    atualizarThemeColor();
-    atualizarAcessibilidade();
+    const aplicarTema = () => {
+      root.classList.toggle("light-mode");
+      try {
+        localStorage.setItem("tema", temaAtual());
+      } catch {
+        // Preferência de tema continua funcionando mesmo sem storage.
+      }
+      atualizarImagens();
+      atualizarThemeColor();
+      atualizarAcessibilidade();
+    };
+
+    // Transição cinematográfica da troca de tema via View Transitions.
+    // Fallback: troca instantânea quando o navegador não suporta.
+    if (document.startViewTransition) {
+      document.startViewTransition(aplicarTema);
+    } else {
+      aplicarTema();
+    }
   });
 }

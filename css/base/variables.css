@@ -6,10 +6,21 @@
   --text-secondary: rgb(203, 213, 225);
   --border-subtle: rgba(255, 255, 255, 0.28);
   --focus-ring: rgb(129, 140, 248);
+  --on-accent: rgb(20, 20, 20);
+  --glow-accent: rgba(129, 140, 248, 0.45);
   --input-focus: rgba(255, 255, 255, 0.7);
   --input-focus-shadow: rgba(255, 255, 255, 0.16);
   --status-success: rgb(80, 200, 120);
   --status-error: rgb(255, 130, 130);
+
+  /* Glow de resposta ao hover e estados ativos. São tokens para que o tema
+     claro use um brilho escuro sutil (o branco ficaria invisível no light). */
+  --glow-hover: rgba(255, 255, 255, 0.5);
+  --glow-soft: rgba(255, 255, 255, 0.3);
+  --glow-active: rgba(255, 255, 255, 0.4);
+  --glow-faint: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(255, 255, 255, 0.3);
+  --bg-active: rgba(255, 255, 255, 0.25);
 
   --shadow-light: rgba(232, 232, 232, 0.2);
   --shadow-dark: rgb(60, 60, 60);
@@ -25,10 +36,19 @@ html.light-mode {
   --text-secondary: rgb(60, 60, 60);
   --border-subtle: rgba(20, 20, 20, 0.24);
   --focus-ring: rgb(67, 56, 202);
+  --on-accent: rgb(255, 255, 255);
+  --glow-accent: rgba(67, 56, 202, 0.35);
   --input-focus: rgba(20, 20, 20, 0.7);
   --input-focus-shadow: rgba(20, 20, 20, 0.12);
   --status-success: rgb(20, 130, 70);
   --status-error: rgb(180, 35, 35);
+
+  --glow-hover: rgba(20, 20, 20, 0.16);
+  --glow-soft: rgba(20, 20, 20, 0.12);
+  --glow-active: rgba(20, 20, 20, 0.14);
+  --glow-faint: rgba(20, 20, 20, 0.08);
+  --border-hover: rgba(20, 20, 20, 0.2);
+  --bg-active: rgba(20, 20, 20, 0.1);
 
   --shadow-light: rgba(200, 200, 200, 0.4);
   --shadow-dark: rgba(60, 60, 60, 0.25);

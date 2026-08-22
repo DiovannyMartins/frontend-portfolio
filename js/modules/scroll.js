@@ -2,6 +2,22 @@ export function initScroll() {
   initScrollReveal();
   initScrollSpy();
   initVoltarTopo();
+  initProgressoLeitura();
+}
+
+function initProgressoLeitura() {
+  const barra = document.getElementById("scrollProgress");
+  if (!barra) return;
+
+  function atualizar() {
+    const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
+    const progresso = alturaTotal > 0 ? window.scrollY / alturaTotal : 0;
+    barra.style.transform = `scaleX(${Math.min(progresso, 1)})`;
+  }
+
+  window.addEventListener("scroll", atualizar, { passive: true });
+  window.addEventListener("resize", atualizar, { passive: true });
+  atualizar();
 }
 
 function initScrollReveal() {

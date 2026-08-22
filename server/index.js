@@ -11,13 +11,16 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 const config = carregarConfig(process.env);
 
 if (config.isProduction) {
-  const resendFaltando = !config.resend.apiKey || !config.resend.from;
+  const configuracaoFaltando =
+    !config.resend.apiKey ||
+    !config.resend.from ||
+    !config.emailDestino ||
+    !config.turnstile.secretKey;
 
-  if (resendFaltando) {
+  if (configuracaoFaltando) {
     console.error(
-      "ERRO: em produção o envio de e-mail exige Resend configurado " +
-        "(RESEND_API_KEY, RESEND_FROM). O modo log é exclusivo para " +
-        "desenvolvimento local.",
+      "ERRO: em produção o contato exige Resend e Turnstile configurados " +
+        "(RESEND_API_KEY, RESEND_FROM, EMAIL_DESTINO e TURNSTILE_SECRET_KEY).",
     );
     process.exit(1);
   }

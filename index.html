@@ -13,7 +13,7 @@
     
 
     <!-- Anti-FOUC: aplica o tema salvo antes da página renderizar, evitando o "flash" do tema errado -->
-    <script src="js/tema-inicial.js"></script>
+    <script src="/js/tema-inicial.js"></script>
 
     <link rel="stylesheet" href="css/main.css">
 
@@ -32,22 +32,27 @@
         content="Portfólio de Diovanny Martins, desenvolvedor Full-Stack especializado em HTML5, CSS3, JavaScript e Node.js.">
     <meta name="twitter:image" content="https://diovanny.dev/img/imagem.webp">
 
-    <!-- Cloudflare Turnstile (CAPTCHA do formulário de contato). URL exata:
-         não fazer proxy nem cache deste arquivo. Carregado de forma SÍNCRONA
-         (sem async/defer): o api.js usa um bootstrap regional e, se carregado
-         com defer/async, dispara "already has been loaded" e não expõe
-         window.turnstile.render, quebrando o widget. -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap">
     <link rel="preload" href="img/imagem.webp" as="image" type="image/webp">
+
+    <!-- Cloudflare Turnstile (CAPTCHA do formulário de contato). URL exata:
+         não fazer proxy nem cache deste arquivo. Carregado de forma SÍNCRONA
+         (sem async/defer): o api.js usa um bootstrap regional e, se carregado
+         com defer/async, dispara "already has been loaded" e não expõe
+         window.turnstile.render, quebrando o widget. Fica por último no <head>
+         para não atrasar os preconnect/preload que o precedem. -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
     <title>Diovanny Martins | Desenvolvedor Full-Stack</title>
 </head>
 
 <body>
+
+    <!-- Linha de progresso de leitura: cresce conforme o scroll, como um
+         indicador de "quanto do arquivo já foi lido" num editor. -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
     <a href="#main" class="skip-link">Pular para o conteúdo principal</a>
 
@@ -57,7 +62,20 @@
             Diovanny.dev
         </a>
 
+        <nav class="nav" id="mainNav" aria-label="Navegação principal">
+            <ul class="nav__list" role="list">
+                <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
+                <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
+                <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
+                <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+
         <div class="header__actions">
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Ativar tema claro"
+                aria-pressed="false">
+                <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
+            </button>
             <button type="button" class="header__menu-toggle" id="menuToggle" aria-label="Abrir menu"
                 aria-expanded="false" aria-controls="mainNav">
                 <span class="header__menu-toggle-bar"></span>
@@ -65,21 +83,6 @@
                 <span class="header__menu-toggle-bar"></span>
             </button>
         </div>
-
-        <nav class="nav" id="mainNav" aria-label="Navegação principal">
-            <ul class="nav__list" role="list">
-                <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
-                <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
-                <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
-                <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
-                <li class="nav__item">
-                    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Ativar tema claro"
-                        aria-pressed="false">
-                        <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true">
-                    </button>
-                </li>
-            </ul>
-        </nav>
     </header>
 
     <main id="main" role="main">
@@ -89,13 +92,14 @@
                 <!-- Texto no HTML serve de fallback caso o JS do efeito de digitação não carregue -->
                 <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Full-Stack">Desenvolvedor Full-Stack
                 </h1>
+                <span class="hero__accent" aria-hidden="true"></span>
                 <p class="hero__text">Desenvolvendo aplicações web modernas, responsivas e eficientes, do front-end ao
                     back-end.</p>
                 <a href="#projetos" class="hero__cta">Ver Projetos</a>
             </div>
 
             <div class="hero__media">
-                <img class="hero__image" src="img/imagem.webp" alt="uma tela de computador com um monte de código nele"
+                <img class="hero__image" src="img/imagem.webp" alt="Tela de computador com código-fonte de uma aplicação web"
                     width="600" height="400" fetchpriority="high">
             </div>
         </section>
@@ -145,7 +149,7 @@
             <div class="projects__header">
                 <h2 class="projects__title" id="projetos-title">Meus Projetos</h2>
                 <p class="projects__subtitle">Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5,
-                    CSS3 e JAVASCRIPT.</p>
+                    CSS3 e JavaScript.</p>
             </div>
 
             <div class="projects__filters">
@@ -165,41 +169,65 @@
 
             <div class="projects__grid">
                 <article class="project-card" data-categoria="dashboard">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-dashboard.webp"
+                            srcset="img/project-dashboard-768.webp 768w, img/project-dashboard.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Business Dashboard" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Business Dashboard</h3>
-                    <p class="project-card__text">Dashboard corporativo com painel administrativo, cards de
-                        métricas e sidebar de navegação, focado em visual profissional e organização de
-                        informações.</p>
+                    <p class="project-card__text">Painel corporativo com sidebar de navegação, cards de métricas e
+                        gráficos — organiza dados de negócio em uma visão única e escaneável.</p>
                     <a href="https://diovannymartins.github.io/business-dashboard/" target="_blank"
                         rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="landing">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-saas.webp"
+                            srcset="img/project-saas-768.webp 768w, img/project-saas.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia da SaaS Landing Page" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">SaaS Landing Page</h3>
-                    <p class="project-card__text">Landing page profissional inspirada em plataformas SaaS
-                        modernas, com layout moderno, seções bem organizadas e interface de nível profissional.</p>
+                    <p class="project-card__text">Landing page de produto com hero, seção de features, pricing e
+                        CTA — conduz o visitante da atenção à ação com hierarquia clara.</p>
                     <a href="https://diovannymartins.github.io/saas-landing-page/" target="_blank"
                         rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="ecommerce">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-ecommerce.webp"
+                            srcset="img/project-ecommerce-768.webp 768w, img/project-ecommerce.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Modern E-commerce" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Modern E-commerce</h3>
-                    <p class="project-card__text">Página inicial de loja virtual com seção de produtos, design
-                        moderno e experiência visual pensada para e-commerce.</p>
+                    <p class="project-card__text">Loja virtual com grade de produtos, cards de item e página de
+                        produto — apresenta o catálogo de forma rápida de percorrer e comparar.</p>
                     <a href="https://diovannymartins.github.io/modern-ecommerce/" target="_blank"
                         rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
 
                 <article class="project-card" data-categoria="dashboard">
+                    <div class="project-card__media">
+                        <img class="project-card__thumb" src="img/project-admin.webp"
+                            srcset="img/project-admin-768.webp 768w, img/project-admin.webp 1280w"
+                            sizes="(max-width: 768px) 90vw, 380px" alt="Prévia do Admin Dashboard" loading="lazy"
+                            width="1280" height="800">
+                    </div>
                     <h3 class="project-card__title">Admin Dashboard</h3>
-                    <p class="project-card__text">Dashboard administrativo com sidebar, cards informativos e
-                        interface moderna, focado em organização visual e responsividade.</p>
+                    <p class="project-card__text">Painel de gerenciamento com sidebar, cards informativos e interface
+                        responsiva — concentra controles e indicadores em um só lugar.</p>
                     <a href="https://diovannymartins.github.io/admin-dashboard/" target="_blank"
                         rel="noopener noreferrer" class="project-card__link">Acessar Projeto</a>
                 </article>
             </div>
 
             <!-- Exibida via JS quando nenhum projeto corresponde aos filtros ativos -->
-            <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.</p>
+            <p class="projects__empty" id="projetosVazio" role="status" hidden>Nenhum projeto encontrado.
+                Tente outro termo ou limpe o filtro.</p>
         </section>
 
         <section class="contact reveal" id="contato" aria-labelledby="contato-title">
@@ -209,22 +237,23 @@
 
                 <form id="formContato" class="contact__form" novalidate>
                     <div class="contact__field">
-                        <label for="nome" class="sr-only">Nome</label>
-                        <input type="text" id="nome" name="nome" placeholder="Seu nome" autocomplete="name"
+                        <label for="nome" class="contact__label">Nome</label>
+                        <input type="text" id="nome" name="nome" placeholder="Ex.: Maria Silva" autocomplete="name"
                             minlength="3" maxlength="100" required aria-describedby="erroNome">
                         <span class="contact__error" id="erroNome" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
-                        <label for="email" class="sr-only">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="Seu e-mail" autocomplete="email"
+                        <label for="email" class="contact__label">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Ex.: maria@email.com" autocomplete="email"
                             maxlength="254" required aria-describedby="erroEmail">
                         <span class="contact__error" id="erroEmail" aria-live="polite"></span>
                     </div>
 
                     <div class="contact__field">
-                        <label for="mensagem" class="sr-only">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Sua mensagem" minlength="10"
+                        <label for="mensagem" class="contact__label">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" rows="4"
+                            placeholder="Ex.: Olá, gostaria de conversar sobre um projeto." minlength="10"
                             maxlength="5000" required aria-describedby="erroMensagem"></textarea>
                         <span class="contact__error" id="erroMensagem" aria-live="polite"></span>
                     </div>

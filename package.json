@@ -1,7 +1,7 @@
 {
   "name": "frontend-portfolio",
   "version": "1.0.0",
-  "description": "Portfólio front-end responsivo com Vite, backend Express e scripts de automação.",
+  "description": "Portfólio Full-Stack responsivo com Vite, backend Hono e scripts de automação.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -15,6 +15,7 @@
     "pages:deploy": "npm run build && wrangler pages deploy dist",
     "sitemap": "node scripts/gerar-sitemap.js",
     "imagens": "node scripts/otimizar-imagens.js",
+    "screenshots": "node scripts/capturar-screenshots.js",
     "check": "node scripts/verificar-assets.js",
     "test": "node --test",
     "lint": "eslint .",
@@ -23,7 +24,7 @@
     "format:check": "prettier --check ."
   },
   "engines": {
-    "node": ">=20"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.1",
@@ -37,6 +38,7 @@
     "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.11.0",
+    "playwright": "^1.55.0",
     "prettier": "^3.9.6",
     "sharp": "^0.35.3",
     "vite": "^8.2.1",
