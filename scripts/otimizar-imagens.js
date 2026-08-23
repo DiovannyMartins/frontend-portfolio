@@ -31,7 +31,7 @@ for (const arquivo of arquivos) {
   if (destinoParaOrigem.has(destino)) {
     const outro = destinoParaOrigem.get(destino);
     throw new Error(
-      `Destino WebP duplicado: ${path.basename(destino)} seria gerado a partir de "${outro}" e "${arquivo}". Renomeie um dos arquivos.`
+      `Destino WebP duplicado: ${path.basename(destino)} seria gerado a partir de "${outro}" e "${arquivo}". Renomeie um dos arquivos.`,
     );
   }
   destinoParaOrigem.set(destino, arquivo);

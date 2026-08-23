@@ -1,14 +1,22 @@
 import { cp, mkdir } from "node:fs/promises";
 import { defineConfig } from "vite";
 
-// base relativa: o build funciona tanto na raiz quanto em subpastas
-// sem nenhum ajuste.
+// Base relativa para que os assets funcionem também em subpastas.
 export default defineConfig({
   base: "./",
-  define: {
-    __IS_PRODUCTION__: JSON.stringify(process.env.NODE_ENV === "production"),
-  },
   plugins: [
+    {
+      name: "injetar-script-anti-fouc",
+      transformIndexHtml: {
+        order: "post",
+        handler(html) {
+          return html.replace(
+            "<!-- ANTI_FOUC_SCRIPT -->",
+            '<script src="./js/tema-inicial.js"></script>',
+          );
+        },
+      },
+    },
     {
       name: "copiar-arquivos-estaticos",
       // Imagens referenciadas por string no JS (tema.js, copiarEmail.js) não
@@ -35,8 +43,7 @@ export default defineConfig({
     },
   ],
   server: {
-    // Durante o desenvolvimento, encaminha chamadas à API para o backend
-    // Hono (npm run dev:server), mantendo o frontend no Vite e o backend separado.
+    // Durante o desenvolvimento, encaminha chamadas à API para o backend Hono.
     proxy: {
       "/api": "http://localhost:3001",
     },

@@ -36,7 +36,7 @@ export async function enviarEmail({ nome, email, mensagem }, config) {
   }
 
   if (!resposta.ok) {
-    const corpo = await resposta.text();
+    const corpo = (await resposta.text()).slice(0, 1000);
     throw new Error(`Resend respondeu ${resposta.status}: ${corpo}`);
   }
 }

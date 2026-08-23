@@ -45,8 +45,7 @@
     box-shadow 0.3s ease;
 }
 
-.projects__search-input:focus {
-  outline: none;
+.projects__search-input:focus-visible {
   border-color: var(--input-focus);
   box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }

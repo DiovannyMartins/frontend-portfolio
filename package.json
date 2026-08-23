@@ -24,7 +24,7 @@
     "format:check": "prettier --check ."
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.1",

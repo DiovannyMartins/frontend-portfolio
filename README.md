@@ -56,7 +56,7 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, usando Vite apenas como ferramenta de desenvolvimento/build — o código continua JavaScript Vanilla, sem framework. As decisões técnicas principais:
 
 - **Vite para desenvolvimento e build**: dev server com HMR, proxy para a API, minificação e hashing de assets no build. O site continua estático e pode ser publicado em qualquer hosting estático.
-- **Backend Hono opcional**: usado apenas para o formulário de contato. Sem variáveis do Resend, roda em "modo log" (exibe a mensagem no console) — **apenas em desenvolvimento**; em produção o servidor não inicia sem elas.
+- **Backend Hono opcional**: usado apenas para o formulário de contato. Sem variáveis do Resend, roda em "modo log" redigido (por padrão em desenvolvimento) — **apenas em desenvolvimento**; em produção o servidor não inicia sem elas.
 - **Configuração centralizada**: `server/lib/config.js` expõe `carregarConfig(env)`, que lê um objeto de ambiente — `process.env` no Node ou `context.env` no Cloudflare Workers. O mesmo código roda nos dois runtimes.
 - **Segurança no backend**: secure-headers (Hono) com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
@@ -90,7 +90,7 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 
 ## Como rodar localmente
 
-Pré-requisitos: [Node.js](https://nodejs.org) 20 ou superior.
+Pré-requisitos: [Node.js](https://nodejs.org) 22.12 ou superior.
 
 ```bash
 # 1. Clone o repositório
@@ -138,9 +138,10 @@ O formulário usa o [Turnstile](https://www.cloudflare.com/products/turnstile/) 
 - O **token** gerado pelo widget é enviado no campo `turnstile` do corpo do POST.
 - No servidor, `server/routes/contato.js` valida o token via [siteverify](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) (`server/lib/turnstile.js`) usando a secret key.
 - **Sem `TURNSTILE_SECRET_KEY`** (ex.: dev local), a validação é ignorada — o captcha só bloqueia em produção.
+- Configure `TURNSTILE_HOSTNAMES` em produção para restringir tokens aos domínios do site. `TURNSTILE_ACTION` pode ser usado quando o widget tiver uma action definida.
 - O widget é resetado a cada tentativa de envio (o token é de uso único).
 
-Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **Turnstile** → **Add widget** (modo **Managed**, hostnames `diovanny.dev` e `frontend-portfolio-5at.pages.dev`). Em produção, a secret key vai como variável no Cloudflare (ver abaixo).
+Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **Turnstile** → **Add widget** (modo **Managed**, hostnames `diovanny.dev`, `www.diovanny.dev` e `frontend-portfolio-5at.pages.dev`). Em produção, a secret key vai como variável no Cloudflare (ver abaixo).
 
 ### Scripts disponíveis
 

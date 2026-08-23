@@ -65,9 +65,8 @@
     box-shadow 0.3s ease;
 }
 
-.contact__field input:focus,
-.contact__field textarea:focus {
-  outline: none;
+.contact__field input:focus-visible,
+.contact__field textarea:focus-visible {
   border-color: var(--input-focus);
   box-shadow: 0 0 0 3px var(--input-focus-shadow);
 }

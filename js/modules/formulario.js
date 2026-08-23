@@ -23,10 +23,8 @@ export function initFormulario() {
   // Em produção o servidor exige o token do Turnstile; em dev/preview não.
   // Usado para mostrar uma mensagem clara quando o captcha não carrega
   // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
-  // __IS_PRODUCTION__ é injetado pelo Vite em build time (process.env.NODE_ENV === "production").
-  // Em previews do Pages, NODE_ENV=production é definido no build, então o cliente
-  // e o servidor ficam alinhados.
-  const PRODUCAO = __IS_PRODUCTION__;
+  // O Vite substitui import.meta.env.PROD no build e mantém o valor correto no dev.
+  const PRODUCAO = import.meta.env.PROD;
 
   function renderizarTurnstile() {
     if (!widgetTurnstile || typeof window.turnstile === "undefined") {
@@ -39,26 +37,28 @@ export function initFormulario() {
       return;
     }
 
-    turnstileId = window.turnstile.render(widgetTurnstile, {
-      sitekey,
-      theme: "auto",
-      // appearance "always" = o desafio interativo é sempre exibido (não
-      // fica invisível/automático). Dificulta bots que só resolvem o modo
-      // invisível. Outras opções: "execute" e "interaction-only".
-      appearance: "always",
-      callback: (token) => {
-        tokenTurnstile = token;
-      },
-      "expired-callback": () => {
-        tokenTurnstile = "";
-      },
-      "error-callback": () => {
-        tokenTurnstile = "";
-        estadoTurnstile = "falha";
-      },
-    });
+    try {
+      turnstileId = window.turnstile.render(widgetTurnstile, {
+        sitekey,
+        theme: "auto",
+        appearance: "always",
+        action: widgetTurnstile.dataset.action || undefined,
+        callback: (token) => {
+          tokenTurnstile = token;
+        },
+        "expired-callback": () => {
+          tokenTurnstile = "";
+        },
+        "error-callback": () => {
+          tokenTurnstile = "";
+          estadoTurnstile = "falha";
+        },
+      });
 
-    estadoTurnstile = "ok";
+      estadoTurnstile = "ok";
+    } catch {
+      estadoTurnstile = "falha";
+    }
   }
 
   // O script do Turnstile é carregado de forma síncrona no <head> e o objeto

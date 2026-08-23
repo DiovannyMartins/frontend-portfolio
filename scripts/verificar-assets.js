@@ -72,6 +72,10 @@ function extrairReferencias(conteudo, formato) {
           : [valor];
 
       for (const url of urls) {
+        if (url.includes("%BASE_URL%")) {
+          refs.push({ url: url.replace(/^%BASE_URL%/, ""), base: "public" });
+          continue;
+        }
         if (
           url.startsWith("#") ||
           url.startsWith("data:") ||
@@ -104,7 +108,7 @@ async function main() {
     for (const { url, base } of extrairReferencias(conteudo, formato)) {
       const caminho = limparUrl(url);
 
-      const baseAbs = base === "raiz" ? RAIZ : dir;
+      const baseAbs = base === "public" ? path.join(RAIZ, "public") : base === "raiz" ? RAIZ : dir;
       const alvo = path.resolve(baseAbs, caminho);
       referencias.add(path.relative(RAIZ, alvo).replace(/\\/g, "/"));
       try {

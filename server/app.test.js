@@ -146,6 +146,42 @@ describe("API", () => {
     assert.ok(corpo.errors.mensagem);
   });
 
+  it("rejeita content-type diferente de JSON", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await fetch(`${baseUrl}/api/contato`, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: "texto",
+    });
+    assert.equal(resposta.status, 415);
+  });
+
+  it("rejeita campos com caracteres de controle", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, {
+      nome: "Nome\nInjetado",
+      email: "teste@dominio.com",
+      mensagem: "Mensagem válida\u0000 aqui.",
+    });
+    assert.equal(resposta.status, 400);
+    const corpo = await resposta.json();
+    assert.ok(corpo.errors.nome);
+    assert.ok(corpo.errors.mensagem);
+  });
+
+  it("rejeita nome e mensagem acima dos limites", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, {
+      nome: "N".repeat(101),
+      email: "teste@dominio.com",
+      mensagem: "M".repeat(5001),
+    });
+    assert.equal(resposta.status, 400);
+    const corpo = await resposta.json();
+    assert.match(corpo.errors.nome, /100/);
+    assert.match(corpo.errors.mensagem, /5\.000/);
+  });
+
   it("rejeita payload acima do limite com 413", async () => {
     const baseUrl = await iniciarServidor();
     const resposta = await postarContato(baseUrl, {
@@ -198,11 +234,11 @@ describe("Turnstile", () => {
   };
 
   // Substitui o fetch global para simular o siteverify da Cloudflare.
-  function mockSiteverify({ success }) {
+  function mockSiteverify({ success, hostname, action }) {
     const fetchOriginal = globalThis.fetch;
     globalThis.fetch = async (url, init) => {
       if (String(url).includes("turnstile/v0/siteverify")) {
-        return new Response(JSON.stringify({ success }), {
+        return new Response(JSON.stringify({ success, hostname, action }), {
           status: 200,
           headers: { "Content-Type": "application/json" },
         });
@@ -265,6 +301,20 @@ describe("Turnstile", () => {
       assert.equal(resposta.status, 200);
       const corpo = await resposta.json();
       assert.equal(corpo.success, true);
+    } finally {
+      restaurar();
+    }
+  });
+
+  it("rejeita token válido para hostname diferente", async () => {
+    const restaurar = mockSiteverify({ success: true, hostname: "outro.example.com" });
+    try {
+      const baseUrl = await iniciarServidor({
+        TURNSTILE_SECRET_KEY: "segredo",
+        TURNSTILE_HOSTNAMES: "diovanny.dev",
+      });
+      const resposta = await postarContato(baseUrl, corpoValido);
+      assert.equal(resposta.status, 400);
     } finally {
       restaurar();
     }

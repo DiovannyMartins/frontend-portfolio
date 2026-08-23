@@ -15,11 +15,12 @@ function validar(payload) {
     erros.nome = "Informe seu nome completo.";
   }
   if (nome.length > 100) erros.nome = "O nome deve ter no máximo 100 caracteres.";
-  const possuiControle = [...nome].some((caractere) => {
-    const codigo = caractere.codePointAt(0);
-    return codigo < 32 || codigo === 127;
-  });
-  if (possuiControle) {
+  const possuiControle = (valor) =>
+    [...valor].some((caractere) => {
+      const codigo = caractere.codePointAt(0);
+      return codigo < 32 || codigo === 127;
+    });
+  if (possuiControle(nome)) {
     erros.nome = "O nome contém caracteres inválidos.";
   }
   if (typeof payload?.email !== "string" || email.length > 254) {
@@ -27,10 +28,14 @@ function validar(payload) {
   } else if (!validarEmail(email)) {
     erros.email = "Informe um e-mail válido.";
   }
+  if (possuiControle(email)) erros.email = "O e-mail contém caracteres inválidos.";
   if (typeof payload?.mensagem !== "string" || mensagem.length < 10) {
     erros.mensagem = "A mensagem deve ter pelo menos 10 caracteres.";
   }
   if (mensagem.length > 5000) erros.mensagem = "A mensagem deve ter no máximo 5.000 caracteres.";
+  if (possuiControle(mensagem)) {
+    erros.mensagem = "A mensagem contém caracteres inválidos.";
+  }
 
   return {
     valido: Object.keys(erros).length === 0,
@@ -116,7 +121,10 @@ export default function rotaContato(config) {
     // configurada (produção). Sem ela, segue sem validar — útil em dev.
     if (config.turnstile.secretKey) {
       const token = typeof body?.turnstile === "string" ? body.turnstile.trim() : "";
-      const captchaValido = await verificarTurnstile(token, config.turnstile.secretKey);
+      const captchaValido = await verificarTurnstile(token, config.turnstile.secretKey, {
+        expectedHostnames: config.turnstile.expectedHostnames,
+        expectedAction: config.turnstile.expectedAction,
+      });
 
       if (!captchaValido) {
         return c.json(

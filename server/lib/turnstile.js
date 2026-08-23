@@ -3,7 +3,7 @@
 
 const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
-export async function verificarTurnstile(token, secretKey) {
+export async function verificarTurnstile(token, secretKey, options = {}) {
   if (!token || !secretKey) return false;
 
   const controller = new AbortController();
@@ -20,7 +20,16 @@ export async function verificarTurnstile(token, secretKey) {
     if (!resposta.ok) return false;
 
     const dados = await resposta.json();
-    return dados.success === true;
+    if (dados.success !== true) return false;
+
+    const hostnames = options.expectedHostnames || [];
+    if (hostnames.length && !hostnames.includes(String(dados.hostname).toLowerCase())) {
+      return false;
+    }
+
+    if (options.expectedAction && dados.action !== options.expectedAction) return false;
+
+    return true;
   } catch {
     return false;
   } finally {
