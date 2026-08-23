@@ -8,7 +8,7 @@ web
 
 ## Users
 
-Recrutadores e empresas (avaliando o perfil para uma vaga ou contratação) e clientes de trabalhos freelancer (buscando alguém para um projeto específico). Ambos visitam a partir de um link (GitHub, LinkedIn, aplicação de vaga ou indicação), percorrem as seções e decidem se entram em contato.
+Recrutadores e empresas (avaliando o perfil para uma vaga ou contratação) e clientes de trabalhos freelancer (buscando alguém para um projeto específico). Ambos visitam a partir de um link (GitHub, aplicação de vaga ou indicação), percorrem as seções e decidem se entram em contato.
 
 ## Product Purpose
 
@@ -38,7 +38,7 @@ O visitante navega por uma única página (one-page) em pt-BR, nas seções Home
 - Nome: Diovanny Martins — Desenvolvedor Full-Stack.
 - Marca/identidade: "Diovanny.dev".
 - E-mail: diovannydev@gmail.com.
-- Links: GitHub @DiovannyMartins, LinkedIn diovanny-martins, domínio diovanny.dev.
+- Links: GitHub @DiovannyMartins e domínio diovanny.dev.
 - Licença MIT.
 
 ## Evidence on Hand

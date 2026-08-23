@@ -172,10 +172,6 @@
   box-shadow: 0 0 20px var(--glow-faint);
 }
 
-.social-card--linkedin:hover {
-  box-shadow: 0 0 20px var(--glow-faint);
-}
-
 /* copy-email-btn é um <button>, então precisa resetar estilos nativos
    (fonte, cursor, alinhamento) que o <a> da .social-card não tem */
 .copy-email-btn {
