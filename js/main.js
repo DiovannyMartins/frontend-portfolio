@@ -5,6 +5,7 @@ import { initTypingEffect } from "./modules/typingEffect.js";
 import { initFiltroProjetos } from "./modules/filtroProjetos.js";
 import { initCopiarEmail } from "./modules/copiarEmail.js";
 import { initFormulario } from "./modules/formulario.js";
+import { initLivingEditor } from "./modules/livingEditor.js";
 
 initMenuMobile();
 initTema();
@@ -13,5 +14,6 @@ initTypingEffect();
 initFiltroProjetos();
 initCopiarEmail();
 initFormulario();
+initLivingEditor();
 
 document.getElementById("anoAtual").textContent = new Date().getFullYear();

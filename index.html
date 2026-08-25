@@ -75,28 +75,32 @@
     <header class="header" role="banner">
       <a href="#home" class="header__logo" aria-label="Diovanny.dev - Página inicial">
         <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64" />
-        Diovanny.dev
+        <span class="header__logo-text">Diovanny.dev</span>
       </a>
 
       <nav class="nav" id="mainNav" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
           <li class="nav__item"><a class="nav__link" href="#home">Home</a></li>
           <li class="nav__item"><a class="nav__link" href="#sobre">Sobre</a></li>
+          <li class="nav__item"><a class="nav__link" href="#tecnologias">Tecnologias</a></li>
           <li class="nav__item"><a class="nav__link" href="#projetos">Projetos</a></li>
           <li class="nav__item"><a class="nav__link" href="#contato">Contato</a></li>
+          <li class="nav__item nav__theme-item">
+            <button
+              type="button"
+              id="themeToggle"
+              class="theme-toggle"
+              aria-label="Ativar tema claro"
+              aria-pressed="false"
+            >
+              <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true" />
+              <span class="theme-toggle__label" id="themeLabel">Tema claro</span>
+            </button>
+          </li>
         </ul>
       </nav>
 
       <div class="header__actions">
-        <button
-          type="button"
-          id="themeToggle"
-          class="theme-toggle"
-          aria-label="Ativar tema claro"
-          aria-pressed="false"
-        >
-          <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true" />
-        </button>
         <button
           type="button"
           class="header__menu-toggle"
@@ -114,6 +118,7 @@
 
     <main id="main" role="main" tabindex="-1">
       <section class="hero" id="home" aria-labelledby="typingText">
+        <canvas class="hero__code-field" id="codeField" aria-hidden="true"></canvas>
         <div class="hero__content">
           <!-- Texto no HTML serve de fallback caso o JS do efeito de digitação não carregue -->
           <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Full-Stack">
@@ -150,7 +155,7 @@
         </p>
       </section>
 
-      <section class="skills reveal" aria-labelledby="skills-title">
+      <section class="skills reveal" id="tecnologias" aria-labelledby="skills-title">
         <h2 class="skills__title" id="skills-title">Minhas Tecnologias</h2>
 
         <div class="skills__grid">

@@ -5,6 +5,7 @@ export function initTema() {
 
   const root = document.documentElement;
   const themeColor = document.querySelector('meta[name="theme-color"]');
+  const themeLabel = document.getElementById("themeLabel");
 
   // [elemento, imagem no tema claro, imagem no tema escuro]
   // Caminhos em string (e não import) para que o site funcione também em
@@ -45,6 +46,9 @@ export function initTema() {
     const claro = temaAtual() === "light";
     themeToggle.setAttribute("aria-pressed", String(claro));
     themeToggle.setAttribute("aria-label", claro ? "Ativar tema escuro" : "Ativar tema claro");
+    if (themeLabel) {
+      themeLabel.textContent = claro ? "Tema escuro" : "Tema claro";
+    }
   }
 
   atualizarImagens();

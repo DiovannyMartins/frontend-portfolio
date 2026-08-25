@@ -147,6 +147,8 @@
 
 .project-card__link {
   display: flex;
+  align-items: center;
+  min-height: 44px;
   background-color: var(--bg-button);
   color: var(--text-primary);
   border-radius: 15px;

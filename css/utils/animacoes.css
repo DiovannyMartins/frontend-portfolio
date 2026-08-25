@@ -10,16 +10,83 @@
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transform: none;
 }
 
-.reveal--visible {
-  opacity: 1;
-  transform: translateY(0);
+.motion-ready .reveal > * {
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.motion-ready .about:not(.reveal--visible) > * {
+  opacity: 0.2;
+  filter: blur(10px);
+  clip-path: inset(0 0 35% 0);
+  transform: translateY(46px);
+}
+
+.motion-ready .skills:not(.reveal--visible) > .skills__title {
+  opacity: 0.2;
+  filter: blur(8px);
+  transform: translateY(32px);
+}
+
+.motion-ready .skills:not(.reveal--visible) .skills__card {
+  opacity: 0.12;
+  filter: blur(8px);
+  transform: translateY(54px) scale(0.94);
+}
+
+.motion-ready .skills__card,
+.motion-ready .project-card {
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.motion-ready .skills .skills__card:nth-child(2) {
+  transition-delay: 80ms;
+}
+
+.motion-ready .skills .skills__card:nth-child(3) {
+  transition-delay: 160ms;
+}
+
+.motion-ready .skills .skills__card:nth-child(4) {
+  transition-delay: 240ms;
+}
+
+.motion-ready .projects:not(.reveal--visible) > :not(.projects__grid) {
+  opacity: 0.15;
+  filter: blur(8px);
+  transform: translateY(34px);
+}
+
+.motion-ready .projects:not(.reveal--visible) .project-card {
+  opacity: 0.12;
+  filter: blur(7px);
+  transform: translateY(48px) scale(0.96);
+}
+
+.motion-ready .projects .project-card:nth-child(even) {
+  transition-delay: 90ms;
+}
+
+.motion-ready .contact:not(.reveal--visible) .contact__info {
+  opacity: 0.15;
+  filter: blur(9px);
+  transform: translateX(-44px);
+}
+
+.motion-ready .contact:not(.reveal--visible) .contact__social {
+  opacity: 0.15;
+  filter: blur(9px);
+  transform: translateX(44px);
 }
 
 /* Transição cinematográfica de tema (View Transitions): o novo tema "desce"

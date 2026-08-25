@@ -22,13 +22,16 @@ function initProgressoLeitura() {
 
 function initScrollReveal() {
   const elementos = document.querySelectorAll(".reveal");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (elementos.length === 0) return;
 
-  if (!("IntersectionObserver" in window)) {
+  if (!("IntersectionObserver" in window) || reducedMotion) {
     elementos.forEach((elemento) => elemento.classList.add("reveal--visible"));
     return;
   }
+
+  document.documentElement.classList.add("motion-ready");
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -41,7 +44,7 @@ function initScrollReveal() {
     },
     // Dispara quando 15% do elemento está visível — evita que seções grandes
     // fora da tela já sejam marcadas como "visíveis" antes da hora.
-    { threshold: 0.15 },
+    { threshold: 0.08, rootMargin: "0px 0px -10% 0px" },
   );
 
   elementos.forEach((el) => observer.observe(el));

@@ -1,0 +1,211 @@
+/* Overdrive: editor vivo como aprimoramento progressivo da hero. */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: clamp(620px, calc(100svh - 75px), 860px);
+  padding: 70px clamp(20px, 5vw, 80px);
+  gap: clamp(48px, 7vw, 120px);
+}
+
+.hero__code-field {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.hero__content {
+  align-items: flex-start;
+  width: min(100%, 650px);
+  padding: 0;
+}
+
+.hero__title {
+  max-width: 11ch;
+  font-size: clamp(40px, 5.3vw, 50px);
+  letter-spacing: -0.035em;
+}
+
+.hero__text {
+  max-width: 55ch;
+}
+
+.hero__accent {
+  margin-top: -16px;
+  transform-origin: left;
+}
+
+.hero__media {
+  position: relative;
+  width: min(46vw, 640px);
+  padding-top: 42px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 15px;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 28px 70px -38px var(--shadow-dark);
+  transform: perspective(1200px) rotateY(-3deg) rotateX(1deg);
+  transform-origin: center;
+}
+
+.hero__media::before {
+  content: "portfolio.js    •    preview";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 42px;
+  padding-inline: 16px;
+  color: var(--text-secondary);
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  letter-spacing: 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hero__image {
+  display: block;
+  border-radius: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  .hero__content {
+    animation: hero-content-depart linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 58vh;
+  }
+
+  .hero__media {
+    animation: hero-media-depart linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 70vh;
+  }
+
+  .hero__code-field {
+    animation: hero-field-depart linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 70vh;
+  }
+}
+
+@keyframes hero-content-depart {
+  to {
+    opacity: 0.18;
+    filter: blur(5px);
+    transform: translateY(70px) scale(0.96);
+  }
+}
+
+@keyframes hero-media-depart {
+  to {
+    opacity: 0.28;
+    filter: blur(3px);
+    transform: perspective(1200px) translateY(-90px) rotateY(3deg) rotateX(-1deg) scale(0.94);
+  }
+}
+
+@keyframes hero-field-depart {
+  to {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 769px) {
+  .header__logo {
+    font-size: 20px;
+  }
+
+  .nav__list {
+    gap: 6px;
+    padding: 16px 8px;
+  }
+
+  .nav__link {
+    padding-inline: 10px;
+    font-size: 18px;
+  }
+
+  .header__actions {
+    gap: 8px;
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    padding-block: 80px;
+  }
+
+  .hero__media {
+    width: min(44vw, 500px);
+  }
+}
+
+@media (max-width: 768px) {
+  .header__logo {
+    padding: 8px;
+    font-size: 20px;
+  }
+
+  .header__actions {
+    gap: 10px;
+    margin: 0 0 0 auto;
+    padding-right: 10px;
+  }
+
+  .header__menu-toggle {
+    margin-right: 0;
+  }
+
+  .hero {
+    min-height: calc(100svh - 80px);
+    padding: 72px 20px;
+  }
+
+  .hero__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__title {
+    width: 100%;
+    max-width: none;
+    font-size: 40px;
+    overflow-wrap: normal;
+    word-break: keep-all;
+  }
+
+  .hero__accent {
+    transform-origin: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__code-field {
+    opacity: 0.3;
+  }
+
+  .hero__content,
+  .hero__media,
+  .hero__code-field {
+    animation: none !important;
+  }
+
+  .motion-ready .reveal > *,
+  .motion-ready .reveal .skills__card,
+  .motion-ready .reveal .project-card {
+    opacity: 1;
+    filter: none;
+    clip-path: none;
+    transform: none;
+  }
+}
