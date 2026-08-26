@@ -23,8 +23,10 @@ export function initFormulario() {
   // Em produção o servidor exige o token do Turnstile; em dev/preview não.
   // Usado para mostrar uma mensagem clara quando o captcha não carrega
   // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
-  // O Vite substitui import.meta.env.PROD no build e mantém o valor correto no dev.
-  const PRODUCAO = import.meta.env.PROD;
+  // O Vite substitui import.meta.env.PROD no build e mantém o valor correto no
+  // dev; fora do Vite (Live Server / hospedagem estática crua) import.meta.env
+  // não existe e o `?.` evita que o módulo quebre — nesse caso não é produção.
+  const PRODUCAO = import.meta.env?.PROD ?? false;
 
   function renderizarTurnstile() {
     if (!widgetTurnstile || typeof window.turnstile === "undefined") {
