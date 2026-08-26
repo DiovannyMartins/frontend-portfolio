@@ -25,6 +25,7 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 - ESLint + Prettier para lint e formatação consistente
 - Scripts de automação: sitemap, verificação de assets e otimização de imagens
 - Anti-spam com honeypot e Cloudflare Turnstile (CAPTCHA) no formulário de contato
+- Hero com "editor vivo" (canvas animado com tokens de código) como aprimoramento progressivo
 - Responsivo (layout adapta-se a todas as telas)
 - Dark/Light Mode
 - Acessível (ARIA)
@@ -60,7 +61,7 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 - **Configuração centralizada**: `server/lib/config.js` expõe `carregarConfig(env)`, que lê um objeto de ambiente — `process.env` no Node ou `context.env` no Cloudflare Workers. O mesmo código roda nos dois runtimes.
 - **Segurança no backend**: secure-headers (Hono) com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
-- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
+- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect, editor vivo) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
 - **Anti-FOUC no tema**: `public/js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
 - **Testes com `node --test`**: cobertura da validação, CORS, rate limit e dos endpoints da API, sem dependências adicionais.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
@@ -80,6 +81,7 @@ O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de 
 - **Scroll reveal** nas seções ao rolar a página
 - **Botão voltar ao topo** com animação fade
 - **Efeito de digitação** no título hero
+- **Editor vivo na hero** — canvas animado com tokens de código que reage ao ponteiro; desliga em `prefers-reduced-motion` e em telas sensíveis ao toque
 - **Skip link** para navegação por teclado
 - **Imagens otimizadas** em WebP com lazy loading
 - **Testes automatizados** da API (`npm test`)
@@ -163,6 +165,7 @@ Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **
 | `npm run sitemap`      | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
 | `npm run check`        | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                   |
 | `npm run imagens`      | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                           |
+| `npm run screenshots`  | Captura screenshots dos projetos (Playwright) e gera as thumbnails WebP em `img/`                  |
 
 ### Deploy — Cloudflare Pages
 
@@ -212,6 +215,9 @@ npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name frontend-portf
 ```
 frontend-portfolio/
 ├── public/
+│   ├── _headers              # Cabeçalhos HTTP/segurança (Cloudflare Pages)
+│   ├── js/
+│   │   └── tema-inicial.js   # Anti-FOUC (aplica o tema antes do render)
 │   ├── robots.txt            # Diretrizes para crawlers
 │   └── sitemap.xml           # Mapa do site (gerado via npm run sitemap)
 ├── shared/
@@ -224,6 +230,7 @@ frontend-portfolio/
 │   ├── components/
 │   │   ├── header.css         # Header e navegação
 │   │   ├── hero.css           # Seção hero
+│   │   ├── overdrive.css      # Editor vivo da hero (canvas, aprimoramento progressivo)
 │   │   ├── about-skills.css   # Sobre mim e cards de tecnologias
 │   │   ├── projetos.css       # Grid e filtros de projetos
 │   │   ├── contato.css        # Formulário e redes sociais
@@ -235,7 +242,6 @@ frontend-portfolio/
 │   │   └── animacoes.css      # Keyframes e scroll reveal
 │   └── main.css               # Entry point (importa todos os módulos)
 ├── js/
-│   ├── tema-inicial.js        # Anti-FOUC (em public/js/; aplica o tema antes do render)
 │   ├── modules/
 │   │   ├── tema.js            # Dark/Light mode
 │   │   ├── menu.js            # Menu mobile
@@ -244,7 +250,8 @@ frontend-portfolio/
 │   │   ├── formulario.js      # Validação e envio do formulário
 │   │   ├── copiarEmail.js     # Copiar e-mail
 │   │   ├── toast.js           # Notificações toast
-│   │   └── typingEffect.js    # Efeito de digitação
+│   │   ├── typingEffect.js    # Efeito de digitação
+│   │   └── livingEditor.js    # Editor vivo da hero (canvas animado)
 │   └── main.js                # Entry point (inicializa módulos)
 ├── functions/
 │   └── api/
@@ -262,7 +269,8 @@ frontend-portfolio/
 ├── scripts/
 │   ├── gerar-sitemap.js       # Regenera public/sitemap.xml
 │   ├── verificar-assets.js    # Checa referências locais e imagens órfãs
-│   └── otimizar-imagens.js    # Converte PNGs/JPGs para WebP
+│   ├── otimizar-imagens.js    # Converte PNGs/JPGs para WebP
+│   └── capturar-screenshots.js# Captura thumbnails dos projetos (Playwright + sharp)
 ├── img/                       # Imagens e ícones (WebP otimizado)
 ├── index.html                 # Página principal (entry point do Vite)
 ├── vite.config.js             # Configuração do Vite (build, proxy e cópia de estáticos)
@@ -270,6 +278,10 @@ frontend-portfolio/
 ├── eslint.config.js           # Configuração do ESLint (flat config)
 ├── .prettierrc.json           # Configuração do Prettier
 ├── .prettierignore            # Arquivos ignorados pelo Prettier
+├── DESIGN.md                  # Notas de design, cores e diretrizes visuais
+├── PRODUCT.md                 # Especificação do produto
+├── desktop-full.png           # Screenshot do site (tema escuro)
+├── desktop-light.png          # Screenshot do site (tema claro)
 ├── package.json               # Scripts e dependências
 └── README.md
 ```
@@ -284,6 +296,7 @@ frontend-portfolio/
 - **Responsividade** — media queries, grid e flexbox para adaptar o layout às telas
 - **Acessibilidade** — ARIA labels, navegação por teclado, skip link, focus management
 - **Performance** — lazy loading de imagens, preload de recursos críticos, preconnect para fontes externas
+- **Aprimoramento progressivo** — "editor vivo" na hero com Canvas API, desativado quando há `prefers-reduced-motion` ou tela sensível ao toque
 - **Persistência de estado** — uso de `localStorage` para manter preferências do usuário entre sessões
 - **Validação de formulário** — feedback visual em tempo real no frontend e validação server-side no Hono, com regras compartilhadas em fonte única
 - **Backend com Hono** — rotas, middlewares, rate limit, envio de e-mail com Resend, modo log para desenvolvimento e configuração por ambiente (`process.env`/`context.env`)
