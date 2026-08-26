@@ -23,20 +23,20 @@
 }
 
 .motion-ready .about:not(.reveal--visible) > * {
-  opacity: 0.2;
+  opacity: 0;
   filter: blur(10px);
   clip-path: inset(0 0 35% 0);
   transform: translateY(46px);
 }
 
 .motion-ready .skills:not(.reveal--visible) > .skills__title {
-  opacity: 0.2;
+  opacity: 0;
   filter: blur(8px);
   transform: translateY(32px);
 }
 
 .motion-ready .skills:not(.reveal--visible) .skills__card {
-  opacity: 0.12;
+  opacity: 0;
   filter: blur(8px);
   transform: translateY(54px) scale(0.94);
 }
@@ -62,13 +62,13 @@
 }
 
 .motion-ready .projects:not(.reveal--visible) > :not(.projects__grid) {
-  opacity: 0.15;
+  opacity: 0;
   filter: blur(8px);
   transform: translateY(34px);
 }
 
 .motion-ready .projects:not(.reveal--visible) .project-card {
-  opacity: 0.12;
+  opacity: 0;
   filter: blur(7px);
   transform: translateY(48px) scale(0.96);
 }
@@ -78,13 +78,13 @@
 }
 
 .motion-ready .contact:not(.reveal--visible) .contact__info {
-  opacity: 0.15;
+  opacity: 0;
   filter: blur(9px);
   transform: translateX(-44px);
 }
 
 .motion-ready .contact:not(.reveal--visible) .contact__social {
-  opacity: 0.15;
+  opacity: 0;
   filter: blur(9px);
   transform: translateX(44px);
 }
