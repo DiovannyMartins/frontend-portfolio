@@ -34,7 +34,7 @@ export function initLivingEditor() {
       y: ((index * 271 + 83) % 991) / 991,
       speed: 0.000012 + (index % 5) * 0.000004,
       phase: index * 0.73,
-      alpha: 0.045 + (index % 4) * 0.018,
+      alpha: 0.06 + (index % 4) * 0.02,
     }));
   }
 
