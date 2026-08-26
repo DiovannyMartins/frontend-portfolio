@@ -5,9 +5,9 @@
   --text-primary: rgb(255, 255, 255);
   --text-secondary: rgb(203, 213, 225);
   --border-subtle: rgba(255, 255, 255, 0.28);
-  --focus-ring: rgb(129, 140, 248);
+  --focus-ring: rgb(147, 153, 240);
   --on-accent: rgb(20, 20, 20);
-  --glow-accent: rgba(129, 140, 248, 0.45);
+  --glow-accent: rgba(147, 153, 240, 0.45);
   --input-focus: rgba(255, 255, 255, 0.7);
   --input-focus-shadow: rgba(255, 255, 255, 0.16);
   --status-success: rgb(80, 200, 120);
@@ -41,9 +41,9 @@ html.light-mode {
   --text-primary: rgb(20, 20, 20);
   --text-secondary: rgb(60, 60, 60);
   --border-subtle: rgba(20, 20, 20, 0.24);
-  --focus-ring: rgb(67, 56, 202);
+  --focus-ring: rgb(59, 48, 184);
   --on-accent: rgb(255, 255, 255);
-  --glow-accent: rgba(67, 56, 202, 0.35);
+  --glow-accent: rgba(59, 48, 184, 0.35);
   --input-focus: rgba(20, 20, 20, 0.7);
   --input-focus-shadow: rgba(20, 20, 20, 0.12);
   --status-success: rgb(20, 130, 70);
