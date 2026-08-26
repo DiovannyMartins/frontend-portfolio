@@ -22,6 +22,7 @@ export function initLivingEditor() {
     return {
       ink: styles.getPropertyValue("--text-primary").trim(),
       accent: styles.getPropertyValue("--focus-ring").trim(),
+      alphaScale: parseFloat(styles.getPropertyValue("--code-field-alpha-scale")) || 1,
     };
   }
 
@@ -73,12 +74,12 @@ export function initLivingEditor() {
         }
       }
 
-      context.globalAlpha = token.alpha;
+      context.globalAlpha = token.alpha * palette.alphaScale;
       context.fillStyle = palette.ink;
       context.fillText(token.text, x, y);
 
       if (index % 4 === 0) {
-        context.globalAlpha = token.alpha * 0.55;
+        context.globalAlpha = token.alpha * 0.55 * palette.alphaScale;
         context.strokeStyle = palette.ink;
         context.lineWidth = 0.7;
         context.beginPath();
@@ -105,9 +106,16 @@ export function initLivingEditor() {
     context.globalAlpha = 1;
   }
 
+  let lastFrameTime = 0;
+
   function animate(timestamp) {
-    draw(timestamp);
     animationFrame = requestAnimationFrame(animate);
+    // Em dispositivos touch (mobile), limita a animação a ~30fps. O movimento
+    // dos tokens é lento, então a fluidez visual se mantém, e o consumo de
+    // CPU/bateria cai — evitando aquecimento e engasgos em aparelhos modestos.
+    if (coarsePointer.matches && timestamp - lastFrameTime < 33) return;
+    lastFrameTime = timestamp;
+    draw(timestamp);
   }
 
   function start() {

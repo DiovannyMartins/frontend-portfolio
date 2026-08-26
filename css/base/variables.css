@@ -25,6 +25,12 @@
   --shadow-light: rgba(232, 232, 232, 0.2);
   --shadow-dark: rgb(60, 60, 60);
 
+  /* Escala de opacidade dos tokens do "editor vivo" da hero. A percepção de
+     contraste é relativa ao fundo (ΔL/L): no tema escuro os tokens claros já
+     aparecem com opacidade baixa; no tema claro a mesma opacidade some sobre o
+     fundo quase branco, então a escala precisa ser maior. */
+  --code-field-alpha-scale: 1;
+
   --font-body: "Inter", sans-serif;
 }
 
@@ -52,4 +58,6 @@ html.light-mode {
 
   --shadow-light: rgba(200, 200, 200, 0.4);
   --shadow-dark: rgba(60, 60, 60, 0.25);
+
+  --code-field-alpha-scale: 2.5;
 }
