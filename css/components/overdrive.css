@@ -201,7 +201,7 @@
   }
 
   .motion-ready .reveal > *,
-  .motion-ready .reveal .skills__card,
+  .motion-ready .reveal .skills__window,
   .motion-ready .reveal .project-card {
     opacity: 1;
     filter: none;

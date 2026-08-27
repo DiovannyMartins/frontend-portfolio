@@ -36,7 +36,6 @@ typography:
 rounded:
   sm: "10px"
   md: "15px"
-  lg: "30px"
   full: "50%"
 spacing:
   xs: "10px"
@@ -74,16 +73,16 @@ components:
 
 O sistema visual é um editor de código em dark mode: um fundo neutro-escuro (`rgb(30, 30, 30)`), um único acento índigo reservado a foco e feedback, e a Inter — a fonte de UI por excelência — em toda parte. Não há ornamento; a identidade vem da precisão de ferramenta, não da decoração. O design serve ao conteúdo como um editor serve ao trabalho: ordenado, legível, sem distração.
 
-A profundidade é majoritariamente plana, construída por três degraus tonais de cinza (`neutral-bg` → `neutral-surface` → `neutral-control`). A sombra neumórfica aparece em exatamente um lugar — os cards de skills — e o glow branco suave responde ao hover dos controles. Sombra é destaque, não padrão.
+A profundidade é majoritariamente plana, construída por três degraus tonais de cinza (`neutral-bg` → `neutral-surface` → `neutral-control`). A única elevação real é a das "janelas" — a mídia da hero e a janela `stack.ts` da seção Tecnologias — que flutuam com a mesma sombra longa; o glow branco suave responde ao hover dos controles. Sombra é destaque, não padrão.
 
 O sistema alterna entre dark e light por `prefers-color-scheme` e persistência em `localStorage`. O dark é o estado canônico (definido em `:root`); o light inverte os tons mantendo a mesma gramática.
 
 **Key Characteristics:**
 
 - Fundo neutro-escuro de IDE (`rgb(30, 30, 30)`) com um único acento índigo.
-- Inter (400–900) como única família tipográfica.
+- Inter (400–900) como única família tipográfica de UI; `ui-monospace` apenas como "voz de código" (barras de janela e trechos de código).
 - Superfícies planas com três degraus tonais; sombra apenas como destaque.
-- Raio de 15px dominante (controles e cards), 10px em inputs, 30px nos cards de skills.
+- Raio de 15px dominante (controles, cards e janelas), 10px em inputs.
 - Feedback de cor restrito a verde (sucesso) e vermelho (erro) em estados de formulário.
 
 ## Colors
@@ -108,6 +107,13 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 - **Success Green** (`rgb(80, 200, 120)`): validação válida e feedback de sucesso.
 - **Error Red** (`rgb(255, 130, 130)`): validação inválida e mensagens de erro.
 
+### Brand Marks (content)
+
+Cores dos logos oficiais das tecnologias na janela `stack.ts` — tratadas como conteúdo (como as thumbnails dos projetos), nunca como acento de UI:
+
+- **HTML5** `rgb(227, 79, 38)` · **CSS3** `rgb(21, 114, 182)` · **JavaScript** `rgb(247, 223, 30)` · **TypeScript** `rgb(49, 120, 198)` · **Node.js** `rgb(95, 160, 78)` · **Git** `rgb(240, 81, 51)`.
+- No light mode, o amarelo do JavaScript escurece via `color-mix(in srgb, rgb(247, 223, 30) 55%, black)` para manter contraste.
+
 ### Named Rules
 
 **The One Accent Rule.** O Selection Indigo marca quatro momentos: o anel de foco, o cursor de digitação, a barra de acento da hero e a ação primária (CTA/submit). Fora desses quatro, a interface é puro cinza. Sua raridade é o ponto.
@@ -116,6 +122,8 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 
 **Display Font:** Inter (com fallback `sans-serif`)
 **Body Font:** Inter (com fallback `sans-serif`)
+
+**Code Voice:** `ui-monospace, monospace` — a voz de "código" da interface (13px nas barras de janela, 15px nos trechos de código da hero e da janela `stack.ts`, 14px em mobile). Nunca usada em texto de UI; é o conteúdo do editor, não a interface.
 
 **Character:** Uma única família, pesos 400–900, carregada com eixo variável (14–32 opsz). A hierarquia vem do peso e do tamanho, nunca de uma segunda fonte — a disciplina de uma ferramenta de software.
 
@@ -129,25 +137,25 @@ Paleta monocromática de cinzas de interface sobre a qual um único índigo — 
 
 ## Layout
 
-Página única com header fixo de ~80px (`scroll-margin-top` compensa âncoras). O conteúdo é um fluxo vertical de seções full-width que alternam entre `Editor Base` e `Panel`, cada uma centrada com `flex`/`grid`. A hero divide o espaço lado a lado (texto + imagem) em `space-evenly` e colapsa para uma coluna central na marca de 768px, ocultando a imagem. Grades responsivas usam `grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))` (skills, até ~1000px) e `minmax(min(100%, 300px), 1fr)` (projects). Dois breakpoints: 768px (mobile) e 900px (ajuste dos cards de skills). O ritmo de espaçamento é 10 / 15 / 20 / 30 / 50px.
+Página única com header fixo de ~80px (`scroll-margin-top` compensa âncoras). O conteúdo é um fluxo vertical de seções full-width que alternam entre `Editor Base` e `Panel`, cada uma centrada com `flex`/`grid`. A hero divide o espaço lado a lado (texto + imagem) em `space-evenly` e colapsa para uma coluna central na marca de 768px, ocultando a imagem. A seção Tecnologias centra uma janela de editor de `min(100%, 640px)`; a grade de projetos usa `minmax(min(100%, 300px), 1fr)`. Um breakpoint principal: 768px (mobile). O ritmo de espaçamento é 10 / 15 / 20 / 30 / 50px.
 
 ## Elevation & Depth
 
-**Flat por padrão, com profundidade pontual.** A hierarquia nasce da alternância tonal de três degraus, não de sombras. Sombra e glow são reservados para dois momentos: a sombra neumórfica dos cards de skills e o glow de resposta ao hover dos controles. Não há elevação estrutural (nenhum card "flutua" por padrão).
+**Flat por padrão, com profundidade pontual.** A hierarquia nasce da alternância tonal de três degraus, não de sombras. Sombra e glow são reservados para dois momentos: a sombra longa das janelas (hero e Tecnologias) e o glow de resposta ao hover dos controles. Não há elevação estrutural (nenhum card "flutua" por padrão).
 
 ### Shadow Vocabulary
 
-- **Neumorphic Relief** (`box-shadow: 10px 10px 20px var(--shadow-light), -10px -10px 20px var(--shadow-dark)`): apenas nos cards de skills, simulando relevo físico claro + escuro.
+- **Window Float** (`box-shadow: 0 28px 70px -38px var(--shadow-dark)`): apenas nas janelas — a mídia da hero e a janela `stack.ts` de Tecnologias.
 - **Hover Glow** (`box-shadow: 0 0 0.5em 0 rgba(255, 255, 255, 0.5)`): resposta padrão ao hover de botões, links de navegação e chips.
 - **Toast Shadow** (`box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3)`): única sombra "levantada" real, no toast.
 
 ### Named Rules
 
-**The Flat-By-Default Rule.** Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (skills). Nunca como padrão de todos os cards.
+**The Flat-By-Default Rule.** Superfícies são planas em repouso. Sombra aparece só como resposta a um estado (hover) ou como destaque deliberado (janelas). Nunca como padrão de todos os cards.
 
 ## Shapes
 
-Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usam 10px; os cards de skills sobem para 30px (o único elemento generosamente curvo); o botão "voltar ao topo" é um círculo perfeito (50%). Bordas são sempre hairline de 1px quando existem. Nenhum recorte, silhueta ou geometria decorativa.
+Forma arredondada e contida. O raio de 15px domina controles, cards e janelas; inputs usam 10px; o botão "voltar ao topo" é um círculo perfeito (50%). Bordas são sempre hairline de 1px quando existem. Nenhum recorte, silhueta ou geometria decorativa.
 
 ## Components
 
@@ -166,11 +174,19 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 
 ### Cards / Containers
 
-- **Corner Style:** 15px (project-card), 30px (skills-card).
+- **Corner Style:** 15px (project-card e janelas).
 - **Background:** `Editor Base` (cards ficam sobre o `Panel` da seção).
 - **Project card:** abre com uma thumbnail de screenshot (`aspect-ratio: 16/10`, raio 10px, `object-fit: cover`) seguida de título, texto e link; plano e levanta no hover (`translateY(-5px)`).
-- **Shadow Strategy:** project-card é plano; skills-card carrega a sombra neumórfica permanente.
-- **Internal Padding:** 20px (project-card), 20px (skills-card).
+- **Shadow Strategy:** project-card é plano; janelas carregam a `Window Float`.
+- **Internal Padding:** 20px (project-card).
+
+### Janela de Editor (stack.ts)
+
+- **Style:** a seção Tecnologias é uma janela de editor idêntica em gramática à mídia da hero: fundo `Panel`, borda hairline, raio 15px, `Window Float`, `min(100%, 640px)`.
+- **Bar:** 42px com aba `stack.ts` em `ui-monospace` 13px (`Ink`) e meta muted; borda inferior hairline — o mesmo chrome da hero.
+- **Editor:** linhas de código numeradas (números muted, `user-select: none`); linhas decorativas `const stack = [` / `];` são `aria-hidden`; cada tecnologia é uma linha com o logo oficial em SVG inline (22px, cor da marca — o único colorido do sistema, tratado como conteúdo, não como acento) + nome em mono 500 `Ink` + vírgula muted.
+- **Hover:** a linha acende com highlight neutro translúcido (`--glow-faint`), como seleção de linha de editor.
+- **Temas:** cores de marca fixas; no light mode o amarelo do JavaScript escurece via `color-mix` para manter contraste.
 
 ### Inputs / Fields
 
@@ -196,15 +212,15 @@ Forma arredondada e contida. O raio de 15px domina controles e cards; inputs usa
 
 - **Do** usar o Selection Indigo apenas no foco, no cursor de digitação, na barra de acento da hero e na ação primária (CTA/submit) — nunca como preenchimento decorativo.
 - **Do** construir hierarquia com os três degraus tonais (`Editor Base`, `Panel`, `Control`).
-- **Do** usar raio 15px em controles, 10px em inputs e 30px apenas nos cards de skills.
+- **Do** usar raio 15px em controles, cards e janelas; 10px em inputs.
 - **Do** abrir os cards de projeto com uma thumbnail real do trabalho (nunca um placeholder decorativo).
 - **Do** manter Inter como única família; varie peso (400–900) e tamanho, não a fonte.
 - **Do** levantar e acender controles no hover (`translateY` + glow), com 0.3s ease.
 
 ### Don't:
 
-- **Don't** introduzir uma segunda cor de acento ou qualquer paleta "colorida" além do índigo.
-- **Don't** aplicar a sombra neumórfica fora dos cards de skills — ela é o destaque, não a regra.
+- **Don't** introduzir uma segunda cor de acento ou qualquer paleta "colorida" além do índigo — cor de marca só nos logos-SVG das tecnologias, como conteúdo.
+- **Don't** usar sombra neumórfica ou sombras estruturais em cards; elevação só nas janelas (hero e Tecnologias) e no toast.
 - **Don't** dar sombras estruturais a cards comuns; a superfície é plana em repouso.
-- **Don't** usar raios maiores que 30px em cards, nem quebrar a escala 10/15/30/50%.
-- **Don't** misturar uma segunda família tipográfica na interface.
+- **Don't** usar raios maiores que 15px em cards e janelas, nem quebrar a escala 10/15/50%.
+- **Don't** usar `ui-monospace` fora das janelas/código — a voz de código nunca vira voz de UI.

@@ -35,30 +35,18 @@
   transform: translateY(32px);
 }
 
-.motion-ready .skills:not(.reveal--visible) .skills__card {
+.motion-ready .skills:not(.reveal--visible) .skills__window {
   opacity: 0;
   filter: blur(8px);
   transform: translateY(54px) scale(0.94);
 }
 
-.motion-ready .skills__card,
+.motion-ready .skills__window,
 .motion-ready .project-card {
   transition:
     opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
     filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.motion-ready .skills .skills__card:nth-child(2) {
-  transition-delay: 80ms;
-}
-
-.motion-ready .skills .skills__card:nth-child(3) {
-  transition-delay: 160ms;
-}
-
-.motion-ready .skills .skills__card:nth-child(4) {
-  transition-delay: 240ms;
 }
 
 .motion-ready .projects:not(.reveal--visible) > :not(.projects__grid) {
