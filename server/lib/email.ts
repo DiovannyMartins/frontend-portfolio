@@ -1,6 +1,8 @@
 // Envio de e-mail via Resend (API REST). Funciona no Node e no Workers,
 // pois usa apenas `fetch` — sem dependência de sockets/SMTP.
-export async function enviarEmail({ nome, email, mensagem }, config) {
+import type { AppConfig, ContatoDados } from "../../shared/types.ts";
+
+export async function enviarEmail({ nome, email, mensagem }: ContatoDados, config: AppConfig) {
   // Sem RESEND_API_KEY/RESEND_FROM no ambiente, roda em "modo log":
   // a mensagem aparece no console em vez de ser enviada por e-mail.
   if (!config.resend.apiKey || !config.resend.from) {
@@ -11,10 +13,18 @@ export async function enviarEmail({ nome, email, mensagem }, config) {
     return;
   }
 
+  // emailDestino é normalizado em carregarConfig: cai para RESEND_FROM
+  // quando EMAIL_DESTINO não está definido (dev). Aqui apenas garante que o
+  // valor opcional seja verificado antes de compor o payload do Resend.
+  const destino = config.emailDestino;
+  if (!destino) {
+    throw new Error("EMAIL_DESTINO não configurado");
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
 
-  let resposta;
+  let resposta: Response;
   try {
     resposta = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -24,7 +34,7 @@ export async function enviarEmail({ nome, email, mensagem }, config) {
       },
       body: JSON.stringify({
         from: config.resend.from,
-        to: [config.emailDestino],
+        to: [destino],
         reply_to: email,
         subject: `Novo contato de ${nome}`,
         text: `Nome: ${nome}\nE-mail: ${email}\n\nMensagem:\n${mensagem}`,

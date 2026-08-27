@@ -1,6 +1,6 @@
 // Validação de e-mail compartilhada entre frontend e backend.
 // Fonte única de verdade: mantenha as regras apenas aqui.
-export function validarEmail(email) {
+export function validarEmail(email: unknown): boolean {
   if (typeof email !== "string") return false;
 
   const valor = email.trim();

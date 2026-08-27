@@ -3,7 +3,28 @@
 
 const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
-export async function verificarTurnstile(token, secretKey, options = {}) {
+export interface OpcoesVerificacaoTurnstile {
+  expectedHostnames?: string[];
+  expectedAction?: string;
+}
+
+interface RespostaSiteverify {
+  success?: unknown;
+  hostname?: unknown;
+  action?: unknown;
+}
+
+// O corpo do siteverify vem de uma API externa: só confia nele após
+// confirmar que é um objeto (a validação de cada campo segue abaixo).
+function ehObjeto(dados: unknown): dados is RespostaSiteverify {
+  return typeof dados === "object" && dados !== null && !Array.isArray(dados);
+}
+
+export async function verificarTurnstile(
+  token: string,
+  secretKey: string | undefined,
+  options: OpcoesVerificacaoTurnstile = {},
+): Promise<boolean> {
   if (!token || !secretKey) return false;
 
   const controller = new AbortController();
@@ -19,7 +40,8 @@ export async function verificarTurnstile(token, secretKey, options = {}) {
 
     if (!resposta.ok) return false;
 
-    const dados = await resposta.json();
+    const dados: unknown = await resposta.json();
+    if (!ehObjeto(dados)) return false;
     if (dados.success !== true) return false;
 
     const hostnames = options.expectedHostnames || [];

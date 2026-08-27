@@ -7,17 +7,19 @@
   "scripts": {
     "dev": "vite",
     "dev:all": "concurrently -n API,WEB -c yellow,cyan \"npm run server\" \"npm run dev\"",
-    "build": "vite build",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
-    "server": "node --watch server/index.js",
-    "start": "node server/index.js",
+    "server": "tsx watch server/index.ts",
+    "start": "tsx server/index.ts",
     "pages:dev": "npm run build && wrangler pages dev dist",
     "pages:deploy": "npm run build && wrangler pages deploy dist",
     "sitemap": "node scripts/gerar-sitemap.js",
     "imagens": "node scripts/otimizar-imagens.js",
     "screenshots": "node scripts/capturar-screenshots.js",
     "check": "node scripts/verificar-assets.js",
-    "test": "node --test",
+    "types:cloudflare": "wrangler types --path=./functions/types.d.ts",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json && tsc -p functions/tsconfig.json",
+    "test": "tsx --test server/app.test.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -30,10 +32,12 @@
     "@hono/node-server": "^2.1.1",
     "dotenv": "^17.4.2",
     "hono": "^4.13.3",
-    "hono-rate-limiter": "^0.5.3"
+    "hono-rate-limiter": "^0.5.3",
+    "tsx": "^4.23.12"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.1",
     "concurrently": "^9.2.4",
     "eslint": "^10.8.1",
     "eslint-config-prettier": "^10.1.8",
@@ -41,6 +45,8 @@
     "playwright": "^1.55.0",
     "prettier": "^3.9.6",
     "sharp": "^0.35.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0",
     "vite": "^8.2.1",
     "wrangler": "^4.124.0"
   }

@@ -51,7 +51,7 @@ function extrairReferencias(conteudo, formato) {
         : [
             [/from\s+["']([^"']+)["']/g, "arquivo"],
             [/import\s+["']([^"']+)["']/g, "arquivo"],
-            // Referências dinâmicas em strings (ex.: tema.js alterna img/icon-lua.png)
+            // Referências dinâmicas em strings (ex.: tema.ts alterna img/icon-lua.png)
             // resolvem em relação à raiz do projeto, como o navegador faz.
             [/["'`]((?:img|css|js)\/[^"'`]+)["'`]/g, "raiz"],
           ];

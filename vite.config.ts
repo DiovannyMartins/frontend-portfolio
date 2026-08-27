@@ -19,7 +19,7 @@ export default defineConfig({
     },
     {
       name: "copiar-arquivos-estaticos",
-      // Imagens referenciadas por string no JS (tema.js, copiarEmail.js) não
+      // Imagens referenciadas por string no TS (tema.ts, copiarEmail.ts) não
       // passam pelo processamento do Vite, então precisam existir verbatim em
       // dist/ para o build funcionar. O script anti-FOUC já vive em public/.
       closeBundle: async () => {

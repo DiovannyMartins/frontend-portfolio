@@ -1,14 +1,14 @@
 export function initFiltroProjetos() {
-  const botoes = document.querySelectorAll(".projects__filter-btn");
-  const campoBusca = document.getElementById("buscaProjetos");
-  const cards = document.querySelectorAll(".project-card");
+  const botoes = document.querySelectorAll<HTMLButtonElement>(".projects__filter-btn");
+  const campoBusca = document.querySelector<HTMLInputElement>("#buscaProjetos");
+  const cards = document.querySelectorAll<HTMLElement>(".project-card");
   const mensagemVazio = document.getElementById("projetosVazio");
 
   if (botoes.length === 0 || cards.length === 0) return;
 
   // "todos" é um valor sentinela — não corresponde a nenhum data-categoria real,
   // apenas sinaliza que nenhum filtro de categoria está ativo.
-  let filtroAtivo = "todos";
+  let filtroAtivo: string | undefined = "todos";
   let termoBusca = "";
 
   function aplicarFiltros() {
@@ -20,8 +20,8 @@ export function initFiltroProjetos() {
 
       const tituloElement = card.querySelector(".project-card__title");
       const descricaoElement = card.querySelector(".project-card__text");
-      const titulo = tituloElement ? tituloElement.textContent.toLowerCase() : "";
-      const descricao = descricaoElement ? descricaoElement.textContent.toLowerCase() : "";
+      const titulo = tituloElement ? (tituloElement.textContent?.toLowerCase() ?? "") : "";
+      const descricao = descricaoElement ? (descricaoElement.textContent?.toLowerCase() ?? "") : "";
       const correspondeBusca = titulo.includes(termoBusca) || descricao.includes(termoBusca);
 
       const visivel = correspondeCategoria && correspondeBusca;

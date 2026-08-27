@@ -1,15 +1,15 @@
-import { criarToast } from "./toast.js";
+import { criarToast } from "./toast.ts";
 
 export function initCopiarEmail() {
-  const btnCopiarEmail = document.getElementById("btnCopiarEmail");
+  const btnCopiarEmail = document.querySelector<HTMLButtonElement>("#btnCopiarEmail");
   const textoCopiarEmail = document.getElementById("textoCopiarEmail");
-  const iconEmail = document.getElementById("iconEmail");
+  const iconEmail = document.querySelector<HTMLImageElement>("#iconEmail");
 
   if (!btnCopiarEmail || !textoCopiarEmail || !iconEmail) return;
 
   const FEEDBACK_DURACAO_MS = 2000;
   const textoOriginal = textoCopiarEmail.textContent;
-  let feedbackTimer;
+  let feedbackTimer: number | undefined;
 
   // O ícone do envelope deve sempre refletir o tema ATUAL, e não o tema do
   // momento em que a página carregou — senão, após alternar o tema e copiar,
@@ -27,9 +27,11 @@ export function initCopiarEmail() {
   }
 
   btnCopiarEmail.addEventListener("click", async () => {
-    const email = btnCopiarEmail.dataset.email;
+    // data-email é sempre preenchido no HTML; o fallback só cobre o caso de
+    // marcação quebrada sem passar undefined para o Clipboard API.
+    const email = btnCopiarEmail.dataset.email ?? "";
 
-    function mostrarSucesso() {
+    const mostrarSucesso = () => {
       textoCopiarEmail.textContent = "Copiado!";
       iconEmail.src = iconCheckAtual();
 
@@ -40,7 +42,7 @@ export function initCopiarEmail() {
         textoCopiarEmail.textContent = textoOriginal;
         iconEmail.src = iconEnvelopeAtual();
       }, FEEDBACK_DURACAO_MS);
-    }
+    };
 
     try {
       if (navigator.clipboard?.writeText) {
@@ -60,7 +62,7 @@ export function initCopiarEmail() {
   });
 }
 
-function copiarComFallback(texto) {
+function copiarComFallback(texto: string): Promise<void> {
   const area = document.createElement("textarea");
   area.value = texto;
   area.setAttribute("readonly", "");

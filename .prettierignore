@@ -5,3 +5,4 @@ package-lock.json
 .impeccable/
 public/sitemap.xml
 DESIGN.md
+functions/types.d.ts

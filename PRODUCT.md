@@ -24,12 +24,12 @@ O visitante navega por uma única página (one-page) em pt-BR, nas seções Home
 
 ## Capabilities and Constraints
 
-- JavaScript Vanilla (ES Modules, sem framework de runtime); Vite apenas como dev server/build.
+- TypeScript/JavaScript Vanilla (ES Modules, sem framework); TypeScript no código-fonte e o Vite gera o JavaScript servido ao navegador; Vite apenas como dev server/build.
 - Backend Hono para o formulário de contato (validação server-side, rate limit, honeypot, Cloudflare Turnstile, envio por Resend com modo log em dev).
 - Dark/Light mode persistido via localStorage com anti-FOUC.
 - Acessibilidade como requisito (ARIA, skip link, focus visible, navegação por teclado, aria-live nos erros).
 - Responsivo, SEO (sitemap, robots.txt, Open Graph, Twitter Card), imagens WebP com lazy loading.
-- Testes automatizados da API com `node --test`; ESLint + Prettier.
+- Testes automatizados da API com `tsx --test`; typecheck de frontend, Node e Cloudflare (`npm run typecheck`); ESLint + Prettier.
 - Seções: Home (hero com efeito de digitação), Sobre, Tecnologias (HTML5, CSS3, JavaScript, Node.js), Projetos (filtro por categoria e busca), Contato (formulário + redes sociais).
 - Categorias de projetos: Dashboard, Landing Page, E-commerce.
 

@@ -1,32 +1,54 @@
 const TOKENS = ["const", "async", "=>", "{}", "[]", "await", "return", "import"];
 
+interface TokenVisual {
+  text: string;
+  x: number;
+  y: number;
+  speed: number;
+  phase: number;
+  alpha: number;
+}
+
+interface Paleta {
+  ink: string;
+  accent: string;
+  alphaScale: number;
+}
+
+interface PointerState {
+  x: number;
+  y: number;
+  active: boolean;
+}
+
 export function initLivingEditor() {
-  const canvas = document.getElementById("codeField");
-  const hero = canvas?.closest(".hero");
+  const canvas = document.querySelector<HTMLCanvasElement>("#codeField");
+  const hero = canvas?.closest<HTMLElement>(".hero");
   const context = canvas?.getContext("2d");
 
   if (!canvas || !hero || !context) return;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const coarsePointer = window.matchMedia("(pointer: coarse)");
-  const pointer = { x: 0.5, y: 0.5, active: false };
-  let palette = readPalette();
-  let tokens = [];
+  const pointer: PointerState = { x: 0.5, y: 0.5, active: false };
+  let tokens: TokenVisual[] = [];
   let animationFrame = 0;
   let visible = true;
   let width = 0;
   let height = 0;
 
-  function readPalette() {
+  const readPalette = (): Paleta => {
     const styles = getComputedStyle(hero);
     return {
       ink: styles.getPropertyValue("--text-primary").trim(),
       accent: styles.getPropertyValue("--focus-ring").trim(),
       alphaScale: parseFloat(styles.getPropertyValue("--code-field-alpha-scale")) || 1,
     };
-  }
+  };
 
-  function createTokens() {
+  let palette: Paleta = readPalette();
+
+  const createTokens = () => {
     const amount = width < 720 ? 13 : 28;
     tokens = Array.from({ length: amount }, (_, index) => ({
       text: TOKENS[index % TOKENS.length],
@@ -36,9 +58,9 @@ export function initLivingEditor() {
       phase: index * 0.73,
       alpha: 0.06 + (index % 4) * 0.02,
     }));
-  }
+  };
 
-  function resize() {
+  const resize = () => {
     const bounds = hero.getBoundingClientRect();
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
     width = Math.max(1, Math.round(bounds.width));
@@ -50,9 +72,9 @@ export function initLivingEditor() {
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     createTokens();
     draw(performance.now());
-  }
+  };
 
-  function draw(timestamp) {
+  const draw = (timestamp: number) => {
     context.clearRect(0, 0, width, height);
     context.font = "500 13px ui-monospace, monospace";
     context.textBaseline = "middle";
@@ -104,11 +126,11 @@ export function initLivingEditor() {
     }
 
     context.globalAlpha = 1;
-  }
+  };
 
   let lastFrameTime = 0;
 
-  function animate(timestamp) {
+  const animate = (timestamp: number) => {
     animationFrame = requestAnimationFrame(animate);
     // Em dispositivos touch (mobile), limita a animação a ~30fps. O movimento
     // dos tokens é lento, então a fluidez visual se mantém, e o consumo de
@@ -116,22 +138,22 @@ export function initLivingEditor() {
     if (coarsePointer.matches && timestamp - lastFrameTime < 33) return;
     lastFrameTime = timestamp;
     draw(timestamp);
-  }
+  };
 
-  function start() {
+  const start = () => {
     cancelAnimationFrame(animationFrame);
     draw(performance.now());
     if (visible && !document.hidden && !reducedMotion.matches) {
       animationFrame = requestAnimationFrame(animate);
     }
-  }
+  };
 
-  function updatePointer(event) {
+  const updatePointer = (event: PointerEvent) => {
     const bounds = hero.getBoundingClientRect();
     pointer.x = (event.clientX - bounds.left) / bounds.width;
     pointer.y = (event.clientY - bounds.top) / bounds.height;
     pointer.active = true;
-  }
+  };
 
   hero.addEventListener("pointermove", updatePointer, { passive: true });
   hero.addEventListener("pointerleave", () => {

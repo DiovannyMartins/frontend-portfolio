@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "lib": ["esnext"],
+    "types": ["./types.d.ts"]
+  },
+  "include": [
+    "api/**/*.ts",
+    "types.d.ts",
+    "../shared/**/*.ts",
+    "../server/app.ts",
+    "../server/lib/**/*.ts",
+    "../server/routes/**/*.ts"
+  ],
+  "exclude": ["../server/index.ts", "../server/app.test.ts", "node_modules"]
+}

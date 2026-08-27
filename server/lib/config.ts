@@ -1,7 +1,9 @@
 // Configuração centralizada, lida a partir de um objeto de ambiente.
 // Recebe `process.env` (Node) ou `context.env` (Cloudflare Workers),
 // para que o mesmo código rode nos dois runtimes.
-export function carregarConfig(env = {}) {
+import type { AppConfig, AppEnv } from "../../shared/types.ts";
+
+export function carregarConfig(env: AppEnv): AppConfig {
   const isProduction =
     env.NODE_ENV === "production" || env.CONTEXT === "production" || env.CF_PAGES === "1";
 

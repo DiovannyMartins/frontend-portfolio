@@ -9,11 +9,11 @@ function initProgressoLeitura() {
   const barra = document.getElementById("scrollProgress");
   if (!barra) return;
 
-  function atualizar() {
+  const atualizar = () => {
     const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
     const progresso = alturaTotal > 0 ? window.scrollY / alturaTotal : 0;
     barra.style.transform = `scaleX(${Math.min(progresso, 1)})`;
-  }
+  };
 
   window.addEventListener("scroll", atualizar, { passive: true });
   window.addEventListener("resize", atualizar, { passive: true });
@@ -87,10 +87,10 @@ function initVoltarTopo() {
   const btnTopo = document.getElementById("btnTopo");
   if (!btnTopo) return;
 
-  function atualizarVisibilidade() {
+  const atualizarVisibilidade = () => {
     const deveMostrar = window.scrollY > 400;
     btnTopo.classList.toggle("back-to-top--visible", deveMostrar);
-  }
+  };
 
   window.addEventListener("scroll", atualizarVisibilidade, { passive: true });
   atualizarVisibilidade();

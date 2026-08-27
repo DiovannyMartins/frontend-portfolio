@@ -1,39 +1,54 @@
 import { Hono } from "hono";
-import { validarEmail } from "../../shared/validacao.js";
-import { enviarEmail } from "../lib/email.js";
-import { verificarTurnstile } from "../lib/turnstile.js";
+import { validarEmail } from "../../shared/validacao.ts";
+import { enviarEmail } from "../lib/email.ts";
+import { verificarTurnstile } from "../lib/turnstile.ts";
+import type { AppConfig, ContatoPayload, ResultadoValidacao } from "../../shared/types.ts";
 
 // Validação server-side: nunca confie apenas na validação do navegador.
 
-function validar(payload) {
-  const nome = typeof payload?.nome === "string" ? payload.nome.trim() : "";
-  const email = typeof payload?.email === "string" ? payload.email.trim() : "";
-  const mensagem = typeof payload?.mensagem === "string" ? payload.mensagem.trim() : "";
-  const erros = {};
+function extrairTexto(valor: unknown): string {
+  return typeof valor === "string" ? valor.trim() : "";
+}
 
-  if (typeof payload?.nome !== "string" || nome.length < 3) {
+// Normaliza as quebras de linha para LF (\n): CRLF e CR viram LF.
+function normalizarQuebrasLinha(valor: string): string {
+  return valor.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+}
+
+function validar(payload: ContatoPayload): ResultadoValidacao {
+  const nome = extrairTexto(payload.nome);
+  const email = extrairTexto(payload.email);
+  const mensagem = normalizarQuebrasLinha(extrairTexto(payload.mensagem));
+  const erros: ResultadoValidacao["erros"] = {};
+
+  // Caracteres de controle (C0 + DEL) são rejeitados. Por padrão todos;
+  // na mensagem, as quebras de linha LF (\n) e CR (\r) são permitidas.
+  const possuiControle = (valor: string, permitirQuebrasLinha = false) =>
+    [...valor].some((caractere) => {
+      const codigo = caractere.codePointAt(0);
+      if (codigo === undefined) return false;
+      if (permitirQuebrasLinha && (codigo === 10 || codigo === 13)) return false;
+      return codigo < 32 || codigo === 127;
+    });
+
+  if (typeof payload.nome !== "string" || nome.length < 3) {
     erros.nome = "Informe seu nome completo.";
   }
   if (nome.length > 100) erros.nome = "O nome deve ter no máximo 100 caracteres.";
-  const possuiControle = (valor) =>
-    [...valor].some((caractere) => {
-      const codigo = caractere.codePointAt(0);
-      return codigo < 32 || codigo === 127;
-    });
   if (possuiControle(nome)) {
     erros.nome = "O nome contém caracteres inválidos.";
   }
-  if (typeof payload?.email !== "string" || email.length > 254) {
+  if (typeof payload.email !== "string" || email.length > 254) {
     erros.email = "O e-mail deve ter no máximo 254 caracteres.";
   } else if (!validarEmail(email)) {
     erros.email = "Informe um e-mail válido.";
   }
   if (possuiControle(email)) erros.email = "O e-mail contém caracteres inválidos.";
-  if (typeof payload?.mensagem !== "string" || mensagem.length < 10) {
+  if (typeof payload.mensagem !== "string" || mensagem.length < 10) {
     erros.mensagem = "A mensagem deve ter pelo menos 10 caracteres.";
   }
   if (mensagem.length > 5000) erros.mensagem = "A mensagem deve ter no máximo 5.000 caracteres.";
-  if (possuiControle(mensagem)) {
+  if (possuiControle(mensagem, true)) {
     erros.mensagem = "A mensagem contém caracteres inválidos.";
   }
 
@@ -44,22 +59,24 @@ function validar(payload) {
   };
 }
 
-async function lerJsonLimitado(request, limite) {
+// Lê o corpo da requisição em stream com um limite rígido de bytes.
+// Retorna o valor já parseado como JSON (desconhecido) para o chamador.
+async function lerJsonLimitado(request: Request, limite: number): Promise<unknown> {
   const reader = request.body?.getReader();
   if (!reader) throw new Error("JSON_INVALIDO");
 
-  const partes = [];
+  const partes: Uint8Array[] = [];
   let total = 0;
 
   while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
+    const resultado = await reader.read();
+    if (resultado.done) break;
+    total += resultado.value.byteLength;
     if (total > limite) {
       await reader.cancel();
       throw new Error("CORPO_MUITO_GRANDE");
     }
-    partes.push(value);
+    partes.push(resultado.value);
   }
 
   const bytes = new Uint8Array(total);
@@ -69,10 +86,11 @@ async function lerJsonLimitado(request, limite) {
     offset += parte.byteLength;
   }
 
-  return JSON.parse(new TextDecoder().decode(bytes));
+  const conteudo: unknown = JSON.parse(new TextDecoder().decode(bytes));
+  return conteudo;
 }
 
-export default function rotaContato(config) {
+export default function rotaContato(config: AppConfig) {
   const rota = new Hono();
 
   rota.post("/", async (c) => {
@@ -87,11 +105,11 @@ export default function rotaContato(config) {
       return c.json({ success: false, error: "Mensagem muito grande." }, 413);
     }
 
-    let body;
+    let body: unknown;
     try {
       body = await lerJsonLimitado(c.req.raw, limiteCorpo);
     } catch (erro) {
-      if (erro.message === "CORPO_MUITO_GRANDE") {
+      if (erro instanceof Error && erro.message === "CORPO_MUITO_GRANDE") {
         return c.json({ success: false, error: "Mensagem muito grande." }, 413);
       }
       return c.json({ success: false, error: "JSON inválido." }, 400);
@@ -105,13 +123,18 @@ export default function rotaContato(config) {
       return c.json({ success: false, error: "Serviço de contato indisponível." }, 503);
     }
 
+    // O corpo já foi confirmado como objeto. ContatoPayload não é uma
+    // garantia de formato: cada campo continua desconhecido até ser validado
+    // por validar() logo abaixo.
+    const payload: ContatoPayload = body;
+
     // Honeypot anti-spam: bot preencheu o campo invisível, então recebe sucesso
     // simulado sem enviar e-mail (não revela a armadilha nem gasta quota).
-    if (body?.website) {
+    if (payload.website) {
       return c.json({ success: true, message: "Mensagem enviada com sucesso!" });
     }
 
-    const { valido, erros, dados } = validar(body);
+    const { valido, erros, dados } = validar(payload);
 
     if (!valido) {
       return c.json({ success: false, errors: erros }, 400);
@@ -120,7 +143,7 @@ export default function rotaContato(config) {
     // Cloudflare Turnstile: valida o token quando a secret key está
     // configurada (produção). Sem ela, segue sem validar — útil em dev.
     if (config.turnstile.secretKey) {
-      const token = typeof body?.turnstile === "string" ? body.turnstile.trim() : "";
+      const token = typeof payload.turnstile === "string" ? payload.turnstile.trim() : "";
       const captchaValido = await verificarTurnstile(token, config.turnstile.secretKey, {
         expectedHostnames: config.turnstile.expectedHostnames,
         expectedAction: config.turnstile.expectedAction,

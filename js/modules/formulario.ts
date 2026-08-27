@@ -1,31 +1,66 @@
-import { validarEmail } from "../../shared/validacao.js";
+import { validarEmail } from "../../shared/validacao.ts";
+import type { ErrosContato, RespostaContato } from "../../shared/types.ts";
+
+type CampoEditavel = HTMLInputElement | HTMLTextAreaElement;
+
+interface ConfiguracaoCampo {
+  campo: CampoEditavel;
+  erro: HTMLElement;
+  validador: (valor: string) => boolean;
+  msgErro: string;
+}
+
+type EstadoTurnstile = "carregando" | "ok" | "falha";
+
+function ehObjeto(valor: unknown): valor is Record<string, unknown> {
+  return typeof valor === "object" && valor !== null && !Array.isArray(valor);
+}
+
+function ehErrosContato(valor: unknown): valor is ErrosContato {
+  if (!ehObjeto(valor)) return false;
+
+  return ["nome", "email", "mensagem"].every((campo) => {
+    const mensagem = valor[campo];
+    return mensagem === undefined || typeof mensagem === "string";
+  });
+}
+
+function ehRespostaContato(valor: unknown): valor is RespostaContato {
+  if (!ehObjeto(valor)) return false;
+  return (
+    (valor.success === true && typeof valor.message === "string") ||
+    (valor.success === false && typeof valor.error === "string") ||
+    (valor.success === false && ehErrosContato(valor.errors))
+  );
+}
 
 export function initFormulario() {
-  const form = document.getElementById("formContato");
-  if (!form) return;
-
-  const campoNome = document.getElementById("nome");
-  const campoEmail = document.getElementById("email");
-  const campoMensagem = document.getElementById("mensagem");
-  const campoWebsite = document.getElementById("website");
+  const form = document.querySelector<HTMLFormElement>("#formContato");
   const feedbackForm = document.getElementById("feedbackForm");
+  if (!form || !feedbackForm) return;
+
+  const campoNome = document.querySelector<HTMLInputElement>("#nome");
+  const campoEmail = document.querySelector<HTMLInputElement>("#email");
+  const campoMensagem = document.querySelector<HTMLTextAreaElement>("#mensagem");
+  const campoWebsite = document.querySelector<HTMLInputElement>("#website");
   const widgetTurnstile = document.getElementById("turnstile");
 
   // Cloudflare Turnstile: renderizado explicitamente para ter o widgetId
   // (permite resetar o token após cada tentativa de envio). A sitekey vem
   // do atributo data-sitekey no HTML — é pública, não é segredo.
-  let turnstileId = null;
+  let turnstileId: string | null = null;
   let tokenTurnstile = "";
   // Estado do widget Turnstile: "carregando" (script ainda não carregou),
   // "ok" (renderizado) ou "falha" (bloqueado/rede/domínio não autorizado).
-  let estadoTurnstile = "carregando";
+  let estadoTurnstile: EstadoTurnstile = "carregando";
 
   // Em produção o servidor exige o token do Turnstile; em dev/preview não.
   // Usado para mostrar uma mensagem clara quando o captcha não carrega
   // (bloqueador de anúncios, rede) em vez de falhar silenciosamente no servidor.
-  // O Vite substitui import.meta.env.PROD no build e mantém o valor correto no
-  // dev; fora do Vite (Live Server / hospedagem estática crua) import.meta.env
-  // não existe e o `?.` evita que o módulo quebre — nesse caso não é produção.
+  // `import.meta.env.PROD` é fornecido pelo Vite (true no build, false no dev).
+  // O código-fonte TypeScript passa sempre pelo Vite; apenas o `dist/` gerado
+  // (JavaScript) pode ser servido como site estático. O `?.` só protege o
+  // acesso caso o objeto `import.meta.env` não exista.
   const PRODUCAO = import.meta.env?.PROD ?? false;
 
   function renderizarTurnstile() {
@@ -98,7 +133,12 @@ export function initFormulario() {
 
   // Única fonte de regras de validação: os listeners de "input" (validação em
   // tempo real) e o submit (validação completa) usam a mesma função avaliarCampo.
-  const CAMPOS = [
+  const configuracaoBruta: Array<{
+    campo: CampoEditavel | null;
+    erro: HTMLElement | null;
+    validador: (valor: string) => boolean;
+    msgErro: string;
+  }> = [
     {
       campo: campoNome,
       erro: document.getElementById("erroNome"),
@@ -119,23 +159,27 @@ export function initFormulario() {
     },
   ];
 
-  const FEEDBACK_DURACAO_MS = 5000;
-  let feedbackTimer;
+  const CAMPOS: ConfiguracaoCampo[] = configuracaoBruta.filter(
+    (item): item is ConfiguracaoCampo => item.campo !== null && item.erro !== null,
+  );
 
-  function marcarErro(campo, elementoErro, mensagem) {
+  const FEEDBACK_DURACAO_MS = 5000;
+  let feedbackTimer: number | undefined;
+
+  function marcarErro(campo: CampoEditavel, elementoErro: HTMLElement, mensagem: string) {
     campo.classList.add("input--invalid");
     campo.classList.remove("input--valid");
     campo.setAttribute("aria-invalid", "true");
     elementoErro.textContent = mensagem;
   }
 
-  function limparErro(campo, elementoErro) {
+  function limparErro(campo: CampoEditavel, elementoErro: HTMLElement) {
     campo.classList.remove("input--invalid");
     campo.removeAttribute("aria-invalid");
     elementoErro.textContent = "";
   }
 
-  function marcarValido(campo) {
+  function marcarValido(campo: CampoEditavel) {
     campo.classList.add("input--valid");
     campo.classList.remove("input--invalid");
     campo.setAttribute("aria-invalid", "false");
@@ -145,7 +189,10 @@ export function initFormulario() {
   // preenchido e inválido = vermelho, campo preenchido e válido = verde.
   // Assim o usuário não vê erros antes mesmo de interagir com o campo.
   // No submit, `forcarErro` marca os campos obrigatórios vazios como erro.
-  function avaliarCampo({ campo, erro, validador, msgErro }, { forcarErro = false } = {}) {
+  function avaliarCampo(
+    { campo, erro, validador, msgErro }: ConfiguracaoCampo,
+    { forcarErro = false }: { forcarErro?: boolean } = {},
+  ): boolean {
     const valor = campo.value.trim();
 
     if (valor.length === 0) {
@@ -183,7 +230,7 @@ export function initFormulario() {
     const formValido = CAMPOS.every((item) => avaliarCampo(item, { forcarErro: true }));
 
     if (!formValido) {
-      form.querySelector("[aria-invalid='true']")?.focus();
+      form.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
       return;
     }
 
@@ -205,7 +252,8 @@ export function initFormulario() {
       return;
     }
 
-    const botaoEnviar = form.querySelector(".contact__submit");
+    const botaoEnviar = form.querySelector<HTMLButtonElement>(".contact__submit");
+    if (!botaoEnviar) return;
     const textoOriginal = botaoEnviar.textContent;
     botaoEnviar.disabled = true;
     form.setAttribute("aria-busy", "true");
@@ -230,9 +278,9 @@ export function initFormulario() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nome: campoNome.value.trim(),
-          email: campoEmail.value.trim(),
-          mensagem: campoMensagem.value.trim(),
+          nome: campoNome?.value.trim() ?? "",
+          email: campoEmail?.value.trim() ?? "",
+          mensagem: campoMensagem?.value.trim() ?? "",
           website: campoWebsite?.value ?? "",
           turnstile: tokenTurnstile,
         }),
@@ -240,7 +288,7 @@ export function initFormulario() {
       });
 
       const ehJson = resposta.headers.get("content-type")?.includes("application/json");
-      const dados = ehJson
+      const dados: unknown = ehJson
         ? await resposta.json().catch((erro) => {
             if (controller.signal.aborted) throw erro;
             return {};
@@ -251,15 +299,15 @@ export function initFormulario() {
         feedbackForm.textContent = "Mensagem enviada com sucesso! Em breve entrarei em contato.";
         form.reset();
         CAMPOS.forEach(({ campo }) => campo.classList.remove("input--valid"));
-      } else if (ehJson && dados?.errors) {
+      } else if (ehJson && ehRespostaContato(dados) && "errors" in dados) {
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent = Object.values(dados.errors).join(" ");
-      } else if (ehJson && dados?.error) {
+      } else if (ehJson && ehRespostaContato(dados) && "error" in dados) {
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent = dados.error;
       } else {
         // Resposta não-JSON (404/405 do próprio servidor estático) significa
-        // que o backend não está ativo nesta origem — ex.: Live Server.
+        // que o backend não está ativo nesta origem — ex.: hospedagem estática do dist sem Pages Functions.
         feedbackForm.classList.add("contact__feedback--error");
         feedbackForm.textContent =
           'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';

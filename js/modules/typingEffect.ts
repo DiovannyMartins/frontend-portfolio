@@ -3,7 +3,7 @@ export function initTypingEffect() {
   if (!alvo) return;
 
   const barra = document.querySelector(".hero__accent");
-  const texto = alvo.textContent.trim();
+  const texto = alvo.textContent?.trim() ?? "";
   const velocidadeMs = 100;
   const palavraChave = "Full-Stack";
   const inicioChave = texto.indexOf(palavraChave);
@@ -12,7 +12,7 @@ export function initTypingEffect() {
   alvo.textContent = "";
   barra?.classList.add("hero__accent--hidden");
 
-  function digitar() {
+  const digitar = () => {
     if (indice >= texto.length) {
       barra?.classList.remove("hero__accent--hidden");
       return;
@@ -42,7 +42,7 @@ export function initTypingEffect() {
     }
 
     setTimeout(digitar, velocidadeMs);
-  }
+  };
 
   digitar();
 }

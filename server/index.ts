@@ -2,8 +2,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 import { serve } from "@hono/node-server";
-import criarApp from "./app.js";
-import { carregarConfig } from "./lib/config.js";
+import { getConnInfo } from "@hono/node-server/conninfo";
+import criarApp from "./app.ts";
+import { carregarConfig } from "./lib/config.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, ".env") });
@@ -26,7 +27,9 @@ if (config.isProduction) {
   }
 }
 
-const app = criarApp(process.env);
+const app = criarApp(process.env, {
+  obterIpCliente: (contexto) => getConnInfo(contexto).remote.address,
+});
 
 serve({ fetch: app.fetch, port: Number(process.env.PORT) || 3001 }, (info) => {
   console.log(`API rodando em http://localhost:${info.port}`);

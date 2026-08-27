@@ -1,15 +1,25 @@
 import { Hono } from "hono";
+import type { Context } from "hono";
 import { secureHeaders } from "hono/secure-headers";
 import { MemoryStore, rateLimiter } from "hono-rate-limiter";
-import rotaContato from "./routes/contato.js";
-import { carregarConfig } from "./lib/config.js";
+import rotaContato from "./routes/contato.ts";
+import { carregarConfig } from "./lib/config.ts";
+import type { AppConfig, AppEnv } from "../shared/types.ts";
 
 // O mesmo app roda em dois runtimes:
 // - Node (local/dev via @hono/node-server)
 // - Cloudflare Workers/Pages Functions (via app.fetch)
 // Por isso config recebe o objeto de ambiente (process.env ou context.env).
-export default function criarApp(env = process.env) {
-  const config = carregarConfig(env);
+
+export interface OpcoesCriarApp {
+  // Sem proxy confiável, o IP real da conexão é resolvido pelo runtime:
+  // no Node via getConnInfo de @hono/node-server. O Cloudflare roda sempre
+  // com TRUST_PROXY=true e não precisa desta injeção.
+  obterIpCliente?: (contexto: Context) => string | undefined;
+}
+
+export default function criarApp(env: AppEnv, opcoes: OpcoesCriarApp = {}) {
+  const config: AppConfig = carregarConfig(env);
   const app = new Hono();
 
   // Cabeçalhos de segurança. A CSP é ajustada para não quebrar o Google Fonts.
@@ -61,33 +71,30 @@ export default function criarApp(env = process.env) {
   // Limita envios por IP (ex.: 10 a cada 15 min) para reduzir spam no formulário.
   // No Workers o MemoryStore é por isolate (best-effort); o Cloudflare Rate
   // Limiting nativo pode substituí-lo via binding se necessário.
-  app.use(
-    "/api/contato",
-    rateLimiter({
-      windowMs: 15 * 60 * 1000,
-      limit: 10,
-      standardHeaders: true,
-      legacyHeaders: false,
-      keyGenerator: (c) => {
-        if (config.trustProxy) {
-          return (
-            c.req.header("cf-connecting-ip") ||
-            c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ||
-            "local"
-          );
-        }
-        // Sem proxy confiável: usa o IP real da conexão (Node)
-        // No Workers isso não é alcançável diretamente, mas lá trustProxy=true
-        const raw = c.req.raw;
-        if (raw?.socket?.remoteAddress) {
-          return raw.socket.remoteAddress;
-        }
-        return "local";
-      },
-      message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
-      store: new MemoryStore(),
-    }),
-  );
+  // legacyHeaders é mantido por compatibilidade: esta versão da biblioteca
+  // ainda não o tipa, mas o ignora no runtime (cabeçalhos padrão via standardHeaders).
+  const opcoesRateLimit = {
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (c: Context) => {
+      if (config.trustProxy) {
+        return (
+          c.req.header("cf-connecting-ip") ||
+          c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ||
+          "local"
+        );
+      }
+      // Sem proxy confiável: usa o resolvedor de IP injetado pelo runtime
+      // e, na ausência de um valor, cai no fallback "local".
+      return opcoes.obterIpCliente?.(c) || "local";
+    },
+    message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
+    store: new MemoryStore(),
+  };
+
+  app.use("/api/contato", rateLimiter(opcoesRateLimit));
 
   app.route("/api/contato", rotaContato(config));
 

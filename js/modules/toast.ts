@@ -7,7 +7,7 @@ const ICONES = {
   erro: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="var(--status-error)"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>',
 };
 
-export function criarToast(mensagem, sucesso = true) {
+export function criarToast(mensagem: string, sucesso = true) {
   const toastExistente = document.querySelector(".toast-notification");
   if (toastExistente) {
     toastExistente.remove();
@@ -35,7 +35,7 @@ export function criarToast(mensagem, sucesso = true) {
   // Força um reflow lendo offsetHeight. Sem isso, o navegador agrupa a
   // adição do elemento e da classe .toast--visible no mesmo frame, e a
   // transição CSS de opacity/transform nunca dispara.
-  toast.offsetHeight;
+  void toast.offsetHeight;
   toast.classList.add("toast--visible");
 
   setTimeout(() => {

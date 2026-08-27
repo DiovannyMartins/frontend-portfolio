@@ -1,6 +1,6 @@
 # Frontend Portfolio
 
-Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacotado com **Vite**, com backend **Hono** para o formulário de contato (deploy no **Cloudflare Pages**) e scripts de automação em **Node.js**.
+Portfólio front-end responsivo desenvolvido com HTML, CSS e TypeScript (compilado para JavaScript), empacotado com **Vite**, com backend **Hono** para o formulário de contato (deploy no **Cloudflare Pages**) e scripts de automação em **Node.js**.
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
@@ -16,12 +16,13 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 ## Destaques
 
-- JavaScript Vanilla (sem frameworks)
+- TypeScript Vanilla (sem frameworks)
 - Vite como dev server e build (minificação, hashing de assets)
 - Backend Hono com validação server-side, rate limit, envio de e-mail (Resend) e cabeçalhos de segurança (secure-headers/CSP)
 - Deploy no Cloudflare Pages com Pages Functions (frontend e API no mesmo domínio)
 - Validação de e-mail em fonte única compartilhada entre frontend e backend
-- Testes automatizados com o runner nativo do Node (`node --test`)
+- Testes automatizados com o runner nativo do Node via `tsx --test`
+- Typecheck dos três ambientes (frontend, Node e Cloudflare Pages Functions) com `npm run typecheck`
 - ESLint + Prettier para lint e formatação consistente
 - Scripts de automação: sitemap, verificação de assets e otimização de imagens
 - Anti-spam com honeypot e Cloudflare Turnstile (CAPTCHA) no formulário de contato
@@ -35,35 +36,35 @@ Portfólio front-end responsivo desenvolvido com HTML, CSS e JavaScript, empacot
 
 ## Tecnologias
 
-| Stack                | Detalhe                                                             |
-| -------------------- | ------------------------------------------------------------------- |
-| HTML5                | Semântica, ARIA, meta tags Open Graph/Twitter Card                  |
-| CSS3                 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular          |
-| JavaScript (ES6+)    | ES Modules — frontend sem dependências de runtime                   |
-| Vite                 | Dev server, build de produção e proxy para a API em desenvolvimento |
-| Hono                 | API para o formulário de contato (validação, rate limit, e-mail)    |
-| secure-headers       | Cabeçalhos de segurança e Content-Security-Policy no Hono           |
-| Resend               | Envio de e-mail a partir do formulário (REST API, sem SMTP)         |
-| Cloudflare Turnstile | CAPTCHA do formulário (anti-bot), validado no servidor              |
-| Cloudflare Pages     | Hospedagem do frontend + Pages Functions (API no mesmo domínio)     |
-| ESLint + Prettier    | Lint estático e formatação consistente do código                    |
-| Git/GitHub           | Versionamento e deploy via Cloudflare Pages                         |
-| Google Fonts         | Inter (todo o texto)                                                |
+| Stack                | Detalhe                                                                  |
+| -------------------- | ------------------------------------------------------------------------ |
+| HTML5                | Semântica, ARIA, meta tags Open Graph/Twitter Card                       |
+| CSS3                 | Variáveis CSS, Grid, Flexbox, animações, `@import` modular               |
+| TypeScript           | Código-fonte com tipos estritos; o Vite gera JavaScript para o navegador |
+| Vite                 | Dev server, build de produção e proxy para a API em desenvolvimento      |
+| Hono                 | API para o formulário de contato (validação, rate limit, e-mail)         |
+| secure-headers       | Cabeçalhos de segurança e Content-Security-Policy no Hono                |
+| Resend               | Envio de e-mail a partir do formulário (REST API, sem SMTP)              |
+| Cloudflare Turnstile | CAPTCHA do formulário (anti-bot), validado no servidor                   |
+| Cloudflare Pages     | Hospedagem do frontend + Pages Functions (API no mesmo domínio)          |
+| ESLint + Prettier    | Lint estático e formatação consistente do código                         |
+| Git/GitHub           | Versionamento e deploy via Cloudflare Pages                              |
+| Google Fonts         | Inter (todo o texto)                                                     |
 
 ---
 
 ## Sobre o projeto
 
-O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, usando Vite apenas como ferramenta de desenvolvimento/build — o código continua JavaScript Vanilla, sem framework. As decisões técnicas principais:
+O projeto foi desenvolvido com foco em simplicidade, desempenho e facilidade de avaliação, usando Vite apenas como ferramenta de desenvolvimento/build — o código continua Vanilla (TypeScript no código-fonte, JavaScript no navegador), sem framework. As decisões técnicas principais:
 
-- **Vite para desenvolvimento e build**: dev server com HMR, proxy para a API, minificação e hashing de assets no build. O site continua estático e pode ser publicado em qualquer hosting estático.
+- **Vite para desenvolvimento e build**: dev server com HMR, proxy para a API, minificação e hashing de assets no build. O resultado em `dist/` é JavaScript e pode ser publicado em qualquer hosting estático.
 - **Backend Hono opcional**: usado apenas para o formulário de contato. Sem variáveis do Resend, roda em "modo log" redigido (por padrão em desenvolvimento) — **apenas em desenvolvimento**; em produção o servidor não inicia sem elas.
-- **Configuração centralizada**: `server/lib/config.js` expõe `carregarConfig(env)`, que lê um objeto de ambiente — `process.env` no Node ou `context.env` no Cloudflare Workers. O mesmo código roda nos dois runtimes.
+- **Configuração centralizada**: `server/lib/config.ts` expõe `carregarConfig(env)`, que lê um objeto de ambiente — `process.env` no Node ou `context.env` no Cloudflare Workers. O mesmo código roda nos dois runtimes.
 - **Segurança no backend**: secure-headers (Hono) com Content-Security-Policy ajustada (Google Fonts + script anti-FOUC externo), honeypot anti-spam no formulário, rate limit por IP, limite de payload (`16kb`) e validação server-side.
 - **CSS modular com `@import`**: base (reset, variáveis, tipografia), componentes (header, hero, about-skills, projetos, contato, botoes, footer, toast) e utilitários (acessibilidade, animações) separados em arquivos independentes. Facilita manutenção e leitura.
-- **JavaScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect, editor vivo) vive em seu próprio módulo. O `main.js` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), o que mantém o site funcional em hospedagem estática crua sem build. A validação de e-mail vive em `shared/validacao.js`, usada pelo frontend e pelo backend (fonte única de verdade).
+- **TypeScript em ES Modules**: cada funcionalidade (tema, menu, scroll, filtro, formulário, copiar e-mail, typing effect, editor vivo) vive em seu próprio módulo. O `main.ts` apenas inicializa — sem acoplamento. Imagens alternadas pelo tema usam caminhos em string (`img/...`), que permanecem válidos no build gerado em `dist/` (o Vite não processa essas referências dinâmicas). A validação de e-mail vive em `shared/validacao.ts`, usada pelo frontend e pelo backend (fonte única de verdade). Tipos compartilhados entre frontend, Node e Cloudflare ficam em `shared/types.ts`.
 - **Anti-FOUC no tema**: `public/js/tema-inicial.js` roda no `<head>` antes da renderização (script clássico síncrono), evitando o flash do tema errado — sem precisar de `'unsafe-inline'` na CSP.
-- **Testes com `node --test`**: cobertura da validação, CORS, rate limit e dos endpoints da API, sem dependências adicionais.
+- **Testes com `tsx --test`**: cobertura da validação, CORS, rate limit e dos endpoints da API, sem dependências adicionais além do `tsx`.
 - **Acessibilidade como requisito, não extra**: skip link, ARIA labels, `aria-live` nos erros do formulário, `aria-pressed` nos filtros, focus visible customizado.
 - **Performance**: imagens em WebP com lazy loading, `preload` da imagem hero, `preconnect` para fontes, `theme-color` para mobile.
 
@@ -112,12 +113,14 @@ npm run dev:all
 npm run dev
 ```
 
+> Os arquivos-fonte estão em TypeScript (`js/*.ts`) e **não funcionam** abrindo o `index.html` diretamente nem com Live Server sem o Vite — o navegador só entende o JavaScript gerado pelo dev/build. Use sempre `npm run dev` (ou `npm run dev:all`) para desenvolvimento. A pasta `dist/`, gerada por `npm run build`, contém JavaScript e pode ser publicada em hospedagem estática; `npm run preview` serve esse build localmente. Os caminhos de imagem em string (`img/...`) continuam válidos no build gerado — eles não tornam o TypeScript executável diretamente no navegador.
+
 ### Formulário de contato
 
 O formulário envia para `POST /api/contato`, então **precisa do backend rodando**. Antes de enviar, ele checa `GET /api/health`:
 
 - **Com backend** (`npm run dev:all` ou `npm start`): envio normal.
-- **Sem backend** (abrir o `index.html` direto ou Live Server): o formulário mostra a mensagem "O envio online não está ativo nesta hospedagem" e orienta a usar `npm run dev:all` — não tenta enviar nem gera erro de POST no console.
+- **Sem backend** (hospedagem somente estática do `dist/`, sem Pages Functions): a interface funciona normalmente, mas o formulário mostra a mensagem "O envio online não está ativo nesta hospedagem" e orienta a usar `npm run dev:all` — não tenta enviar nem gera erro de POST no console.
 
 Para testar o envio localmente, copie `server/.env.example` para `server/.env`:
 
@@ -136,9 +139,9 @@ Copy-Item server/.env.example server/.env
 O formulário usa o [Turnstile](https://www.cloudflare.com/products/turnstile/) como proteção anti-bot:
 
 - A **sitekey** (pública) fica no `<div id="turnstile" data-sitekey="...">` do `index.html` e no script `https://challenges.cloudflare.com/turnstile/v0/api.js` (carregado sem `async`/`defer` no `<head>` — necessário para o `window.turnstile.render` estar pronto).
-- O widget usa **modo interativo** (`appearance: "always"` em `js/modules/formulario.js`): o desafio é sempre exibido, em vez de invisível/automático — dificulta bots que só resolvem o modo oculto.
+- O widget usa **modo interativo** (`appearance: "always"` em `js/modules/formulario.ts`): o desafio é sempre exibido, em vez de invisível/automático — dificulta bots que só resolvem o modo oculto.
 - O **token** gerado pelo widget é enviado no campo `turnstile` do corpo do POST.
-- No servidor, `server/routes/contato.js` valida o token via [siteverify](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) (`server/lib/turnstile.js`) usando a secret key.
+- No servidor, `server/routes/contato.ts` valida o token via [siteverify](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/) (`server/lib/turnstile.ts`) usando a secret key.
 - **Sem `TURNSTILE_SECRET_KEY`** (ex.: dev local), a validação é ignorada — o captcha só bloqueia em produção.
 - Configure `TURNSTILE_HOSTNAMES` em produção para restringir tokens aos domínios do site. `TURNSTILE_ACTION` pode ser usado quando o widget tiver uma action definida.
 - O widget é resetado a cada tentativa de envio (o token é de uso único).
@@ -147,25 +150,27 @@ Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **
 
 ### Scripts disponíveis
 
-| Comando                | Descrição                                                                                          |
-| ---------------------- | -------------------------------------------------------------------------------------------------- |
-| `npm run dev`          | Inicia o Vite (frontend) com proxy para a API                                                      |
-| `npm run dev:all`      | Inicia frontend e backend juntos                                                                   |
-| `npm run server`       | Inicia apenas o backend Hono (usado pelo `dev:all`)                                                |
-| `npm run build`        | Gera o build de produção em `dist/`                                                                |
-| `npm run preview`      | Serve localmente o build gerado                                                                    |
-| `npm start`            | Inicia o servidor Hono (API; em produção não inicia sem as variáveis do Resend)                    |
-| `npm run pages:dev`    | Sobe o Cloudflare Pages localmente (build + `wrangler pages dev`) — testa as Functions             |
-| `npm run pages:deploy` | Builda e publica no Cloudflare Pages (`wrangler pages deploy dist`)                                |
-| `npm test`             | Roda os testes automatizados da API (`node --test`)                                                |
-| `npm run lint`         | Verifica o código com ESLint                                                                       |
-| `npm run lint:fix`     | Corrige automaticamente os problemas de lint                                                       |
-| `npm run format`       | Formata todos os arquivos com Prettier                                                             |
-| `npm run format:check` | Verifica se todos os arquivos seguem o padrão do Prettier                                          |
-| `npm run sitemap`      | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
-| `npm run check`        | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                   |
-| `npm run imagens`      | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                           |
-| `npm run screenshots`  | Captura screenshots dos projetos (Playwright) e gera as thumbnails WebP em `img/`                  |
+| Comando                    | Descrição                                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------------------------- |
+| `npm run dev`              | Inicia o Vite (frontend) com proxy para a API                                                      |
+| `npm run dev:all`          | Inicia frontend e backend juntos                                                                   |
+| `npm run server`           | Inicia apenas o backend Hono com reload automático (`tsx watch server/index.ts`)                   |
+| `npm run build`            | Roda o typecheck e gera o build de produção em `dist/`                                             |
+| `npm run preview`          | Serve localmente o build gerado                                                                    |
+| `npm start`                | Inicia o servidor Hono via `tsx` (API; em produção não inicia sem as variáveis do Resend)          |
+| `npm run typecheck`        | Verifica os tipos dos três ambientes (frontend, Node e Cloudflare Pages Functions)                 |
+| `npm run types:cloudflare` | Regenera `functions/types.d.ts` (tipos do runtime Cloudflare)                                      |
+| `npm run pages:dev`        | Sobe o Cloudflare Pages localmente (build + `wrangler pages dev`) — testa as Functions             |
+| `npm run pages:deploy`     | Builda e publica no Cloudflare Pages (`wrangler pages deploy dist`)                                |
+| `npm test`                 | Roda os testes automatizados da API com `tsx --test`                                               |
+| `npm run lint`             | Verifica o código com ESLint                                                                       |
+| `npm run lint:fix`         | Corrige automaticamente os problemas de lint                                                       |
+| `npm run format`           | Formata todos os arquivos com Prettier                                                             |
+| `npm run format:check`     | Verifica se todos os arquivos seguem o padrão do Prettier                                          |
+| `npm run sitemap`          | Regenera o `sitemap.xml` em `public/` (lastmod = data do último commit que alterou o `index.html`) |
+| `npm run check`            | Verifica se todas as referências a arquivos locais existem e lista imagens órfãs                   |
+| `npm run imagens`          | Converte PNGs/JPGs grandes (> 10 KB) de `img/` para WebP                                           |
+| `npm run screenshots`      | Captura screenshots dos projetos (Playwright) e gera as thumbnails WebP em `img/`                  |
 
 ### Deploy — Cloudflare Pages
 
@@ -221,7 +226,8 @@ frontend-portfolio/
 │   ├── robots.txt            # Diretrizes para crawlers
 │   └── sitemap.xml           # Mapa do site (gerado via npm run sitemap)
 ├── shared/
-│   └── validacao.js          # Validação de e-mail (fonte única frontend/backend)
+│   ├── validacao.ts          # Validação de e-mail (fonte única frontend/backend)
+│   └── types.ts              # Tipos compartilhados (AppEnv, AppConfig, respostas da API)
 ├── css/
 │   ├── base/
 │   │   ├── reset.css          # Reset e normalização
@@ -243,28 +249,31 @@ frontend-portfolio/
 │   └── main.css               # Entry point (importa todos os módulos)
 ├── js/
 │   ├── modules/
-│   │   ├── tema.js            # Dark/Light mode
-│   │   ├── menu.js            # Menu mobile
-│   │   ├── scroll.js          # Scroll spy, reveal e voltar ao topo
-│   │   ├── filtroProjetos.js  # Filtro e busca de projetos
-│   │   ├── formulario.js      # Validação e envio do formulário
-│   │   ├── copiarEmail.js     # Copiar e-mail
-│   │   ├── toast.js           # Notificações toast
-│   │   ├── typingEffect.js    # Efeito de digitação
-│   │   └── livingEditor.js    # Editor vivo da hero (canvas animado)
-│   └── main.js                # Entry point (inicializa módulos)
+│   │   ├── tema.ts            # Dark/Light mode
+│   │   ├── menu.ts            # Menu mobile
+│   │   ├── scroll.ts          # Scroll spy, reveal e voltar ao topo
+│   │   ├── filtroProjetos.ts  # Filtro e busca de projetos
+│   │   ├── formulario.ts      # Validação e envio do formulário
+│   │   ├── copiarEmail.ts     # Copiar e-mail
+│   │   ├── toast.ts           # Notificações toast
+│   │   ├── typingEffect.ts    # Efeito de digitação
+│   │   └── livingEditor.ts    # Editor vivo da hero (canvas animado)
+│   └── main.ts                # Entry point (inicializa módulos)
+├── types/
+│   └── turnstile.d.ts         # Tipagem mínima do Cloudflare Turnstile no window
 ├── functions/
+│   ├── types.d.ts             # Tipos do runtime Cloudflare (gerado por wrangler types)
 │   └── api/
-│       └── [[path]].js          # Pages Functions: qualquer rota /api/* monta o app Hono
+│       └── [[path]].ts        # Pages Functions: qualquer rota /api/* monta o app Hono
 ├── server/
-│   ├── index.js               # Inicializa o servidor Hono no Node (@hono/node-server)
-│   ├── app.js                 # App Hono (secure-headers, CORS, rate limit, rotas) — factory criarApp()
-│   ├── app.test.js            # Testes automatizados da API (node --test)
-│   ├── routes/contato.js      # POST /api/contato com validação, honeypot e Turnstile
+│   ├── index.ts               # Inicializa o servidor Hono no Node (@hono/node-server)
+│   ├── app.ts                 # App Hono (secure-headers, CORS, rate limit, rotas) — factory criarApp()
+│   ├── app.test.ts            # Testes automatizados da API (tsx --test)
+│   ├── routes/contato.ts      # POST /api/contato com validação, honeypot e Turnstile
 │   ├── lib/
-│   │   ├── config.js          # carregarConfig(env) — lê process.env ou context.env
-│   │   ├── email.js           # Envio de e-mail via Resend (REST API / modo log)
-│   │   └── turnstile.js       # Valida o token do Cloudflare Turnstile (siteverify)
+│   │   ├── config.ts          # carregarConfig(env) — lê process.env ou context.env
+│   │   ├── email.ts           # Envio de e-mail via Resend (REST API / modo log)
+│   │   └── turnstile.ts       # Valida o token do Cloudflare Turnstile (siteverify)
 │   └── .env.example           # Modelo de variáveis de ambiente
 ├── scripts/
 │   ├── gerar-sitemap.js       # Regenera public/sitemap.xml
@@ -273,7 +282,11 @@ frontend-portfolio/
 │   └── capturar-screenshots.js# Captura thumbnails dos projetos (Playwright + sharp)
 ├── img/                       # Imagens e ícones (WebP otimizado)
 ├── index.html                 # Página principal (entry point do Vite)
-├── vite.config.js             # Configuração do Vite (build, proxy e cópia de estáticos)
+├── vite.config.ts             # Configuração do Vite (build, proxy e cópia de estáticos)
+├── tsconfig.json              # Typecheck do frontend (js/, shared/, types/)
+├── tsconfig.node.json         # Typecheck do Node (server/, shared/, vite.config.ts)
+├── functions/tsconfig.json    # Typecheck das Pages Functions (funções + runtime Cloudflare)
+├── tsconfig.base.json         # Base comum (strict, noEmit, ES2022)
 ├── wrangler.toml              # Configuração do Cloudflare Pages
 ├── eslint.config.js           # Configuração do ESLint (flat config)
 ├── .prettierrc.json           # Configuração do Prettier
@@ -291,7 +304,7 @@ frontend-portfolio/
 ## O que aprendi
 
 - **Manipulação do DOM** — criação e remoção de elementos, event delegation, manipulação de classes e atributos
-- **Organização de código** — separação em módulos ES6, cada funcionalidade isolada e testável
+- **Organização de código** — separação em módulos TypeScript/ES6, cada funcionalidade isolada e testável
 - **CSS modular** — uso de `@import` para organizar estilos em base, componentes e utilitários
 - **Responsividade** — media queries, grid e flexbox para adaptar o layout às telas
 - **Acessibilidade** — ARIA labels, navegação por teclado, skip link, focus management
@@ -302,7 +315,8 @@ frontend-portfolio/
 - **Backend com Hono** — rotas, middlewares, rate limit, envio de e-mail com Resend, modo log para desenvolvimento e configuração por ambiente (`process.env`/`context.env`)
 - **Cloudflare Pages + Functions** — deploy do frontend e da API no mesmo domínio, variáveis por secret e domínio próprio (diovanny.dev)
 - **Segurança web** — secure-headers/CSP, honeypot + Cloudflare Turnstile, limite de payload e validação de entrada no servidor
-- **Testes automatizados** — cobertura da API com o runner nativo do Node (`node --test`) e `fetch`
+- **Testes automatizados** — cobertura da API com `tsx --test` (runner nativo do Node) e `fetch`
+- **TypeScript estrito** — tipagem de frontend (Vite), Node (tsx) e Cloudflare (Wrangler) em configurações separadas, com `npm run typecheck`
 - **Qualidade de código** — ESLint e Prettier para manter o código consistente e sem problemas comuns
 - **Automação com Node.js** — scripts para gerar sitemap, verificar referências de assets e otimizar imagens
 

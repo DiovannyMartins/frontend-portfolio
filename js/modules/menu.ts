@@ -4,19 +4,19 @@ export function initMenuMobile() {
 
   if (!menuToggle || !nav) return;
 
-  function abrirMenu() {
+  const abrirMenu = () => {
     nav.classList.add("nav--active");
     menuToggle.classList.add("header__menu-toggle--active");
     menuToggle.setAttribute("aria-expanded", "true");
     menuToggle.setAttribute("aria-label", "Fechar menu");
-  }
+  };
 
-  function fecharMenu() {
+  const fecharMenu = () => {
     nav.classList.remove("nav--active");
     menuToggle.classList.remove("header__menu-toggle--active");
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.setAttribute("aria-label", "Abrir menu");
-  }
+  };
 
   menuToggle.addEventListener("click", () => {
     const estaAberto = nav.classList.contains("nav--active");
@@ -32,8 +32,8 @@ export function initMenuMobile() {
   });
 
   document.addEventListener("click", (event) => {
-    const clicouNoMenu = nav.contains(event.target);
-    const clicouNoBotao = menuToggle.contains(event.target);
+    const clicouNoMenu = event.target instanceof Node && nav.contains(event.target);
+    const clicouNoBotao = event.target instanceof Node && menuToggle.contains(event.target);
 
     if (!clicouNoMenu && !clicouNoBotao && nav.classList.contains("nav--active")) {
       fecharMenu();
