@@ -90,10 +90,11 @@ function traduzirHead(html) {
 
 // Na página EN o switcher aponta para a versão PT (/), com rótulo "PT".
 // Reconstruído por inteiro: mexer em atributos isolados com regex colide
-// (ex.: `lang=` casa dentro de `hreflang=`).
+// (ex.: `lang=` casa dentro de `hreflang=`). O Prettier quebra o <a> em
+// várias linhas, então a regex tolera qualquer espaço/linha.
 function traduzirSwitcher(html) {
   return html.replace(
-    /<a[^>]*\bdata-lang-switch[^>]*>[^<]*<\/a>/,
+    /<a[\s\S]*?\bdata-lang-switch[\s\S]*?>[\s\S]*?<\/a\s*>/,
     () =>
       '<a class="lang-switch nav__link btn" href="/" hreflang="pt-BR" lang="pt" data-lang-switch>PT</a>',
   );
