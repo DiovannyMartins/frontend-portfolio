@@ -1,3 +1,5 @@
+import { traduzir } from "../i18n.ts";
+
 export function initMenuMobile() {
   const menuToggle = document.getElementById("menuToggle");
   const nav = document.querySelector(".nav");
@@ -8,14 +10,14 @@ export function initMenuMobile() {
     nav.classList.add("nav--active");
     menuToggle.classList.add("header__menu-toggle--active");
     menuToggle.setAttribute("aria-expanded", "true");
-    menuToggle.setAttribute("aria-label", "Fechar menu");
+    menuToggle.setAttribute("aria-label", traduzir("fecharMenu"));
   };
 
   const fecharMenu = () => {
     nav.classList.remove("nav--active");
     menuToggle.classList.remove("header__menu-toggle--active");
     menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Abrir menu");
+    menuToggle.setAttribute("aria-label", traduzir("abrirMenu"));
   };
 
   menuToggle.addEventListener("click", () => {

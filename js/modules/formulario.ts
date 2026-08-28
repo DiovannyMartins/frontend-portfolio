@@ -1,4 +1,7 @@
 import { validarEmail } from "../../shared/validacao.ts";
+import { HONEYTOKEN_VALOR } from "../../shared/anti-spam.ts";
+import { HEADER_IDIOMA } from "../../shared/i18n.ts";
+import { traduzir, idiomaAtual } from "../i18n.ts";
 import type { ErrosContato, RespostaContato } from "../../shared/types.ts";
 
 type CampoEditavel = HTMLInputElement | HTMLTextAreaElement;
@@ -43,7 +46,15 @@ export function initFormulario() {
   const campoEmail = document.querySelector<HTMLInputElement>("#email");
   const campoMensagem = document.querySelector<HTMLTextAreaElement>("#mensagem");
   const campoWebsite = document.querySelector<HTMLInputElement>("#website");
+  const campoAssunto = document.querySelector<HTMLInputElement>("#assunto");
   const widgetTurnstile = document.getElementById("turnstile");
+
+  // Honeytoken: o campo escondido recebe o valor sentinela no load. O servidor
+  // só aceita esse valor; bots que não executam JS deixam o campo vazio.
+  if (campoAssunto) campoAssunto.value = HONEYTOKEN_VALOR;
+  // Marca o momento do render do formulário; o servidor exige um tempo mínimo
+  // entre render e submit (fill-time). Reiniciado após cada tentativa.
+  let inicioRender = Date.now();
 
   // Cloudflare Turnstile: renderizado explicitamente para ter o widgetId
   // (permite resetar o token após cada tentativa de envio). A sitekey vem
@@ -143,19 +154,19 @@ export function initFormulario() {
       campo: campoNome,
       erro: document.getElementById("erroNome"),
       validador: (valor) => valor.length >= 3,
-      msgErro: "Digite seu nome completo.",
+      msgErro: traduzir("nomeObrigatorio"),
     },
     {
       campo: campoEmail,
       erro: document.getElementById("erroEmail"),
       validador: (valor) => validarEmail(valor),
-      msgErro: "Digite um e-mail válido.",
+      msgErro: traduzir("emailInvalido"),
     },
     {
       campo: campoMensagem,
       erro: document.getElementById("erroMensagem"),
       validador: (valor) => valor.length >= 10,
-      msgErro: "Escreva uma mensagem com pelo menos 10 caracteres.",
+      msgErro: traduzir("mensagemMinima"),
     },
   ];
 
@@ -239,15 +250,13 @@ export function initFormulario() {
     // avisa na hora em vez de enviar sem token e receber erro 400 do servidor.
     if (PRODUCAO && estadoTurnstile !== "ok") {
       feedbackForm.classList.add("contact__feedback--error");
-      feedbackForm.textContent =
-        "Não foi possível carregar o verificador de segurança (captcha). " +
-        "Se você usa bloqueador de anúncios, desative-o e recarregue a página.";
+      feedbackForm.textContent = traduzir("captchaFalhou");
       return;
     }
 
     if (PRODUCAO && !tokenTurnstile) {
       feedbackForm.classList.add("contact__feedback--error");
-      feedbackForm.textContent = "Complete o desafio de segurança antes de enviar.";
+      feedbackForm.textContent = traduzir("captchaPendente");
       widgetTurnstile?.focus?.();
       return;
     }
@@ -257,7 +266,7 @@ export function initFormulario() {
     const textoOriginal = botaoEnviar.textContent;
     botaoEnviar.disabled = true;
     form.setAttribute("aria-busy", "true");
-    botaoEnviar.textContent = "Enviando...";
+    botaoEnviar.textContent = traduzir("enviando");
 
     const controller = new AbortController();
     const TIMEOUT_ENVIO_MS = 10000;
@@ -269,19 +278,23 @@ export function initFormulario() {
       const health = await fetch("/api/health", { signal: controller.signal });
       if (!health.ok) {
         feedbackForm.classList.add("contact__feedback--error");
-        feedbackForm.textContent =
-          'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';
+        feedbackForm.textContent = traduzir("envioInativo");
         return;
       }
 
       const resposta = await fetch("/api/contato", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          [HEADER_IDIOMA]: idiomaAtual(),
+        },
         body: JSON.stringify({
           nome: campoNome?.value.trim() ?? "",
           email: campoEmail?.value.trim() ?? "",
           mensagem: campoMensagem?.value.trim() ?? "",
           website: campoWebsite?.value ?? "",
+          assunto: campoAssunto?.value ?? "",
+          fillTime: Date.now() - inicioRender,
           turnstile: tokenTurnstile,
         }),
         signal: controller.signal,
@@ -296,7 +309,7 @@ export function initFormulario() {
         : {};
 
       if (resposta.ok) {
-        feedbackForm.textContent = "Mensagem enviada com sucesso! Em breve entrarei em contato.";
+        feedbackForm.textContent = traduzir("envioSucesso");
         form.reset();
         CAMPOS.forEach(({ campo }) => campo.classList.remove("input--valid"));
       } else if (ehJson && ehRespostaContato(dados) && "errors" in dados) {
@@ -309,18 +322,15 @@ export function initFormulario() {
         // Resposta não-JSON (404/405 do próprio servidor estático) significa
         // que o backend não está ativo nesta origem — ex.: hospedagem estática do dist sem Pages Functions.
         feedbackForm.classList.add("contact__feedback--error");
-        feedbackForm.textContent =
-          'O envio online não está ativo nesta hospedagem. Teste com "npm run dev:all" ou copie meu e-mail abaixo.';
+        feedbackForm.textContent = traduzir("envioInativo");
       }
     } catch {
       if (controller.signal.aborted) {
         feedbackForm.classList.add("contact__feedback--error");
-        feedbackForm.textContent =
-          "O envio demorou demais. Verifique sua conexão e tente novamente.";
+        feedbackForm.textContent = traduzir("envioLento");
       } else {
         feedbackForm.classList.add("contact__feedback--error");
-        feedbackForm.textContent =
-          "Não foi possível enviar. Verifique sua conexão e tente novamente.";
+        feedbackForm.textContent = traduzir("envioFalha");
       }
     } finally {
       clearTimeout(timerEnvio);
@@ -334,6 +344,11 @@ export function initFormulario() {
         window.turnstile.reset(turnstileId);
       }
       tokenTurnstile = "";
+
+      // Após cada tentativa (sucesso ou erro) reinicia a contagem do fill-time
+      // e reaplica o honeytoken: o form.reset() do sucesso limpa o campo.
+      if (campoAssunto) campoAssunto.value = HONEYTOKEN_VALOR;
+      inicioRender = Date.now();
 
       feedbackTimer = setTimeout(() => {
         feedbackForm.textContent = "";

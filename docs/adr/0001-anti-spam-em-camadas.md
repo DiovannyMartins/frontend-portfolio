@@ -1,0 +1,5 @@
+# Anti-spam do formulário de contato em camadas
+
+O formulário combina o rate limit por IP (10/15min, já existente) com camadas extras em memória — limite por e-mail do remetente (3/15min), dedupe de conteúdo (máx. 3 cópias idênticas/1h) e cap global de entregas (20/15min) — além de honeytoken preenchido pelo JS e tempo mínimo de preenchimento (3s). Todas as camadas respondem 429 genérico ou sucesso simulado, sem revelar qual pegou, e cada bloqueio gera um log `[anti-spam]`.
+
+Optamos por contadores em memória (best-effort, por isolate no Workers) em vez do Cloudflare Rate Limiting nativo via binding: o caso comum de bots já é coberto, não adiciona custo nem configuração, e migrar para o binding nativo é a resposta natural a um ataque real observado. O honeytoken usa um valor sentinela estático (visível no JS) em vez de token por sessão — o alvo é o bot que não executa JS; o bot que executa já precisa resolver o Turnstile. Por fim, um kill-switch operacional (`CONTATO_ENABLED=false`) desliga o formulário com 503 sem novo deploy, como alavanca manual caso todas as camadas falhem.

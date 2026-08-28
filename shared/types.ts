@@ -15,6 +15,7 @@ export interface AppEnv {
   TURNSTILE_HOSTNAMES?: string;
   TURNSTILE_ACTION?: string;
   LOG_EMAIL_FALLBACK?: string;
+  CONTATO_ENABLED?: string;
 }
 
 export interface AppConfig {
@@ -41,6 +42,10 @@ export interface ContatoPayload {
   email?: unknown;
   mensagem?: unknown;
   website?: unknown;
+  // Honeytoken preenchido pelo JS no load (ver shared/anti-spam.ts).
+  assunto?: unknown;
+  // Tempo em ms entre o render do formulário e o submit.
+  fillTime?: unknown;
   turnstile?: unknown;
 }
 

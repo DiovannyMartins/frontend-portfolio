@@ -146,6 +146,17 @@ O formulário usa o [Turnstile](https://www.cloudflare.com/products/turnstile/) 
 - Configure `TURNSTILE_HOSTNAMES` em produção para restringir tokens aos domínios do site. `TURNSTILE_ACTION` pode ser usado quando o widget tiver uma action definida.
 - O widget é resetado a cada tentativa de envio (o token é de uso único).
 
+#### Anti-spam em camadas e resposta a ataques
+
+Além do Turnstile, o formulário combina camadas defensivas: rate limit por IP (10/15min), honeypot `website`, honeytoken preenchido pelo JS no load, tempo mínimo de preenchimento (3s), rate limit por e-mail do remetente (3/15min), dedupe de conteúdo (>3 cópias idênticas/1h) e cap global de entregas (20/15min). Bloqueios respondem **429 genérico** (ou sucesso simulado nas armadilhas), sem revelar qual camada pegou.
+
+Ao suspeitar de um ataque:
+
+1. **Observe os logs** — cada bloqueio gera `[anti-spam] <camada> bloqueado (chave: ...)`. A camada que dispara indica o tipo de ataque.
+2. **Não precisa agir** — as camadas continuam bloqueando; mensagens válidas ainda passam.
+3. **Se o ataque sobreviver a todas as camadas**, desligue o formulário sem deploy: defina `CONTATO_ENABLED=false` (variável de ambiente) → a API responde 503 e o site mostra "envio online não ativo".
+4. **Investigue** no painel do Resend (envios recentes) e no Cloudflare (logs/analytics) para entender a origem.
+
 Para criar as chaves: [dash.cloudflare.com](https://dash.cloudflare.com/) → **Turnstile** → **Add widget** (modo **Managed**, hostnames `diovanny.dev`, `www.diovanny.dev` e `frontend-portfolio-5at.pages.dev`). Em produção, a secret key vai como variável no Cloudflare (ver abaixo).
 
 ### Scripts disponíveis

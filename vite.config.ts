@@ -10,10 +10,12 @@ export default defineConfig({
       transformIndexHtml: {
         order: "post",
         handler(html) {
-          return html.replace(
-            "<!-- ANTI_FOUC_SCRIPT -->",
-            '<script src="./js/tema-inicial.js"></script>',
-          );
+          return html
+            .replace("<!-- ANTI_FOUC_SCRIPT -->", '<script src="./js/tema-inicial.js"></script>')
+            .replace(
+              "<!-- IDIOMA_INICIAL_SCRIPT -->",
+              '<script src="./js/idioma-inicial.js"></script>',
+            );
         },
       },
     },

@@ -6,3 +6,8 @@ package-lock.json
 public/sitemap.xml
 DESIGN.md
 functions/types.d.ts
+screenshots-preview.html
+.agents/
+AGENTS.md
+docs/agents/
+skills-lock.json

@@ -4,6 +4,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { MemoryStore, rateLimiter } from "hono-rate-limiter";
 import rotaContato from "./routes/contato.ts";
 import { carregarConfig } from "./lib/config.ts";
+import { mensagensDoRequest } from "./lib/idioma.ts";
 import type { AppConfig, AppEnv } from "../shared/types.ts";
 
 // O mesmo app roda em dois runtimes:
@@ -65,16 +66,18 @@ export default function criarApp(env: AppEnv, opcoes: OpcoesCriarApp = {}) {
       return next();
     }
 
-    return c.json({ success: false, error: "Origem não permitida." }, 403);
+    return c.json({ success: false, error: mensagensDoRequest(c).origemNaoPermitida }, 403);
   });
 
   // Limita envios por IP (ex.: 10 a cada 15 min) para reduzir spam no formulário.
   // No Workers o MemoryStore é por isolate (best-effort); o Cloudflare Rate
   // Limiting nativo pode substituí-lo via binding se necessário.
+  // `standardHeaders: false` deixa o 429 idêntico aos das demais camadas de
+  // anti-spam (sem headers RateLimit-*), para não revelar qual bloqueou.
   const opcoesRateLimit = {
     windowMs: 15 * 60 * 1000,
     limit: 10,
-    standardHeaders: true,
+    standardHeaders: false,
     keyGenerator: (c: Context) => {
       if (config.trustProxy) {
         return (
@@ -87,7 +90,10 @@ export default function criarApp(env: AppEnv, opcoes: OpcoesCriarApp = {}) {
       // e, na ausência de um valor, cai no fallback "local".
       return opcoes.obterIpCliente?.(c) || "local";
     },
-    message: { success: false, error: "Muitas tentativas de envio. Aguarde alguns minutos." },
+    message: (c: Context) => ({
+      success: false,
+      error: mensagensDoRequest(c).limiteMensagem,
+    }),
     store: new MemoryStore(),
   };
 

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "dev:all": "concurrently -n API,WEB -c yellow,cyan \"npm run server\" \"npm run dev\"",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run typecheck && vite build && tsx scripts/gerar-pagina-en.js",
     "preview": "vite preview",
     "server": "tsx watch server/index.ts",
     "start": "tsx server/index.ts",

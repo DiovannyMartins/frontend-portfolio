@@ -26,6 +26,10 @@
     <!-- O Vite injeta o script clássico anti-FOUC durante o build/dev. -->
     <!-- ANTI_FOUC_SCRIPT -->
 
+    <!-- Anti-FOUC de idioma: redireciona para a preferência salva (ou para o
+         idioma do navegador na primeira visita) antes da página renderizar. -->
+    <!-- IDIOMA_INICIAL_SCRIPT -->
+
     <link rel="stylesheet" href="css/main.css" />
 
     <meta property="og:type" content="website" />
@@ -37,6 +41,9 @@
     <meta property="og:image" content="https://diovanny.dev/img/imagem.webp" />
     <meta property="og:url" content="https://diovanny.dev/" />
     <link rel="canonical" href="https://diovanny.dev/" />
+    <link rel="alternate" hreflang="pt-BR" href="https://diovanny.dev/" />
+    <link rel="alternate" hreflang="en" href="https://diovanny.dev/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://diovanny.dev/" />
     <meta property="og:locale" content="pt_BR" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -70,21 +77,52 @@
          indicador de "quanto do arquivo já foi lido" num editor. -->
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-    <a href="#main" class="skip-link">Pular para o conteúdo principal</a>
+    <a href="#main" class="skip-link" data-i18n="pularParaConteudo"
+      >Pular para o conteúdo principal</a
+    >
 
     <header class="header" role="banner">
-      <a href="#home" class="header__logo" aria-label="Diovanny.dev - Página inicial">
-        <img src="img/icon-logo.png" alt="Logo Diovanny.dev" width="64" height="64" />
+      <a
+        href="#home"
+        class="header__logo"
+        aria-label="Diovanny.dev - Página inicial"
+        data-i18n-aria="paginaInicial"
+      >
+        <img
+          src="img/icon-logo.png"
+          alt="Logo Diovanny.dev"
+          width="64"
+          height="64"
+          data-i18n-alt="logoAlt"
+        />
         <span class="header__logo-text">Diovanny.dev</span>
       </a>
 
-      <nav class="nav" id="mainNav" aria-label="Navegação principal">
+      <nav
+        class="nav"
+        id="mainNav"
+        aria-label="Navegação principal"
+        data-i18n-aria="navegacaoPrincipal"
+      >
         <ul class="nav__list" role="list">
-          <li class="nav__item"><a class="nav__link btn" href="#home">Home</a></li>
-          <li class="nav__item"><a class="nav__link btn" href="#sobre">Sobre</a></li>
-          <li class="nav__item"><a class="nav__link btn" href="#tecnologias">Tecnologias</a></li>
-          <li class="nav__item"><a class="nav__link btn" href="#projetos">Projetos</a></li>
-          <li class="nav__item"><a class="nav__link btn" href="#contato">Contato</a></li>
+          <li class="nav__item">
+            <a class="nav__link btn" href="#home" data-i18n="navHome">Home</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link btn" href="#sobre" data-i18n="navSobre">Sobre</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link btn" href="#tecnologias" data-i18n="navTecnologias">Tecnologias</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link btn" href="#projetos" data-i18n="navProjetos">Projetos</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link btn" href="#contato" data-i18n="navContato">Contato</a>
+          </li>
+          <li class="nav__item nav__lang-item">
+            <a class="lang-switch btn" href="/en/" hreflang="en" lang="en" data-lang-switch>EN</a>
+          </li>
           <li class="nav__item nav__theme-item">
             <button
               type="button"
@@ -92,9 +130,12 @@
               class="theme-toggle btn"
               aria-label="Ativar tema claro"
               aria-pressed="false"
+              data-i18n-aria="ativarTemaClaro"
             >
               <img src="img/icon-lua.png" alt="" id="iconTema" class="icon" aria-hidden="true" />
-              <span class="theme-toggle__label" id="themeLabel">Tema claro</span>
+              <span class="theme-toggle__label" id="themeLabel" data-i18n="temaClaro"
+                >Tema claro</span
+              >
             </button>
           </li>
         </ul>
@@ -108,6 +149,7 @@
           aria-label="Abrir menu"
           aria-expanded="false"
           aria-controls="mainNav"
+          data-i18n-aria="abrirMenu"
         >
           <span class="header__menu-toggle-bar"></span>
           <span class="header__menu-toggle-bar"></span>
@@ -121,15 +163,21 @@
         <canvas class="hero__code-field" id="codeField" aria-hidden="true"></canvas>
         <div class="hero__content">
           <!-- Texto no HTML serve de fallback caso o JS do efeito de digitação não carregue -->
-          <h1 class="hero__title" id="typingText" aria-label="Desenvolvedor Full-Stack">
+          <h1
+            class="hero__title"
+            id="typingText"
+            aria-label="Desenvolvedor Full-Stack"
+            data-i18n="heroTitulo"
+            data-i18n-aria="heroTitulo"
+          >
             Desenvolvedor Full-Stack
           </h1>
           <span class="hero__accent" aria-hidden="true"></span>
-          <p class="hero__text">
+          <p class="hero__text" data-i18n="heroTexto">
             Desenvolvendo aplicações web modernas, responsivas e eficientes, do front-end ao
             back-end.
           </p>
-          <a href="#projetos" class="hero__cta btn">Ver Projetos</a>
+          <a href="#projetos" class="hero__cta btn" data-i18n="verProjetos">Ver Projetos</a>
         </div>
 
         <div class="hero__media">
@@ -137,6 +185,7 @@
             class="hero__image"
             src="img/imagem.webp"
             alt="Tela de computador com código-fonte de uma aplicação web"
+            data-i18n-alt="heroImagemAlt"
             width="600"
             height="400"
             fetchpriority="high"
@@ -145,8 +194,8 @@
       </section>
 
       <section class="about reveal" id="sobre" aria-labelledby="sobre-title">
-        <h2 class="about__title" id="sobre-title">Sobre mim</h2>
-        <p class="about__text">
+        <h2 class="about__title" id="sobre-title" data-i18n="sobreTitulo">Sobre mim</h2>
+        <p class="about__text" data-i18n="sobreTexto">
           Olá, eu sou o Diovanny, Desenvolvedor Full-Stack focado na criação de aplicações web
           modernas, responsivas e funcionais. Trabalho desde a construção de interfaces intuitivas
           até o desenvolvimento de back-ends eficientes e bem estruturados, utilizando tecnologias
@@ -156,12 +205,14 @@
       </section>
 
       <section class="skills reveal" id="tecnologias" aria-labelledby="skills-title">
-        <h2 class="skills__title" id="skills-title">Minhas Tecnologias</h2>
+        <h2 class="skills__title" id="skills-title" data-i18n="tecnologiasTitulo">
+          Minhas Tecnologias
+        </h2>
 
         <div class="skills__window">
           <div class="skills__window-bar" aria-hidden="true">
-            <span class="skills__window-tab">stack.ts</span>
-            <span class="skills__window-meta">• 6 tecnologias</span>
+            <span class="skills__window-tab" data-i18n="stackTab">stack.ts</span>
+            <span class="skills__window-meta" data-i18n="stackMeta">• 6 tecnologias</span>
           </div>
 
           <ul class="skills__editor">
@@ -286,8 +337,10 @@
 
       <section id="projetos" class="projects reveal" aria-labelledby="projetos-title">
         <div class="projects__header">
-          <h2 class="projects__title" id="projetos-title">Meus Projetos</h2>
-          <p class="projects__subtitle">
+          <h2 class="projects__title" id="projetos-title" data-i18n="projetosTitulo">
+            Meus Projetos
+          </h2>
+          <p class="projects__subtitle" data-i18n="projetosSubtitulo">
             Confira abaixo alguns dos trabalhos que desenvolvi utilizando HTML5, CSS3 e JavaScript.
           </p>
         </div>
@@ -297,27 +350,46 @@
             class="projects__filter-btn projects__filter-btn--active btn"
             data-filtro="todos"
             aria-pressed="true"
+            data-i18n="filtroTodos"
           >
             Todos
           </button>
-          <button class="projects__filter-btn btn" data-filtro="dashboard" aria-pressed="false">
+          <button
+            class="projects__filter-btn btn"
+            data-filtro="dashboard"
+            aria-pressed="false"
+            data-i18n="filtroDashboard"
+          >
             Dashboard
           </button>
-          <button class="projects__filter-btn btn" data-filtro="landing" aria-pressed="false">
+          <button
+            class="projects__filter-btn btn"
+            data-filtro="landing"
+            aria-pressed="false"
+            data-i18n="filtroLanding"
+          >
             Landing Page
           </button>
-          <button class="projects__filter-btn btn" data-filtro="ecommerce" aria-pressed="false">
+          <button
+            class="projects__filter-btn btn"
+            data-filtro="ecommerce"
+            aria-pressed="false"
+            data-i18n="filtroEcommerce"
+          >
             E-commerce
           </button>
         </div>
 
         <div class="projects__search">
-          <label for="buscaProjetos" class="sr-only">Buscar projetos</label>
+          <label for="buscaProjetos" class="sr-only" data-i18n="buscarProjetos"
+            >Buscar projetos</label
+          >
           <input
             type="search"
             id="buscaProjetos"
             class="projects__search-input"
             placeholder="Buscar projetos..."
+            data-i18n-placeholder="buscarProjetosPlaceholder"
             autocomplete="off"
           />
         </div>
@@ -331,13 +403,14 @@
                 srcset="img/project-dashboard-768.webp 768w, img/project-dashboard.webp 1280w"
                 sizes="(max-width: 768px) 90vw, 380px"
                 alt="Prévia do Business Dashboard"
+                data-i18n-alt="projeto1Alt"
                 loading="lazy"
                 width="1280"
                 height="800"
               />
             </div>
-            <h3 class="project-card__title">Business Dashboard</h3>
-            <p class="project-card__text">
+            <h3 class="project-card__title" data-i18n="projeto1Titulo">Business Dashboard</h3>
+            <p class="project-card__text" data-i18n="projeto1Texto">
               Painel corporativo com sidebar de navegação, cards de métricas e gráficos — organiza
               dados de negócio em uma visão única e escaneável.
             </p>
@@ -346,6 +419,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="project-card__link btn"
+              data-i18n="acessarProjeto"
               >Acessar Projeto</a
             >
           </article>
@@ -358,13 +432,14 @@
                 srcset="img/project-saas-768.webp 768w, img/project-saas.webp 1280w"
                 sizes="(max-width: 768px) 90vw, 380px"
                 alt="Prévia da SaaS Landing Page"
+                data-i18n-alt="projeto2Alt"
                 loading="lazy"
                 width="1280"
                 height="800"
               />
             </div>
-            <h3 class="project-card__title">SaaS Landing Page</h3>
-            <p class="project-card__text">
+            <h3 class="project-card__title" data-i18n="projeto2Titulo">SaaS Landing Page</h3>
+            <p class="project-card__text" data-i18n="projeto2Texto">
               Landing page de produto com hero, seção de features, pricing e CTA — conduz o
               visitante da atenção à ação com hierarquia clara.
             </p>
@@ -373,6 +448,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="project-card__link btn"
+              data-i18n="acessarProjeto"
               >Acessar Projeto</a
             >
           </article>
@@ -385,13 +461,14 @@
                 srcset="img/project-ecommerce-768.webp 768w, img/project-ecommerce.webp 1280w"
                 sizes="(max-width: 768px) 90vw, 380px"
                 alt="Prévia do Modern E-commerce"
+                data-i18n-alt="projeto3Alt"
                 loading="lazy"
                 width="1280"
                 height="800"
               />
             </div>
-            <h3 class="project-card__title">Modern E-commerce</h3>
-            <p class="project-card__text">
+            <h3 class="project-card__title" data-i18n="projeto3Titulo">Modern E-commerce</h3>
+            <p class="project-card__text" data-i18n="projeto3Texto">
               Loja virtual com grade de produtos, cards de item e página de produto — apresenta o
               catálogo de forma rápida de percorrer e comparar.
             </p>
@@ -400,6 +477,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="project-card__link btn"
+              data-i18n="acessarProjeto"
               >Acessar Projeto</a
             >
           </article>
@@ -412,13 +490,14 @@
                 srcset="img/project-admin-768.webp 768w, img/project-admin.webp 1280w"
                 sizes="(max-width: 768px) 90vw, 380px"
                 alt="Prévia do Admin Dashboard"
+                data-i18n-alt="projeto4Alt"
                 loading="lazy"
                 width="1280"
                 height="800"
               />
             </div>
-            <h3 class="project-card__title">Admin Dashboard</h3>
-            <p class="project-card__text">
+            <h3 class="project-card__title" data-i18n="projeto4Titulo">Admin Dashboard</h3>
+            <p class="project-card__text" data-i18n="projeto4Texto">
               Painel de gerenciamento com sidebar, cards informativos e interface responsiva —
               concentra controles e indicadores em um só lugar.
             </p>
@@ -427,32 +506,40 @@
               target="_blank"
               rel="noopener noreferrer"
               class="project-card__link btn"
+              data-i18n="acessarProjeto"
               >Acessar Projeto</a
             >
           </article>
         </div>
 
         <!-- Exibida via JS quando nenhum projeto corresponde aos filtros ativos -->
-        <p class="projects__empty" id="projetosVazio" role="status" hidden>
+        <p
+          class="projects__empty"
+          id="projetosVazio"
+          role="status"
+          hidden
+          data-i18n="projetosVazio"
+        >
           Nenhum projeto encontrado. Tente outro termo ou limpe o filtro.
         </p>
       </section>
 
       <section class="contact reveal" id="contato" aria-labelledby="contato-title">
         <div class="contact__info">
-          <h2 class="contact__title" id="contato-title">Contato</h2>
-          <p class="contact__text">
+          <h2 class="contact__title" id="contato-title" data-i18n="contatoTitulo">Contato</h2>
+          <p class="contact__text" data-i18n="contatoTexto">
             Entre em contato comigo pelas redes sociais ou pelo formulário abaixo:
           </p>
 
           <form id="formContato" class="contact__form" novalidate>
             <div class="contact__field">
-              <label for="nome" class="contact__label">Nome</label>
+              <label for="nome" class="contact__label" data-i18n="labelNome">Nome</label>
               <input
                 type="text"
                 id="nome"
                 name="nome"
                 placeholder="Ex.: Maria Silva"
+                data-i18n-placeholder="placeholderNome"
                 autocomplete="name"
                 minlength="3"
                 maxlength="100"
@@ -463,12 +550,13 @@
             </div>
 
             <div class="contact__field">
-              <label for="email" class="contact__label">E-mail</label>
+              <label for="email" class="contact__label" data-i18n="labelEmail">E-mail</label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="Ex.: maria@email.com"
+                data-i18n-placeholder="placeholderEmail"
                 autocomplete="email"
                 maxlength="254"
                 required
@@ -478,12 +566,15 @@
             </div>
 
             <div class="contact__field">
-              <label for="mensagem" class="contact__label">Mensagem</label>
+              <label for="mensagem" class="contact__label" data-i18n="labelMensagem"
+                >Mensagem</label
+              >
               <textarea
                 id="mensagem"
                 name="mensagem"
                 rows="4"
                 placeholder="Ex.: Olá, gostaria de conversar sobre um projeto."
+                data-i18n-placeholder="placeholderMensagem"
                 minlength="10"
                 maxlength="5000"
                 required
@@ -495,8 +586,17 @@
             <!-- Honeypot anti-spam: invisível para humanos. Bots que o
                          preenchem recebem sucesso simulado sem enviar e-mail. -->
             <div class="contact__field contact__field--honeypot" aria-hidden="true">
-              <label for="website">Deixe este campo em branco</label>
+              <label for="website" data-i18n="honeypotLabel">Deixe este campo em branco</label>
               <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <!-- Honeytoken anti-spam: o JS preenche este campo com um valor
+                         sentinela no load (ver shared/anti-spam.ts). Bots que não
+                         executam JS deixam vazio ou autopreenchem errado e recebem
+                         sucesso simulado sem enviar e-mail. -->
+            <div class="contact__field contact__field--honeypot" aria-hidden="true">
+              <label for="assunto" data-i18n="honeytokenLabel">Assunto</label>
+              <input type="text" id="assunto" name="assunto" tabindex="-1" autocomplete="off" />
             </div>
 
             <!-- Cloudflare Turnstile: renderizado via JS em js/modules/formulario.ts.
@@ -509,15 +609,18 @@
               tabindex="-1"
               role="region"
               aria-label="Verificação de segurança"
+              data-i18n-aria="turnstileAria"
             ></div>
 
-            <button type="submit" class="contact__submit btn">Enviar Mensagem</button>
+            <button type="submit" class="contact__submit btn" data-i18n="enviarMensagem">
+              Enviar Mensagem
+            </button>
 
             <p id="feedbackForm" class="contact__feedback" role="status" aria-live="polite"></p>
           </form>
         </div>
 
-        <ul class="contact__social" aria-label="Redes sociais">
+        <ul class="contact__social" aria-label="Redes sociais" data-i18n-aria="redesSociais">
           <li>
             <a
               href="https://github.com/DiovannyMartins"
@@ -525,6 +628,7 @@
               rel="noopener noreferrer"
               class="social-card social-card--github"
               aria-label="Visitar perfil no GitHub"
+              data-i18n-aria="visitarGitHub"
             >
               <img
                 class="social-card__icon"
@@ -545,6 +649,7 @@
               id="btnCopiarEmail"
               data-email="diovannydev@gmail.com"
               aria-label="Copiar endereço de e-mail"
+              data-i18n-aria="copiarEnderecoEmail"
             >
               <img
                 class="social-card__icon icon"
@@ -554,14 +659,20 @@
                 loading="lazy"
                 aria-hidden="true"
               />
-              <span id="textoCopiarEmail">Copiar E-mail</span>
+              <span id="textoCopiarEmail" data-i18n="copiarEmail">Copiar E-mail</span>
             </button>
           </li>
         </ul>
       </section>
     </main>
 
-    <button type="button" id="btnTopo" class="back-to-top btn" aria-label="Voltar ao topo da página">
+    <button
+      type="button"
+      id="btnTopo"
+      class="back-to-top btn"
+      aria-label="Voltar ao topo da página"
+      data-i18n-aria="voltarTopo"
+    >
       <img
         src="img/icon-seta-branco.png"
         alt=""
@@ -573,7 +684,10 @@
     </button>
 
     <footer class="footer" role="contentinfo">
-      <p>© <span id="anoAtual"></span> Diovanny.dev - Todos os direitos reservados</p>
+      <p>
+        © <span id="anoAtual"></span>
+        <span data-i18n="footerDireitos">Diovanny.dev - Todos os direitos reservados</span>
+      </p>
     </footer>
 
     <script type="module" src="js/main.ts"></script>

@@ -6,7 +6,9 @@ import { initFiltroProjetos } from "./modules/filtroProjetos.ts";
 import { initCopiarEmail } from "./modules/copiarEmail.ts";
 import { initFormulario } from "./modules/formulario.ts";
 import { initLivingEditor } from "./modules/livingEditor.ts";
+import { initIdioma } from "./i18n.ts";
 
+initIdioma();
 initMenuMobile();
 initTema();
 initScroll();

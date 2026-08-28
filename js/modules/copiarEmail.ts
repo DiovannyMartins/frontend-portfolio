@@ -1,5 +1,6 @@
 import { criarToast } from "./toast.ts";
 import { temaAtual, EVENTO_TEMA } from "./tema.ts";
+import { traduzir } from "../i18n.ts";
 
 export function initCopiarEmail() {
   const btnCopiarEmail = document.querySelector<HTMLButtonElement>("#btnCopiarEmail");
@@ -16,9 +17,7 @@ export function initCopiarEmail() {
   let exibindoCheck = false;
 
   function iconEnvelopeAtual() {
-    return temaAtual() === "light"
-      ? "img/icon-envelope-preto.png"
-      : "img/icon-envelope-branco.png";
+    return temaAtual() === "light" ? "img/icon-envelope-preto.png" : "img/icon-envelope-branco.png";
   }
 
   function iconCheckAtual() {
@@ -41,11 +40,11 @@ export function initCopiarEmail() {
     const email = btnCopiarEmail.dataset.email ?? "";
 
     const mostrarSucesso = () => {
-      textoCopiarEmail.textContent = "Copiado!";
+      textoCopiarEmail.textContent = traduzir("copiado");
       exibindoCheck = true;
       atualizarIconEmail();
 
-      criarToast("E-mail copiado com sucesso!");
+      criarToast(traduzir("emailCopiado"));
 
       clearTimeout(feedbackTimer);
       feedbackTimer = setTimeout(() => {
@@ -67,7 +66,7 @@ export function initCopiarEmail() {
         await copiarComFallback(email);
         mostrarSucesso();
       } catch {
-        criarToast("Erro ao copiar e-mail. Tente novamente.", false);
+        criarToast(traduzir("erroCopiar"), false);
       }
     }
   });

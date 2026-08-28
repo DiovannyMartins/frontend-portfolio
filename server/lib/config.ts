@@ -32,8 +32,11 @@ export function carregarConfig(env: AppEnv): AppConfig {
   return {
     isProduction,
     trustProxy: env.TRUST_PROXY === "true",
+    // Kill-switch: desliga o envio (503) sem novo deploy. Padrão: habilitado.
     productionReady:
-      !isProduction || Boolean(resend.apiKey && resend.from && emailDestino && turnstile.secretKey),
+      env.CONTATO_ENABLED !== "false" &&
+      (!isProduction ||
+        Boolean(resend.apiKey && resend.from && emailDestino && turnstile.secretKey)),
     allowedOrigins: (env.FRONTEND_ORIGIN || "http://localhost:5173")
       .split(",")
       .map((origem) => origem.trim())

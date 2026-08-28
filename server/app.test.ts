@@ -5,6 +5,8 @@ import { serve } from "@hono/node-server";
 import { getConnInfo } from "@hono/node-server/conninfo";
 import criarApp, { type OpcoesCriarApp } from "./app.ts";
 import { validarEmail } from "../shared/validacao.ts";
+import { HONEYTOKEN_VALOR } from "../shared/anti-spam.ts";
+import { HEADER_IDIOMA } from "../shared/i18n.ts";
 import type { AppEnv } from "../shared/types.ts";
 
 let servidor: Server | undefined;
@@ -46,6 +48,35 @@ async function postarContato(
     headers: { "Content-Type": "application/json", ...extra },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
+}
+
+// Corpo de contato "de verdade", como o formulário envia com JS habilitado:
+// inclui o honeytoken (assunto) e o fill-time acima do mínimo.
+function corpoContatoValido(extra: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    nome: "Diovanny Martins",
+    email: "teste@dominio.com",
+    mensagem: "Mensagem com mais de dez caracteres.",
+    assunto: HONEYTOKEN_VALOR,
+    fillTime: 5000,
+    ...extra,
+  };
+}
+
+// Conta chamadas a console.log: o envio em "modo log" (sem Resend) registra a
+// mensagem no console. Permite distinguir envio real de sucesso simulado.
+function espionarLog(): { obterChamadas: () => number; restaurar: () => void } {
+  const original = console.log;
+  let chamadas = 0;
+  console.log = (..._args: unknown[]) => {
+    chamadas += 1;
+  };
+  return {
+    obterChamadas: () => chamadas,
+    restaurar: () => {
+      console.log = original;
+    },
+  };
 }
 
 type ObjetoJson = Record<string, unknown>;
@@ -118,11 +149,7 @@ describe("API", () => {
 
   it("envia contato válido em modo log", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-    });
+    const resposta = await postarContato(baseUrl, corpoContatoValido());
     assert.equal(resposta.status, 200);
     const corpo = await lerCorpoJson(resposta);
     assert.equal(corpo["success"], true);
@@ -130,11 +157,7 @@ describe("API", () => {
 
   it("rejeita e-mail inválido com 400 e erros por campo", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "nao-e-um-email",
-      mensagem: "Mensagem válida aqui.",
-    });
+    const resposta = await postarContato(baseUrl, corpoContatoValido({ email: "nao-e-um-email" }));
     assert.equal(resposta.status, 400);
     const corpo = await lerCorpoJson(resposta);
     assert.equal(corpo["success"], false);
@@ -143,15 +166,19 @@ describe("API", () => {
 
   it("ignora silenciosamente envio com honeypot preenchido", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-      website: "http://spam.example.com",
-    });
-    assert.equal(resposta.status, 200);
-    const corpo = await lerCorpoJson(resposta);
-    assert.equal(corpo["success"], true);
+    const log = espionarLog();
+    try {
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({ website: "http://spam.example.com" }),
+      );
+      assert.equal(resposta.status, 200);
+      const corpo = await lerCorpoJson(resposta);
+      assert.equal(corpo["success"], true);
+      assert.equal(log.obterChamadas(), 0, "não deveria enviar e-mail");
+    } finally {
+      log.restaurar();
+    }
   });
 
   it("rejeita campos obrigatórios ausentes com 400", async () => {
@@ -199,11 +226,13 @@ describe("API", () => {
 
   it("rejeita campos com caracteres de controle", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Nome\nInjetado",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem válida\u0000 aqui.",
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({
+        nome: "Nome\nInjetado",
+        mensagem: "Mensagem válida\u0000 aqui.",
+      }),
+    );
     assert.equal(resposta.status, 400);
     const corpo = await lerCorpoJson(resposta);
     assert.ok(campoErro(corpo, "nome"));
@@ -212,11 +241,10 @@ describe("API", () => {
 
   it("aceita mensagem com quebras de linha LF", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Primeira linha.\nSegunda linha.",
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({ mensagem: "Primeira linha.\nSegunda linha." }),
+    );
     assert.equal(resposta.status, 200);
     const corpo = await lerCorpoJson(resposta);
     assert.equal(corpo["success"], true);
@@ -224,11 +252,10 @@ describe("API", () => {
 
   it("aceita mensagem com quebras de linha CRLF", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Primeira linha.\r\nSegunda linha.",
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({ mensagem: "Primeira linha.\r\nSegunda linha." }),
+    );
     assert.equal(resposta.status, 200);
     const corpo = await lerCorpoJson(resposta);
     assert.equal(corpo["success"], true);
@@ -236,11 +263,10 @@ describe("API", () => {
 
   it("rejeita caractere de controle diferente de quebra de linha na mensagem", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem válida\tcom tabulação.",
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({ mensagem: "Mensagem válida\tcom tabulação." }),
+    );
     assert.equal(resposta.status, 400);
     const corpo = await lerCorpoJson(resposta);
     assert.ok(campoErro(corpo, "mensagem"));
@@ -248,11 +274,13 @@ describe("API", () => {
 
   it("continua rejeitando caracteres de controle em nome e e-mail", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Nome\rInjetado",
-      email: "teste@dominio\u0000.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({
+        nome: "Nome\rInjetado",
+        email: "teste@dominio\u0000.com",
+      }),
+    );
     assert.equal(resposta.status, 400);
     const corpo = await lerCorpoJson(resposta);
     assert.ok(campoErro(corpo, "nome"));
@@ -261,11 +289,13 @@ describe("API", () => {
 
   it("rejeita nome e mensagem acima dos limites", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "N".repeat(101),
-      email: "teste@dominio.com",
-      mensagem: "M".repeat(5001),
-    });
+    const resposta = await postarContato(
+      baseUrl,
+      corpoContatoValido({
+        nome: "N".repeat(101),
+        mensagem: "M".repeat(5001),
+      }),
+    );
     assert.equal(resposta.status, 400);
     const corpo = await lerCorpoJson(resposta);
     assert.match(String(campoErro(corpo, "nome")), /100/);
@@ -291,15 +321,7 @@ describe("API", () => {
   it("permite origem configurada e devolve o header CORS", async () => {
     const baseUrl = await iniciarServidor();
     const origem = "http://localhost:5173";
-    const resposta = await postarContato(
-      baseUrl,
-      {
-        nome: "Diovanny Martins",
-        email: "teste@dominio.com",
-        mensagem: "Mensagem com mais de dez caracteres.",
-      },
-      { Origin: origem },
-    );
+    const resposta = await postarContato(baseUrl, corpoContatoValido(), { Origin: origem });
     assert.equal(resposta.status, 200);
     assert.equal(resposta.headers.get("access-control-allow-origin"), origem);
   });
@@ -320,6 +342,8 @@ describe("Turnstile", () => {
     nome: "Diovanny Martins",
     email: "teste@dominio.com",
     mensagem: "Mensagem com mais de dez caracteres.",
+    assunto: HONEYTOKEN_VALOR,
+    fillTime: 5000,
     turnstile: "token-teste",
   };
 
@@ -350,11 +374,7 @@ describe("Turnstile", () => {
 
   it("sem secret key configurada não exige captcha (modo dev)", async () => {
     const baseUrl = await iniciarServidor();
-    const resposta = await postarContato(baseUrl, {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-    });
+    const resposta = await postarContato(baseUrl, corpoContatoValido());
     assert.equal(resposta.status, 200);
     const corpo = await lerCorpoJson(resposta);
     assert.equal(corpo["success"], true);
@@ -364,11 +384,7 @@ describe("Turnstile", () => {
     const restaurar = mockSiteverify({ success: true });
     try {
       const baseUrl = await iniciarServidor({ TURNSTILE_SECRET_KEY: "segredo" });
-      const resposta = await postarContato(baseUrl, {
-        nome: "Diovanny Martins",
-        email: "teste@dominio.com",
-        mensagem: "Mensagem com mais de dez caracteres.",
-      });
+      const resposta = await postarContato(baseUrl, corpoContatoValido());
       assert.equal(resposta.status, 400);
       const corpo = await lerCorpoJson(resposta);
       assert.equal(corpo["success"], false);
@@ -422,18 +438,21 @@ describe("Turnstile", () => {
 describe("rate limit", () => {
   it("retorna 429 após exceder o limite de envios por IP", async () => {
     const baseUrl = await iniciarServidor();
-    const corpo = {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-    };
 
     for (let i = 0; i < 10; i++) {
-      const resposta = await postarContato(baseUrl, corpo);
+      // E-mail e mensagem únicos: as camadas por e-mail e dedupe não podem
+      // interferir no teste do limite por IP.
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({
+          email: `pessoa${i}@dominio.com`,
+          mensagem: `Mensagem ${i} com conteúdo único para este teste.`,
+        }),
+      );
       assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
     }
 
-    const excedido = await postarContato(baseUrl, corpo);
+    const excedido = await postarContato(baseUrl, corpoContatoValido());
     assert.equal(excedido.status, 429);
   });
 
@@ -446,17 +465,216 @@ describe("rate limit", () => {
         obterIpCliente: () => `ip-${chamadas++}`,
       },
     );
-    const corpo = {
-      nome: "Diovanny Martins",
-      email: "teste@dominio.com",
-      mensagem: "Mensagem com mais de dez caracteres.",
-    };
 
     for (let i = 0; i < 12; i++) {
-      const resposta = await postarContato(baseUrl, corpo);
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({
+          email: `pessoa${i}@dominio.com`,
+          mensagem: `Mensagem ${i} com conteúdo único para este teste.`,
+        }),
+      );
       assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
     }
 
     assert.ok(chamadas >= 12, "o resolvedor injetado deveria ser consultado a cada envio");
+  });
+});
+
+describe("anti-spam extra", () => {
+  it("honeytoken ausente ou errado recebe sucesso simulado sem enviar e-mail", async () => {
+    const baseUrl = await iniciarServidor();
+    for (const extra of [{ assunto: undefined }, { assunto: "valor-errado" }]) {
+      const log = espionarLog();
+      try {
+        const resposta = await postarContato(baseUrl, corpoContatoValido(extra));
+        assert.equal(resposta.status, 200);
+        assert.equal((await lerCorpoJson(resposta))["success"], true);
+        assert.equal(log.obterChamadas(), 0, "não deveria enviar e-mail");
+      } finally {
+        log.restaurar();
+      }
+    }
+  });
+
+  it("envio rápido demais (fill-time < mínimo) recebe sucesso simulado", async () => {
+    const baseUrl = await iniciarServidor();
+    const log = espionarLog();
+    try {
+      const resposta = await postarContato(baseUrl, corpoContatoValido({ fillTime: 100 }));
+      assert.equal(resposta.status, 200);
+      assert.equal((await lerCorpoJson(resposta))["success"], true);
+      assert.equal(log.obterChamadas(), 0, "não deveria enviar e-mail");
+    } finally {
+      log.restaurar();
+    }
+  });
+
+  it("ausência de fill-time (JS desligado) não bloqueia o envio", async () => {
+    const baseUrl = await iniciarServidor();
+    const log = espionarLog();
+    try {
+      const resposta = await postarContato(baseUrl, corpoContatoValido({ fillTime: undefined }));
+      assert.equal(resposta.status, 200);
+      assert.ok(log.obterChamadas() >= 1, "deveria enviar de verdade");
+    } finally {
+      log.restaurar();
+    }
+  });
+
+  it("bloqueia após 3 envios do mesmo e-mail em 15 minutos", async () => {
+    const baseUrl = await iniciarServidor();
+    for (let i = 0; i < 3; i++) {
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({ mensagem: `Mensagem ${i} com conteúdo único.` }),
+      );
+      assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
+    }
+    const bloqueado = await postarContato(baseUrl, corpoContatoValido());
+    assert.equal(bloqueado.status, 429);
+  });
+
+  it("bloqueia após 3 cópias do mesmo conteúdo em uma hora", async () => {
+    const baseUrl = await iniciarServidor();
+    for (let i = 0; i < 3; i++) {
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({ email: `pessoa${i}@dominio.com` }),
+      );
+      assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
+    }
+    const bloqueado = await postarContato(
+      baseUrl,
+      corpoContatoValido({ email: "pessoa3@dominio.com" }),
+    );
+    assert.equal(bloqueado.status, 429);
+  });
+
+  it("bloqueia envio quando o cap global de entregas é atingido", async () => {
+    let chamadas = 0;
+    const baseUrl = await iniciarServidor(
+      { TRUST_PROXY: "false" },
+      { obterIpCliente: () => `ip-${chamadas++}` },
+    );
+    for (let i = 0; i < 20; i++) {
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({
+          email: `pessoa${i}@dominio.com`,
+          mensagem: `Mensagem ${i} com conteúdo único para não acionar o dedupe.`,
+        }),
+      );
+      assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
+    }
+    const bloqueado = await postarContato(
+      baseUrl,
+      corpoContatoValido({
+        email: "pessoa20@dominio.com",
+        mensagem: "Mensagem 20 com conteúdo único para não acionar o dedupe.",
+      }),
+    );
+    assert.equal(bloqueado.status, 429);
+  });
+
+  it("não consome quota global quando o envio falha", async () => {
+    // Primeira chamada ao Resend falha (500); as seguintes são entregas reais.
+    const fetchOriginal: typeof globalThis.fetch = globalThis.fetch;
+    let primeiraFalha = true;
+    globalThis.fetch = async (url, init) => {
+      if (String(url).includes("api.resend.com")) {
+        if (primeiraFalha) {
+          primeiraFalha = false;
+          return new Response("erro", { status: 500 });
+        }
+        return new Response("ok", { status: 200 });
+      }
+      return fetchOriginal(url, init);
+    };
+
+    try {
+      let chamadas = 0;
+      const baseUrl = await iniciarServidor(
+        {
+          TRUST_PROXY: "false",
+          RESEND_API_KEY: "re_teste",
+          RESEND_FROM: "onboarding@resend.dev",
+          EMAIL_DESTINO: "teste@dominio.com",
+        },
+        { obterIpCliente: () => `ip-${chamadas++}` },
+      );
+
+      const statuses: number[] = [];
+      for (let i = 0; i < 21; i++) {
+        const resposta = await postarContato(
+          baseUrl,
+          corpoContatoValido({
+            email: `pessoa${i}@dominio.com`,
+            mensagem: `Mensagem ${i} com conteúdo único para não acionar o dedupe.`,
+          }),
+        );
+        statuses.push(resposta.status);
+      }
+
+      // A falha não conta como entrega: as 20 seguintes entregam e o cap
+      // global (20/15min) nunca é excedido — nem na 21ª tentativa.
+      assert.equal(statuses[0], 500, "primeira tentativa deveria falhar no Resend");
+      assert.equal(statuses.length, 21);
+      assert.equal(
+        statuses[20],
+        200,
+        "21ª tentativa deveria passar porque a falha não consumiu quota",
+      );
+      assert.ok(
+        statuses.every((status) => status !== 429),
+        "nenhuma tentativa deveria ser bloqueada pelo cap global",
+      );
+    } finally {
+      globalThis.fetch = fetchOriginal;
+    }
+  });
+
+  it("desliga o formulário quando CONTATO_ENABLED=false", async () => {
+    const baseUrl = await iniciarServidor({ CONTATO_ENABLED: "false" });
+    const health = await fetch(`${baseUrl}/api/health`);
+    assert.equal(health.status, 503);
+    const resposta = await postarContato(baseUrl, corpoContatoValido());
+    assert.equal(resposta.status, 503);
+  });
+});
+
+describe("i18n do servidor", () => {
+  it("responde as mensagens de validação em inglês quando x-lang: en", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, corpoContatoValido({ email: "nao-e-um-email" }), {
+      [HEADER_IDIOMA]: "en",
+    });
+    assert.equal(resposta.status, 400);
+    const corpo = await lerCorpoJson(resposta);
+    assert.equal(campoErro(corpo, "email"), "Enter a valid email address.");
+  });
+
+  it("mantém o padrão pt quando o header x-lang não é en", async () => {
+    const baseUrl = await iniciarServidor();
+    const resposta = await postarContato(baseUrl, corpoContatoValido({ email: "nao-e-um-email" }));
+    assert.equal(resposta.status, 400);
+    const corpo = await lerCorpoJson(resposta);
+    assert.equal(campoErro(corpo, "email"), "Informe um e-mail válido.");
+  });
+
+  it("responde a mensagem de rate limit em inglês", async () => {
+    const baseUrl = await iniciarServidor();
+    for (let i = 0; i < 3; i++) {
+      const resposta = await postarContato(
+        baseUrl,
+        corpoContatoValido({ mensagem: `Mensagem ${i} com conteúdo único.` }),
+        { [HEADER_IDIOMA]: "en" },
+      );
+      assert.equal(resposta.status, 200, `envio ${i + 1} deveria passar`);
+    }
+    const bloqueado = await postarContato(baseUrl, corpoContatoValido(), { [HEADER_IDIOMA]: "en" });
+    assert.equal(bloqueado.status, 429);
+    const corpo = await lerCorpoJson(bloqueado);
+    assert.equal(corpo["error"], "Too many submission attempts. Wait a few minutes.");
   });
 });

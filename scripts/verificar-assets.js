@@ -78,6 +78,7 @@ function extrairReferencias(conteudo, formato) {
         }
         if (
           url.startsWith("#") ||
+          url.startsWith("/") ||
           url.startsWith("data:") ||
           url.startsWith("mailto:") ||
           /^[a-z]+:\/\//i.test(url)

@@ -1,3 +1,5 @@
+import { traduzir } from "../i18n.ts";
+
 export type Tema = "light" | "dark";
 
 // Evento disparado no `document` sempre que o tema muda. Módulos que precisam
@@ -62,9 +64,12 @@ export function initTema() {
   const atualizarAcessibilidade = () => {
     const claro = temaAtual() === "light";
     themeToggle.setAttribute("aria-pressed", String(claro));
-    themeToggle.setAttribute("aria-label", claro ? "Ativar tema escuro" : "Ativar tema claro");
+    themeToggle.setAttribute(
+      "aria-label",
+      claro ? traduzir("ativarTemaEscuro") : traduzir("ativarTemaClaro"),
+    );
     if (themeLabel) {
-      themeLabel.textContent = claro ? "Tema escuro" : "Tema claro";
+      themeLabel.textContent = claro ? traduzir("temaEscuro") : traduzir("temaClaro");
     }
   };
 

@@ -20,6 +20,9 @@ npm-debug.log*
 # Artefatos de ferramentas de teste de navegador
 .playwright-mcp/
 
+# Relatório de revisão das thumbnails (gerado pelo npm run screenshots)
+screenshots-preview.html
+
 # Sistema operacional
 .DS_Store
 Thumbs.db

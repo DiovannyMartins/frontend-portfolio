@@ -13,7 +13,16 @@ const DESTINO = path.join(RAIZ, "public", "sitemap.xml");
 
 // Edite conforme o domínio/página do portfólio.
 const URL_BASE = "https://diovanny.dev";
-const ROTAS = [""];
+
+// Declarações de alternates por idioma, idênticas nas duas páginas.
+const ALTERNATES = [
+  { hreflang: "pt-BR", href: `${URL_BASE}/` },
+  { hreflang: "en", href: `${URL_BASE}/en/` },
+  { hreflang: "x-default", href: `${URL_BASE}/` },
+];
+
+// Páginas por idioma: "/" é PT, "/en/" é EN. Cada uma declara as alternates.
+const PAGINAS = [`${URL_BASE}/`, `${URL_BASE}/en/`];
 
 // Fallback (fonte controlada por versão) quando o git não está disponível.
 // Ajuste manualmente quando o conteúdo da página mudar de fato.
@@ -43,16 +52,19 @@ async function obterUltimaModificacao() {
 
 const ultimaModificacao = await obterUltimaModificacao();
 
-const urls = ROTAS.map((rota) => {
-  const loc = `${URL_BASE.replace(/\/$/, "")}/${rota.replace(/^\//, "")}`;
+const urls = PAGINAS.map((loc) => {
+  const links = ALTERNATES.map(
+    (a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />`,
+  ).join("\n");
   return `  <url>
     <loc>${loc}</loc>
     <lastmod>${ultimaModificacao}</lastmod>
+${links}
   </url>`;
 }).join("\n");
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls}
 </urlset>
 `;
