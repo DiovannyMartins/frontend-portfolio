@@ -236,7 +236,7 @@ frontend-portfolio/
 │   ├── components/
 │   │   ├── header.css         # Header e navegação
 │   │   ├── hero.css           # Seção hero
-│   │   ├── overdrive.css      # Editor vivo da hero (canvas, aprimoramento progressivo)
+│   │   ├── hero-live.css       # Editor vivo da hero (aprimoramento progressivo sobre hero.css)
 │   │   ├── about-skills.css   # Sobre mim e cards de tecnologias
 │   │   ├── projetos.css       # Grid e filtros de projetos
 │   │   ├── contato.css        # Formulário e redes sociais

@@ -1,4 +1,5 @@
 import { criarToast } from "./toast.ts";
+import { temaAtual, EVENTO_TEMA } from "./tema.ts";
 
 export function initCopiarEmail() {
   const btnCopiarEmail = document.querySelector<HTMLButtonElement>("#btnCopiarEmail");
@@ -10,21 +11,29 @@ export function initCopiarEmail() {
   const FEEDBACK_DURACAO_MS = 2000;
   const textoOriginal = textoCopiarEmail.textContent;
   let feedbackTimer: number | undefined;
+  // O ícone de envelope é o estado estável; o de check aparece só durante o
+  // feedback de cópia. Este módulo é o único que escreve em #iconEmail.
+  let exibindoCheck = false;
 
-  // O ícone do envelope deve sempre refletir o tema ATUAL, e não o tema do
-  // momento em que a página carregou — senão, após alternar o tema e copiar,
-  // a restauração mostraria o ícone do tema errado.
   function iconEnvelopeAtual() {
-    return document.documentElement.classList.contains("light-mode")
+    return temaAtual() === "light"
       ? "img/icon-envelope-preto.png"
       : "img/icon-envelope-branco.png";
   }
 
   function iconCheckAtual() {
-    return document.documentElement.classList.contains("light-mode")
-      ? "img/icon-check-preto.png"
-      : "img/icon-check-branco.png";
+    return temaAtual() === "light" ? "img/icon-check-preto.png" : "img/icon-check-branco.png";
   }
+
+  const atualizarIconEmail = () => {
+    iconEmail.src = exibindoCheck ? iconCheckAtual() : iconEnvelopeAtual();
+  };
+
+  // Reage à troca de tema mantendo o estado atual (check durante feedback,
+  // envelope fora dele). Ler o tema no momento do evento evita restaurações
+  // com o ícone do tema antigo.
+  document.addEventListener(EVENTO_TEMA, atualizarIconEmail);
+  atualizarIconEmail();
 
   btnCopiarEmail.addEventListener("click", async () => {
     // data-email é sempre preenchido no HTML; o fallback só cobre o caso de
@@ -33,14 +42,16 @@ export function initCopiarEmail() {
 
     const mostrarSucesso = () => {
       textoCopiarEmail.textContent = "Copiado!";
-      iconEmail.src = iconCheckAtual();
+      exibindoCheck = true;
+      atualizarIconEmail();
 
       criarToast("E-mail copiado com sucesso!");
 
       clearTimeout(feedbackTimer);
       feedbackTimer = setTimeout(() => {
         textoCopiarEmail.textContent = textoOriginal;
-        iconEmail.src = iconEnvelopeAtual();
+        exibindoCheck = false;
+        atualizarIconEmail();
       }, FEEDBACK_DURACAO_MS);
     };
 

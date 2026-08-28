@@ -59,11 +59,25 @@ function validar(payload: ContatoPayload): ResultadoValidacao {
   };
 }
 
+// Erro tipado para falhas de leitura/parse do corpo. O `code` permite
+// distinguir, sem comparar strings soltas, o corpo grande do JSON inválido.
+type CodigoErroCorpo = "CORPO_MUITO_GRANDE" | "JSON_INVALIDO";
+
+class ErroCorpo extends Error {
+  readonly code: CodigoErroCorpo;
+
+  constructor(code: CodigoErroCorpo) {
+    super(code);
+    this.name = "ErroCorpo";
+    this.code = code;
+  }
+}
+
 // Lê o corpo da requisição em stream com um limite rígido de bytes.
 // Retorna o valor já parseado como JSON (desconhecido) para o chamador.
 async function lerJsonLimitado(request: Request, limite: number): Promise<unknown> {
   const reader = request.body?.getReader();
-  if (!reader) throw new Error("JSON_INVALIDO");
+  if (!reader) throw new ErroCorpo("JSON_INVALIDO");
 
   const partes: Uint8Array[] = [];
   let total = 0;
@@ -74,7 +88,7 @@ async function lerJsonLimitado(request: Request, limite: number): Promise<unknow
     total += resultado.value.byteLength;
     if (total > limite) {
       await reader.cancel();
-      throw new Error("CORPO_MUITO_GRANDE");
+      throw new ErroCorpo("CORPO_MUITO_GRANDE");
     }
     partes.push(resultado.value);
   }
@@ -109,7 +123,7 @@ export default function rotaContato(config: AppConfig) {
     try {
       body = await lerJsonLimitado(c.req.raw, limiteCorpo);
     } catch (erro) {
-      if (erro instanceof Error && erro.message === "CORPO_MUITO_GRANDE") {
+      if (erro instanceof ErroCorpo && erro.code === "CORPO_MUITO_GRANDE") {
         return c.json({ success: false, error: "Mensagem muito grande." }, 413);
       }
       return c.json({ success: false, error: "JSON inválido." }, 400);

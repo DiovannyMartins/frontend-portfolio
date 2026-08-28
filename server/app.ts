@@ -71,13 +71,10 @@ export default function criarApp(env: AppEnv, opcoes: OpcoesCriarApp = {}) {
   // Limita envios por IP (ex.: 10 a cada 15 min) para reduzir spam no formulário.
   // No Workers o MemoryStore é por isolate (best-effort); o Cloudflare Rate
   // Limiting nativo pode substituí-lo via binding se necessário.
-  // legacyHeaders é mantido por compatibilidade: esta versão da biblioteca
-  // ainda não o tipa, mas o ignora no runtime (cabeçalhos padrão via standardHeaders).
   const opcoesRateLimit = {
     windowMs: 15 * 60 * 1000,
     limit: 10,
     standardHeaders: true,
-    legacyHeaders: false,
     keyGenerator: (c: Context) => {
       if (config.trustProxy) {
         return (

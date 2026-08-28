@@ -1,4 +1,12 @@
-type Tema = "light" | "dark";
+export type Tema = "light" | "dark";
+
+// Evento disparado no `document` sempre que o tema muda. Módulos que precisam
+// reagir ao tema (ex.: copiarEmail) escutam em vez de ler a classe por conta própria.
+export const EVENTO_TEMA = "tema:mudou";
+
+export function temaAtual(): Tema {
+  return document.documentElement.classList.contains("light-mode") ? "light" : "dark";
+}
 
 type ImagemPorTema = [imagem: HTMLImageElement | null, srcClaro: string, srcEscuro: string];
 
@@ -14,6 +22,8 @@ export function initTema() {
   // [elemento, imagem no tema claro, imagem no tema escuro]
   // Caminhos em string (e não import) para que as imagens continuem válidas no
   // build gerado em `dist/` (o Vite não processa essas referências dinâmicas).
+  // #iconEmail fica de fora de propósito: quem o escreve é o copiarEmail.ts,
+  // que precisa do ícone também durante o feedback de "Copiado!".
   const imagensPorTema: ImagemPorTema[] = [
     [
       document.querySelector<HTMLImageElement>(".header__logo img"),
@@ -31,16 +41,7 @@ export function initTema() {
       "img/icon-seta-preto.png",
       "img/icon-seta-branco.png",
     ],
-    [
-      document.querySelector<HTMLImageElement>("#iconEmail"),
-      "img/icon-envelope-preto.png",
-      "img/icon-envelope-branco.png",
-    ],
   ];
-
-  function temaAtual(): Tema {
-    return root.classList.contains("light-mode") ? "light" : "dark";
-  }
 
   const atualizarImagens = () => {
     const claro = temaAtual() === "light";
@@ -67,6 +68,10 @@ export function initTema() {
     }
   };
 
+  const notificarMudanca = () => {
+    document.dispatchEvent(new CustomEvent(EVENTO_TEMA));
+  };
+
   atualizarImagens();
   atualizarThemeColor();
   atualizarAcessibilidade();
@@ -82,6 +87,7 @@ export function initTema() {
       atualizarImagens();
       atualizarThemeColor();
       atualizarAcessibilidade();
+      notificarMudanca();
     };
 
     // Transição cinematográfica da troca de tema via View Transitions.

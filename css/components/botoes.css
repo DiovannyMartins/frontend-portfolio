@@ -1,3 +1,16 @@
+/* Interativos "lift + glow": base de botão usada por botões e links que sobem
+   e ganham um brilho no hover. A variação (distância do lift, tamanho e cor do
+   glow) fica nas custom properties, que cada componente ajusta na sua classe:
+     --lift:       deslocamento vertical no hover (ex.: -0.25em)
+     --glow-size:  raio do glow (ex.: 0.75em)
+     --glow-color: cor do glow (ex.: var(--glow-accent))
+   A transição continua local de cada componente, pois vários também transicionam
+   outras propriedades (cor de fundo, borda). */
+.btn:hover {
+  transform: translateY(var(--lift, -0.2em));
+  box-shadow: 0 0 var(--glow-size, 0.5em) 0 var(--glow-color, var(--glow-hover));
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -43,8 +56,9 @@
 }
 
 .back-to-top:hover {
+  /* O transform próprio (com scale) substitui o lift padrão do .btn;
+     o glow vem da base .btn:hover. */
   transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 .back-to-top--visible {

@@ -15,5 +15,5 @@
     "../server/lib/**/*.ts",
     "../server/routes/**/*.ts"
   ],
-  "exclude": ["../server/index.ts", "../server/app.test.ts", "node_modules"]
+  "exclude": ["../server/index.ts", "../server/app.test.ts", "../server/lib/config.test.ts", "node_modules"]
 }

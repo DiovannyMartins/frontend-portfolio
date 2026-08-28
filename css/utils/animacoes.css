@@ -115,4 +115,15 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  /* Com movimento reduzido, os elementos de reveal já aparecem visíveis:
+     nenhum estado de partida (opacity 0, blur, deslocamento) deve persistir. */
+  .motion-ready .reveal > *,
+  .motion-ready .reveal .skills__window,
+  .motion-ready .reveal .project-card {
+    opacity: 1;
+    filter: none;
+    clip-path: none;
+    transform: none;
+  }
 }

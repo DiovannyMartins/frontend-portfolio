@@ -11,7 +11,13 @@ export function carregarConfig(env: AppEnv): AppConfig {
     apiKey: env.RESEND_API_KEY,
     from: env.RESEND_FROM,
   };
-  const emailDestino = isProduction ? env.EMAIL_DESTINO : env.EMAIL_DESTINO || resend.from;
+  // Em produção o EMAIL_DESTINO é obrigatório (sem fallback — a validação de
+  // productionReady abaixo garante isso). Em dev, sem ele, o envio cai no
+  // remetente (RESEND_FROM), já que o fluxo é de teste/log.
+  let emailDestino = env.EMAIL_DESTINO;
+  if (!isProduction && !emailDestino) {
+    emailDestino = resend.from;
+  }
   const turnstile = {
     // Secret key do Cloudflare Turnstile. Sem ela, o captcha não é
     // validado (útil em dev, mas em produção o envio fica protegido).

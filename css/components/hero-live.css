@@ -1,4 +1,9 @@
-/* Overdrive: editor vivo como aprimoramento progressivo da hero. */
+/* Camada de aprimoramento progressivo da hero: o "editor vivo". Estende os
+   blocos BEM base de `hero.css` (hero__content, hero__media, hero__title,
+   hero__accent) com o layout de editor de código — a janela .hero__media com
+   moldura de "preview", o campo .hero__code-field ao fundo e as animações de
+   partida acionadas por rolagem. As re-declarações aqui são intencionais:
+   ajustam o layout base quando o aprimoramento está ativo. */
 
 .hero {
   position: relative;
@@ -118,27 +123,6 @@
   }
 }
 
-@media (max-width: 1050px) and (min-width: 769px) {
-  .header__logo {
-    font-size: 20px;
-  }
-
-  .nav__list {
-    gap: 6px;
-    padding: 16px 8px;
-  }
-
-  .nav__link {
-    padding-inline: 10px;
-    font-size: 18px;
-  }
-
-  .header__actions {
-    gap: 8px;
-    padding-right: 10px;
-  }
-}
-
 @media (max-width: 900px) {
   .hero {
     min-height: auto;
@@ -151,21 +135,6 @@
 }
 
 @media (max-width: 768px) {
-  .header__logo {
-    padding: 8px;
-    font-size: 20px;
-  }
-
-  .header__actions {
-    gap: 10px;
-    margin: 0 0 0 auto;
-    padding-right: 10px;
-  }
-
-  .header__menu-toggle {
-    margin-right: 0;
-  }
-
   .hero {
     min-height: calc(100svh - 80px);
     padding: 72px 20px;
@@ -198,14 +167,5 @@
   .hero__media,
   .hero__code-field {
     animation: none !important;
-  }
-
-  .motion-ready .reveal > *,
-  .motion-ready .reveal .skills__window,
-  .motion-ready .reveal .project-card {
-    opacity: 1;
-    filter: none;
-    clip-path: none;
-    transform: none;
   }
 }

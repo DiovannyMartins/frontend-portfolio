@@ -55,6 +55,7 @@
 }
 
 .projects__filter-btn {
+  --glow-color: var(--glow-soft);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -71,11 +72,6 @@
     transform 0.3s ease,
     box-shadow 0.3s ease,
     background-color 0.3s ease;
-}
-
-.projects__filter-btn:hover {
-  transform: translateY(-0.2em);
-  box-shadow: 0 0 0.5em 0em var(--glow-soft);
 }
 
 .projects__filter-btn--active {
@@ -146,6 +142,7 @@
 }
 
 .project-card__link {
+  --lift: -0.25em;
   display: flex;
   align-items: center;
   min-height: 44px;
@@ -158,11 +155,6 @@
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
-}
-
-.project-card__link:hover {
-  transform: translateY(-0.25em);
-  box-shadow: 0 0 0.5em 0em var(--glow-hover);
 }
 
 @media (max-width: 768px) {
