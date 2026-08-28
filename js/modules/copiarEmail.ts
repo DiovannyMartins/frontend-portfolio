@@ -1,6 +1,6 @@
 import { criarToast } from "./toast.ts";
 import { temaAtual, EVENTO_TEMA } from "./tema.ts";
-import { traduzir } from "../i18n.ts";
+import { caminhoAsset, traduzir } from "../i18n.ts";
 
 export function initCopiarEmail() {
   const btnCopiarEmail = document.querySelector<HTMLButtonElement>("#btnCopiarEmail");
@@ -17,11 +17,15 @@ export function initCopiarEmail() {
   let exibindoCheck = false;
 
   function iconEnvelopeAtual() {
-    return temaAtual() === "light" ? "img/icon-envelope-preto.png" : "img/icon-envelope-branco.png";
+    return temaAtual() === "light"
+      ? caminhoAsset("img/icon-envelope-preto.png")
+      : caminhoAsset("img/icon-envelope-branco.png");
   }
 
   function iconCheckAtual() {
-    return temaAtual() === "light" ? "img/icon-check-preto.png" : "img/icon-check-branco.png";
+    return temaAtual() === "light"
+      ? caminhoAsset("img/icon-check-preto.png")
+      : caminhoAsset("img/icon-check-branco.png");
   }
 
   const atualizarIconEmail = () => {

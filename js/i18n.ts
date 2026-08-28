@@ -12,6 +12,14 @@ export function traduzir(chave: ChaveTraducao): string {
   return traducoes[idiomaAtual()][chave];
 }
 
+// Caminhos de imagem definidos via JS (tema.ts, copiarEmail.ts) são relativos
+// ("img/...") e resolvem contra a URL da página. Em /en/ eles virariam
+// "/en/img/..."; este helper prefixa "../" quando a página está em inglês,
+// igual ao que o build faz com os caminhos estáticos.
+export function caminhoAsset(caminho: string): string {
+  return location.pathname.startsWith("/en/") ? `../${caminho}` : caminho;
+}
+
 // Persiste a escolha do usuário e garante que o switcher aponte para a outra
 // língua preservando a âncora atual (ex.: /en/#sobre).
 export function initIdioma() {

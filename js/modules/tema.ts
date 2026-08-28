@@ -1,4 +1,4 @@
-import { traduzir } from "../i18n.ts";
+import { caminhoAsset, traduzir } from "../i18n.ts";
 
 export type Tema = "light" | "dark";
 
@@ -29,19 +29,23 @@ export function initTema() {
   const imagensPorTema: ImagemPorTema[] = [
     [
       document.querySelector<HTMLImageElement>(".header__logo img"),
-      "img/icon-logo-dark.png",
-      "img/icon-logo.png",
+      caminhoAsset("img/icon-logo-dark.png"),
+      caminhoAsset("img/icon-logo.png"),
     ],
     [
       document.querySelector<HTMLImageElement>("#iconGithub"),
-      "img/github-dark.png",
-      "img/github.png",
+      caminhoAsset("img/github-dark.png"),
+      caminhoAsset("img/github.png"),
     ],
-    [document.querySelector<HTMLImageElement>("#iconTema"), "img/icon-sol.png", "img/icon-lua.png"],
+    [
+      document.querySelector<HTMLImageElement>("#iconTema"),
+      caminhoAsset("img/icon-sol.png"),
+      caminhoAsset("img/icon-lua.png"),
+    ],
     [
       document.querySelector<HTMLImageElement>("#iconSeta"),
-      "img/icon-seta-preto.png",
-      "img/icon-seta-branco.png",
+      caminhoAsset("img/icon-seta-preto.png"),
+      caminhoAsset("img/icon-seta-branco.png"),
     ],
   ];
 
