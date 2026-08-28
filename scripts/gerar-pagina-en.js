@@ -94,7 +94,8 @@ function traduzirHead(html) {
 function traduzirSwitcher(html) {
   return html.replace(
     /<a[^>]*\bdata-lang-switch[^>]*>[^<]*<\/a>/,
-    () => '<a class="lang-switch btn" href="/" hreflang="pt-BR" lang="pt" data-lang-switch>PT</a>',
+    () =>
+      '<a class="lang-switch nav__link btn" href="/" hreflang="pt-BR" lang="pt" data-lang-switch>PT</a>',
   );
 }
 
