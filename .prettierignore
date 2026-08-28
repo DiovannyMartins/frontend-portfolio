@@ -2,7 +2,6 @@ node_modules/
 dist/
 package-lock.json
 .git/
-.impeccable/
 public/sitemap.xml
 DESIGN.md
 functions/types.d.ts
