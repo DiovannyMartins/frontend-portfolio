@@ -3,6 +3,7 @@ node_modules/
 
 # Artefatos do Wrangler (Cloudflare)
 .wrangler/
+.dev.vars
 
 # Build do Vite
 dist/
@@ -22,6 +23,10 @@ npm-debug.log*
 
 # Relatório de revisão das thumbnails (gerado pelo npm run screenshots)
 screenshots-preview.html
+
+# Editor
+.vscode/
+.idea/
 
 # Sistema operacional
 .DS_Store
