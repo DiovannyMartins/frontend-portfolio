@@ -582,7 +582,7 @@ describe("anti-spam extra", () => {
     const fetchOriginal: typeof globalThis.fetch = globalThis.fetch;
     let primeiraFalha = true;
     globalThis.fetch = async (url, init) => {
-      if (String(url).includes("api.resend.com")) {
+      if (new URL(String(url)).hostname === "api.resend.com") {
         if (primeiraFalha) {
           primeiraFalha = false;
           return new Response("erro", { status: 500 });
